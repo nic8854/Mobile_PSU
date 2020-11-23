@@ -1050,7 +1050,7 @@ TickType_t PNGTest(TFT_t * dev, char * file, int width, int height) {
 	for(int y = 0; y < pngHeight; y++){
 		for(int x = 0;x < pngWidth; x++){
 			pixel_png pixel = pngle->pixels[y][x];
-			colors[x] = rgb565_conv(pixel.red, pixel.green, pixel.blue);
+			colors[x] = rgb565_conv(pixel.blue, pixel.green, pixel.red);
 			//uint16_t color = rgb565_conv(pixel.red, pixel.green, pixel.blue);
 			//colors[x] = ~color;
 		}
@@ -1106,7 +1106,18 @@ void ILI9341(void *pvParameters)
 #endif
 	lcdInit(&dev, model, CONFIG_WIDTH, CONFIG_HEIGHT, CONFIG_OFFSETX, CONFIG_OFFSETY);
 
+	char file[32];
 
+	uint16_t color;
+	uint8_t ascii[40];
+	uint16_t margin = 10;
+	color = WHITE;
+	lcdSetFontDirection(&dev, 0);
+	uint16_t xpos = 35;
+	uint16_t ypos = 25;
+	int xd = 0;
+	int yd = 1;
+	int Inhalt[3] = {1, 2, 3};
 
 	while(1) {
 
@@ -1166,15 +1177,52 @@ void ILI9341(void *pvParameters)
 		strcpy(file, "/spiffs/image.bmp");
 		BMPTest(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
 		WAIT;
-*/
-		char file[32];
+
+		
 		strcpy(file, "/spiffs/background.jpeg");
 		JPEGTest(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
 		WAIT;
-		
-		
+*/		
+
 		strcpy(file, "/spiffs/background.png");
 		PNGTest(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
+		
+		color = WHITE;
+		xpos = 35;
+		ypos = 25;
+		strcpy((char *)ascii, "Titel");
+		lcdDrawString(&dev, fx24G, xpos, ypos, ascii, color);
+
+		xpos = 20;
+		ypos = 50;
+		strcpy((char *)ascii, "Inhalt:");
+		lcdDrawString(&dev, fx16G, xpos, ypos, ascii, color);
+		xpos = 20;
+		ypos = 70;
+		strcpy((char *)ascii, "Inhalt:");
+		lcdDrawString(&dev, fx16G, xpos, ypos, ascii, color);
+		xpos = 20;
+		ypos = 90;
+		strcpy((char *)ascii, "Inhalt:");
+		lcdDrawString(&dev, fx16G, xpos, ypos, ascii, color);
+		
+
+		color = RED;
+		xpos = 75;
+		ypos = 50;
+		strcpy((char *)ascii, "123");
+		lcdDrawString(&dev, fx16G, xpos, ypos, ascii, color);
+		xpos = 75;
+		ypos = 70;
+		strcpy((char *)ascii, "456");
+		lcdDrawString(&dev, fx16G, xpos, ypos, ascii, color);
+		xpos = 75;
+		ypos = 90;
+		strcpy((char *)ascii, "789");
+		lcdDrawString(&dev, fx16G, xpos, ypos, ascii, color);
+		vTaskDelay(300);
+
+		WAIT;
 		WAIT;
 /*
 		ScrollTest(&dev, fx16G, CONFIG_WIDTH, CONFIG_HEIGHT);
