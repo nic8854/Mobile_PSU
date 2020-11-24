@@ -1066,6 +1066,35 @@ TickType_t PNGTest(TFT_t * dev, char * file, int width, int height) {
 	return diffTick;
 }
 
+void print_value(uint16_t color, uint16_t xpos, uint16_t ypos, uint16_t int_value)
+{
+
+	TickType_t startTick, endTick, diffTick;
+	// set font file
+	FontxFile fx16G[2];
+	FontxFile fx24G[2];
+	FontxFile fx32G[2];
+	InitFontx(fx16G,"/spiffs/ILGH16XB.FNT",""); // 8x16Dot Gothic
+	InitFontx(fx24G,"/spiffs/ILGH24XB.FNT",""); // 12x24Dot Gothic
+	InitFontx(fx32G,"/spiffs/ILGH32XB.FNT",""); // 16x32Dot Gothic
+
+	FontxFile fx16M[2];
+	FontxFile fx24M[2];
+	FontxFile fx32M[2];
+	InitFontx(fx16M,"/spiffs/ILMH16XB.FNT",""); // 8x16Dot Mincyo
+	InitFontx(fx24M,"/spiffs/ILMH24XB.FNT",""); // 12x24Dot Mincyo
+	InitFontx(fx32M,"/spiffs/ILMH32XB.FNT",""); // 16x32Dot Mincyo
+	
+	TFT_t dev;
+
+	char text[40];
+	uint8_t ascii[40];
+	itoa(int_value, "text", 10);
+	strcpy((char *)ascii, text);
+	lcdDrawString(&dev, fx16G, xpos, ypos, ascii, color);
+}
+
+
 void ILI9341(void *pvParameters)
 {
 	// set font file
@@ -1109,6 +1138,7 @@ void ILI9341(void *pvParameters)
 	char file[32];
 
 	uint16_t color;
+	char text[40];
 	uint8_t ascii[40];
 	uint16_t margin = 10;
 	color = WHITE;
@@ -1117,7 +1147,7 @@ void ILI9341(void *pvParameters)
 	uint16_t ypos = 25;
 	int xd = 0;
 	int yd = 1;
-	int Inhalt[3] = {1, 2, 3};
+	int Inhalt[3] = {9876, 654, 321};
 
 	while(1) {
 
@@ -1208,22 +1238,27 @@ void ILI9341(void *pvParameters)
 		
 
 		color = RED;
-		xpos = 75;
+		xpos = 80;
 		ypos = 50;
-		strcpy((char *)ascii, "123");
-		lcdDrawString(&dev, fx16G, xpos, ypos, ascii, color);
-		xpos = 75;
+		uint16_t int_value = 12345;
+		//itoa(Inhalt[0], text, 10);
+		//strcpy((char *)ascii, text);
+		//lcdDrawString(&dev, fx16G, xpos, ypos, ascii, color);
+		print_value(color, xpos, ypos, int_value);
+		xpos = 80;
 		ypos = 70;
-		strcpy((char *)ascii, "456");
+		itoa(Inhalt[1], text, 10);
+		strcpy((char *)ascii, text);
 		lcdDrawString(&dev, fx16G, xpos, ypos, ascii, color);
-		xpos = 75;
+		xpos = 80;
 		ypos = 90;
-		strcpy((char *)ascii, "789");
+		itoa(Inhalt[2], text, 10);
+		strcpy((char *)ascii, text);
 		lcdDrawString(&dev, fx16G, xpos, ypos, ascii, color);
-		vTaskDelay(300);
+		vTaskDelay(5000);
 
 		WAIT;
-		WAIT;
+
 /*
 		ScrollTest(&dev, fx16G, CONFIG_WIDTH, CONFIG_HEIGHT);
 		WAIT;
