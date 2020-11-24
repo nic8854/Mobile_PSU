@@ -1086,11 +1086,11 @@ void print_value(uint16_t color, uint16_t xpos, uint16_t ypos, uint16_t int_valu
 	InitFontx(fx32M,"/spiffs/ILMH32XB.FNT",""); // 16x32Dot Mincyo
 	
 	TFT_t dev;
-
+	lcdSetFontDirection(&dev, 0);
 	char text[40];
 	uint8_t ascii[40];
-	itoa(int_value, "text", 10);
-	strcpy((char *)ascii, text);
+	itoa(int_value, text, 10);
+	strcpy((char *)ascii, "text");
 	lcdDrawString(&dev, fx16G, xpos, ypos, ascii, color);
 }
 
@@ -1114,6 +1114,8 @@ void ILI9341(void *pvParameters)
 	
 	TFT_t dev;
 	spi_master_init(&dev, CONFIG_CS_GPIO, CONFIG_DC_GPIO, CONFIG_RESET_GPIO, CONFIG_BL_GPIO);
+
+
 
 #if CONFIG_ILI9225
 	uint16_t model = 0x9225;
