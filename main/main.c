@@ -1046,6 +1046,7 @@ TickType_t PNGTest(TFT_t * dev, char * file, int width, int height) {
 		}
 	}
 #endif
+	//pixel_png vscreen[width][height];
 
 	for(int y = 0; y < pngHeight; y++){
 		for(int x = 0;x < pngWidth; x++){
@@ -1053,13 +1054,16 @@ TickType_t PNGTest(TFT_t * dev, char * file, int width, int height) {
 			colors[x] = rgb565_conv(pixel.blue, pixel.green, pixel.red);
 			//uint16_t color = rgb565_conv(pixel.red, pixel.green, pixel.blue);
 			//colors[x] = ~color;
+
+			//vscreen[x][y] = pngle->pixels[y][x];
+
 		}
 		lcdDrawMultiPixels(dev, offsetX, y+offsetY, pngWidth, colors);
 		vTaskDelay(1);
 	}
 	free(colors);
 	pngle_destroy(pngle, _width, _height);
-
+	//return *vscreen;
 	endTick = xTaskGetTickCount();
 	diffTick = endTick - startTick;
 	ESP_LOGI(__FUNCTION__, "printing value");
