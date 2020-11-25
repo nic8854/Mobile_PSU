@@ -1062,14 +1062,14 @@ TickType_t PNGTest(TFT_t * dev, char * file, int width, int height) {
 
 	endTick = xTaskGetTickCount();
 	diffTick = endTick - startTick;
-	ESP_LOGI(__FUNCTION__, "elapsed time[ms]:%d",diffTick*portTICK_RATE_MS);
+	ESP_LOGI(__FUNCTION__, "printing value");
 	return diffTick;
 }
 
 void print_value(uint16_t color, uint16_t xpos, uint16_t ypos, uint16_t int_value)
 {
 
-	TickType_t startTick, endTick, diffTick;
+
 	// set font file
 	FontxFile fx16G[2];
 	FontxFile fx24G[2];
@@ -1085,15 +1085,24 @@ void print_value(uint16_t color, uint16_t xpos, uint16_t ypos, uint16_t int_valu
 	InitFontx(fx24M,"/spiffs/ILMH24XB.FNT",""); // 12x24Dot Mincyo
 	InitFontx(fx32M,"/spiffs/ILMH32XB.FNT",""); // 16x32Dot Mincyo
 	
+	if(int_value)
+	{
+		ESP_LOGE(__FUNCTION__, "Int Value: %d", int_value);
+	}
+
 	TFT_t dev;
 	lcdSetFontDirection(&dev, 0);
 	char text[40];
 	uint8_t ascii[40];
+
+	xpos = 20;
+	ypos = 20;
 	itoa(int_value, text, 10);
 	strcpy((char *)ascii, "text");
-	lcdDrawString(&dev, fx16G, xpos, ypos, ascii, color);
-}
+	lcdDrawString(&dev, fx32G, xpos, ypos, ascii, color);
+	ESP_LOGE(__FUNCTION__, "Value printed");
 
+}
 
 void ILI9341(void *pvParameters)
 {
