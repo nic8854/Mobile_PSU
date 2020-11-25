@@ -1066,40 +1066,22 @@ TickType_t PNGTest(TFT_t * dev, char * file, int width, int height) {
 	return diffTick;
 }
 
-void print_value(uint16_t color, uint16_t xpos, uint16_t ypos, uint16_t int_value)
+void print_value(TFT_t dev, uint16_t color, FontxFile font[2], uint16_t xpos, uint16_t ypos, uint16_t int_value)
 {
 
 
-	// set font file
-	FontxFile fx16G[2];
-	FontxFile fx24G[2];
-	FontxFile fx32G[2];
-	InitFontx(fx16G,"/spiffs/ILGH16XB.FNT",""); // 8x16Dot Gothic
-	InitFontx(fx24G,"/spiffs/ILGH24XB.FNT",""); // 12x24Dot Gothic
-	InitFontx(fx32G,"/spiffs/ILGH32XB.FNT",""); // 16x32Dot Gothic
+	lcdSetFontDirection(&dev, 0);
+	char text[40];
+	uint8_t ascii[40];
 
-	FontxFile fx16M[2];
-	FontxFile fx24M[2];
-	FontxFile fx32M[2];
-	InitFontx(fx16M,"/spiffs/ILMH16XB.FNT",""); // 8x16Dot Mincyo
-	InitFontx(fx24M,"/spiffs/ILMH24XB.FNT",""); // 12x24Dot Mincyo
-	InitFontx(fx32M,"/spiffs/ILMH32XB.FNT",""); // 16x32Dot Mincyo
-	
 	if(int_value)
 	{
 		ESP_LOGE(__FUNCTION__, "Int Value: %d", int_value);
 	}
 
-	TFT_t dev;
-	lcdSetFontDirection(&dev, 0);
-	char text[40];
-	uint8_t ascii[40];
-
-	xpos = 20;
-	ypos = 20;
 	itoa(int_value, text, 10);
-	strcpy((char *)ascii, "text");
-	lcdDrawString(&dev, fx32G, xpos, ypos, ascii, color);
+	strcpy((char *)ascii, text);
+	lcdDrawString(&dev, font, xpos, ypos, ascii, color);
 	ESP_LOGE(__FUNCTION__, "Value printed");
 
 }
@@ -1124,6 +1106,7 @@ void ILI9341(void *pvParameters)
 	TFT_t dev;
 	spi_master_init(&dev, CONFIG_CS_GPIO, CONFIG_DC_GPIO, CONFIG_RESET_GPIO, CONFIG_BL_GPIO);
 
+	
 
 
 #if CONFIG_ILI9225
@@ -1158,7 +1141,7 @@ void ILI9341(void *pvParameters)
 	uint16_t ypos = 25;
 	int xd = 0;
 	int yd = 1;
-	int Inhalt[3] = {9876, 654, 321};
+	int Inhalt[3] = {987, 654, 321};
 
 	while(1) {
 
@@ -1251,21 +1234,13 @@ void ILI9341(void *pvParameters)
 		color = RED;
 		xpos = 80;
 		ypos = 50;
-		uint16_t int_value = 12345;
-		//itoa(Inhalt[0], text, 10);
-		//strcpy((char *)ascii, text);
-		//lcdDrawString(&dev, fx16G, xpos, ypos, ascii, color);
-		print_value(color, xpos, ypos, int_value);
+		print_value(dev, color, fx16G, xpos, ypos, Inhalt[0]);
 		xpos = 80;
 		ypos = 70;
-		itoa(Inhalt[1], text, 10);
-		strcpy((char *)ascii, text);
-		lcdDrawString(&dev, fx16G, xpos, ypos, ascii, color);
+		print_value(dev, color, fx16G, xpos, ypos, Inhalt[1]);
 		xpos = 80;
 		ypos = 90;
-		itoa(Inhalt[2], text, 10);
-		strcpy((char *)ascii, text);
-		lcdDrawString(&dev, fx16G, xpos, ypos, ascii, color);
+		print_value(dev, color, fx16G, xpos, ypos, Inhalt[2]);
 		vTaskDelay(5000);
 
 		WAIT;
