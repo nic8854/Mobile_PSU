@@ -1066,24 +1066,24 @@ TickType_t PNGTest(TFT_t * dev, char * file, int width, int height) {
 	return diffTick;
 }
 
-void print_value(TFT_t dev, uint16_t color, FontxFile font[2], uint16_t xpos, uint16_t ypos, uint16_t int_value)
+void print_value(TFT_t dev, uint16_t color, FontxFile font[2], uint16_t xpos, uint16_t ypos, int int_value, float float_value)
 {
-
-
 	lcdSetFontDirection(&dev, 0);
 	char text[40];
 	uint8_t ascii[40];
-
-	if(int_value)
+	if(int_value != -1)
 	{
-		ESP_LOGE(__FUNCTION__, "Int Value: %d", int_value);
+		ESP_LOGW(__FUNCTION__, "Int Value: %d", int_value);
+		sprintf(text, "%d", int_value);
 	}
-
-	itoa(int_value, text, 10);
+	if(float_value != -1)
+	{
+		ESP_LOGW(__FUNCTION__, "Float Value: %.2f", float_value);
+		sprintf(text, "%.2f", float_value);
+	}
 	strcpy((char *)ascii, text);
 	lcdDrawString(&dev, font, xpos, ypos, ascii, color);
-	ESP_LOGE(__FUNCTION__, "Value printed");
-
+	
 }
 
 void ILI9341(void *pvParameters)
@@ -1230,17 +1230,17 @@ void ILI9341(void *pvParameters)
 		strcpy((char *)ascii, "Inhalt:");
 		lcdDrawString(&dev, fx16G, xpos, ypos, ascii, color);
 		
-
+		float float_value = 9.87;
 		color = RED;
 		xpos = 80;
 		ypos = 50;
-		print_value(dev, color, fx16G, xpos, ypos, Inhalt[0]);
+		print_value(dev, color, fx16G, xpos, ypos, -1, float_value);
 		xpos = 80;
 		ypos = 70;
-		print_value(dev, color, fx16G, xpos, ypos, Inhalt[1]);
+		print_value(dev, color, fx16G, xpos, ypos, Inhalt[1], -1);
 		xpos = 80;
 		ypos = 90;
-		print_value(dev, color, fx16G, xpos, ypos, Inhalt[2]);
+		print_value(dev, color, fx16G, xpos, ypos, Inhalt[2], -1);
 		vTaskDelay(5000);
 
 		WAIT;
