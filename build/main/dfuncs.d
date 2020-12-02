@@ -1,4 +1,4 @@
-main.o: /home/michael/esp/PSU_display/main/main.c \
+dfuncs.o: /home/michael/esp/PSU_display/main/dfuncs.c \
  /home/michael/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/FreeRTOSConfig.h \
@@ -53,16 +53,6 @@ main.o: /home/michael/esp/PSU_display/main/main.c \
  /home/michael/esp/esp-idf/components/freertos/include/freertos/mpu_wrappers.h \
  /home/michael/esp/esp-idf/components/freertos/include/freertos/task.h \
  /home/michael/esp/esp-idf/components/freertos/include/freertos/list.h \
- /home/michael/esp/esp-idf/components/log/include/esp_log.h \
- /home/michael/esp/esp-idf/components/log/include/esp_log_internal.h \
- /home/michael/esp/esp-idf/components/vfs/include/esp_vfs.h \
- /home/michael/esp/esp-idf/components/freertos/include/freertos/semphr.h \
- /home/michael/esp/esp-idf/components/freertos/include/freertos/queue.h \
- /home/michael/esp/esp-idf/components/freertos/include/freertos/task.h \
- /home/michael/esp/esp-idf/components/newlib/platform_include/sys/termios.h \
- /home/michael/esp/esp-idf/components/newlib/platform_include/sys/poll.h \
- /home/michael/esp/esp-idf/components/spiffs/include/esp_spiffs.h \
- /home/michael/esp/PSU_display/main/dfuncs.h \
  /home/michael/esp/esp-idf/components/driver/include/driver/spi_master.h \
  /home/michael/esp/esp-idf/components/driver/include/driver/spi_common.h \
  /home/michael/esp/esp-idf/components/soc/include/soc/lldesc.h \
@@ -79,12 +69,23 @@ main.o: /home/michael/esp/PSU_display/main/main.c \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/spi_struct.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/gpio_sig_map.h \
  /home/michael/esp/esp-idf/components/hal/include/hal/spi_types.h \
- /home/michael/esp/PSU_display/main/fontx.h \
+ /home/michael/esp/esp-idf/components/driver/include/driver/gpio.h \
+ /home/michael/esp/esp-idf/components/esp_common/include/esp_types.h \
+ /home/michael/esp/esp-idf/components/esp_system/include/esp_intr_alloc.h \
+ /home/michael/esp/esp-idf/components/soc/include/soc/gpio_periph.h \
+ /home/michael/esp/esp-idf/components/soc/esp32/include/soc/io_mux_reg.h \
+ /home/michael/esp/esp-idf/components/soc/esp32/include/soc/gpio_struct.h \
+ /home/michael/esp/esp-idf/components/soc/esp32/include/soc/gpio_reg.h \
+ /home/michael/esp/esp-idf/components/hal/include/hal/gpio_types.h \
+ /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/gpio.h \
+ /home/michael/esp/esp-idf/components/log/include/esp_log.h \
+ /home/michael/esp/esp-idf/components/log/include/esp_log_internal.h \
  /home/michael/esp/PSU_display/main/ili9340.h \
+ /home/michael/esp/PSU_display/main/fontx.h \
  /home/michael/esp/PSU_display/main/pngle.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/miniz.h \
- /home/michael/esp/PSU_display/main/bmpfile.h \
- /home/michael/esp/PSU_display/main/decode_image.h
+ /home/michael/esp/PSU_display/main/decode_image.h \
+ /home/michael/esp/PSU_display/main/dfuncs.h
 
 /home/michael/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h:
 
@@ -194,26 +195,6 @@ main.o: /home/michael/esp/PSU_display/main/main.c \
 
 /home/michael/esp/esp-idf/components/freertos/include/freertos/list.h:
 
-/home/michael/esp/esp-idf/components/log/include/esp_log.h:
-
-/home/michael/esp/esp-idf/components/log/include/esp_log_internal.h:
-
-/home/michael/esp/esp-idf/components/vfs/include/esp_vfs.h:
-
-/home/michael/esp/esp-idf/components/freertos/include/freertos/semphr.h:
-
-/home/michael/esp/esp-idf/components/freertos/include/freertos/queue.h:
-
-/home/michael/esp/esp-idf/components/freertos/include/freertos/task.h:
-
-/home/michael/esp/esp-idf/components/newlib/platform_include/sys/termios.h:
-
-/home/michael/esp/esp-idf/components/newlib/platform_include/sys/poll.h:
-
-/home/michael/esp/esp-idf/components/spiffs/include/esp_spiffs.h:
-
-/home/michael/esp/PSU_display/main/dfuncs.h:
-
 /home/michael/esp/esp-idf/components/driver/include/driver/spi_master.h:
 
 /home/michael/esp/esp-idf/components/driver/include/driver/spi_common.h:
@@ -246,15 +227,37 @@ main.o: /home/michael/esp/PSU_display/main/main.c \
 
 /home/michael/esp/esp-idf/components/hal/include/hal/spi_types.h:
 
-/home/michael/esp/PSU_display/main/fontx.h:
+/home/michael/esp/esp-idf/components/driver/include/driver/gpio.h:
+
+/home/michael/esp/esp-idf/components/esp_common/include/esp_types.h:
+
+/home/michael/esp/esp-idf/components/esp_system/include/esp_intr_alloc.h:
+
+/home/michael/esp/esp-idf/components/soc/include/soc/gpio_periph.h:
+
+/home/michael/esp/esp-idf/components/soc/esp32/include/soc/io_mux_reg.h:
+
+/home/michael/esp/esp-idf/components/soc/esp32/include/soc/gpio_struct.h:
+
+/home/michael/esp/esp-idf/components/soc/esp32/include/soc/gpio_reg.h:
+
+/home/michael/esp/esp-idf/components/hal/include/hal/gpio_types.h:
+
+/home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/gpio.h:
+
+/home/michael/esp/esp-idf/components/log/include/esp_log.h:
+
+/home/michael/esp/esp-idf/components/log/include/esp_log_internal.h:
 
 /home/michael/esp/PSU_display/main/ili9340.h:
+
+/home/michael/esp/PSU_display/main/fontx.h:
 
 /home/michael/esp/PSU_display/main/pngle.h:
 
 /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/miniz.h:
 
-/home/michael/esp/PSU_display/main/bmpfile.h:
-
 /home/michael/esp/PSU_display/main/decode_image.h:
-/home/michael/esp/PSU_display/main/./main.c:
+
+/home/michael/esp/PSU_display/main/dfuncs.h:
+/home/michael/esp/PSU_display/main/./dfuncs.c:

@@ -10,6 +10,7 @@
 #include "esp_vfs.h"
 #include "esp_spiffs.h"
 #include "esp_heap_caps.h"
+#include "dfuncs.h"
 
 #include "ili9340.h"
 #include "fontx.h"
@@ -1070,26 +1071,6 @@ TickType_t PNGTest(TFT_t * dev, char * file, int width, int height) {
 	return diffTick;
 }
 
-void print_value(TFT_t dev, uint16_t color, FontxFile font[2], uint16_t xpos, uint16_t ypos, int int_value, float float_value)
-{
-	lcdSetFontDirection(&dev, 0);
-	char text[40];
-	uint8_t ascii[40];
-	if(int_value != -1)
-	{
-		ESP_LOGW(__FUNCTION__, "Int Value: %d", int_value);
-		sprintf(text, "%d", int_value);
-	}
-	if(float_value != -1)
-	{
-		ESP_LOGW(__FUNCTION__, "Float Value: %.2f", float_value);
-		sprintf(text, "%.2f", float_value);
-	}
-	strcpy((char *)ascii, text);
-	lcdDrawString(&dev, font, xpos, ypos, ascii, color);
-	
-}
-
 void ILI9341(void *pvParameters)
 {
 	// set font file
@@ -1110,7 +1091,6 @@ void ILI9341(void *pvParameters)
 	TFT_t dev;
 	spi_master_init(&dev, CONFIG_CS_GPIO, CONFIG_DC_GPIO, CONFIG_RESET_GPIO, CONFIG_BL_GPIO);
 
-	
 
 
 #if CONFIG_ILI9225
@@ -1213,26 +1193,26 @@ void ILI9341(void *pvParameters)
 */		
 
 		strcpy(file, "/spiffs/background.png");
-		PNGTest(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
+		print_png(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
 		
 		color = WHITE;
 		xpos = 35;
 		ypos = 25;
 		strcpy((char *)ascii, "Titel");
-		lcdDrawString(&dev, fx24G, xpos, ypos, ascii, color);
+		print_string(&dev, fx24G, xpos, ypos, ascii, color);
 
 		xpos = 20;
 		ypos = 50;
 		strcpy((char *)ascii, "Inhalt:");
-		lcdDrawString(&dev, fx16G, xpos, ypos, ascii, color);
+		print_string(&dev, fx16G, xpos, ypos, ascii, color);
 		xpos = 20;
 		ypos = 70;
 		strcpy((char *)ascii, "Inhalt:");
-		lcdDrawString(&dev, fx16G, xpos, ypos, ascii, color);
+		print_string(&dev, fx16G, xpos, ypos, ascii, color);
 		xpos = 20;
 		ypos = 90;
 		strcpy((char *)ascii, "Inhalt:");
-		lcdDrawString(&dev, fx16G, xpos, ypos, ascii, color);
+		print_string(&dev, fx16G, xpos, ypos, ascii, color);
 		
 		float float_value = 9.87;
 		color = RED;
