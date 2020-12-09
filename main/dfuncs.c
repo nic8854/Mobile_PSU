@@ -11,6 +11,7 @@
 #include "decode_image.h"
 #include "dfuncs.h"
 
+uint16_t vscreen[192][160];
 
 void print_value(TFT_t dev, uint16_t color, FontxFile font[2], uint16_t xpos, uint16_t ypos, int int_value, float float_value)
 {
@@ -51,6 +52,135 @@ int print_string(TFT_t * dev, FontxFile *fx, uint16_t x, uint16_t y, uint8_t * a
 	if (dev->_font_direction == 1) return y;
 	if (dev->_font_direction == 3) return y;
 	return 0;
+}
+
+int print_char(TFT_t * dev, FontxFile *fxs, uint16_t x, uint16_t y, uint8_t ascii, uint16_t color) {
+	uint16_t xx,yy,bit,ofs;
+	unsigned char fonts[128]; // font pattern
+	unsigned char pw, ph;
+	int h,w;
+	uint16_t mask;
+	bool rc;
+
+	if(_DEBUG_)printf("_font_direction=%d\n",dev->_font_direction);
+	rc = GetFontx(fxs, ascii, fonts, &pw, &ph);
+	if(_DEBUG_)printf("GetFontx rc=%d pw=%d ph=%d\n",rc,pw,ph);
+	if (!rc) return 0;
+
+	uint16_t xd1 = 0;
+	uint16_t yd1 = 0;
+	uint16_t xd2 = 0;
+	uint16_t yd2 = 0;
+	uint16_t xss = 0;
+	uint16_t yss = 0;
+	uint16_t xsd = 0;
+	uint16_t ysd = 0;
+	int next = 0;
+        uint16_t x0  = 0;
+        uint16_t x1  = 0;
+        uint16_t y0  = 0;
+        uint16_t y1  = 0;
+	if (dev->_font_direction == 0) {
+		xd1 = +1;
+		yd1 = +1; //-1;
+		xd2 =  0;
+		yd2 =  0;
+		xss =  x;
+		yss =  y - (ph - 1);
+		xsd =  1;
+		ysd =  0;
+		next = x + pw;
+
+                x0  = x;
+                y0  = y - (ph-1);
+                x1  = x + (pw-1);
+                y1  = y;
+	} else if (dev->_font_direction == 2) {
+		xd1 = -1;
+		yd1 = -1; //+1;
+		xd2 =  0;
+		yd2 =  0;
+		xss =  x;
+		yss =  y + ph + 1;
+		xsd =  1;
+		ysd =  0;
+		next = x - pw;
+
+                x0  = x - (pw-1);
+                y0  = y;
+                x1  = x;
+                y1  = y + (ph-1);
+	} else if (dev->_font_direction == 1) {
+		xd1 =  0;
+		yd1 =  0;
+		xd2 = -1;
+		yd2 = +1; //-1;
+		xss =  x + ph;
+		yss =  y;
+		xsd =  0;
+		ysd =  1;
+		next = y + pw; //y - pw;
+
+                x0  = x;
+                y0  = y;
+                x1  = x + (ph-1);
+                y1  = y + (pw-1);
+	} else if (dev->_font_direction == 3) {
+		xd1 =  0;
+		yd1 =  0;
+		xd2 = +1;
+		yd2 = -1; //+1;
+		xss =  x - (ph - 1);
+		yss =  y;
+		xsd =  0;
+		ysd =  1;
+		next = y - pw; //y + pw;
+
+                x0  = x - (ph-1);
+                y0  = y - (pw-1);
+                x1  = x;
+                y1  = y;
+	}
+
+        if (dev->_font_fill) lcdDrawFillRect(dev, x0, y0, x1, y1, dev->_font_fill_color);
+
+	int bits;
+	if(_DEBUG_)printf("xss=%d yss=%d\n",xss,yss);
+	ofs = 0;
+	yy = yss;
+	xx = xss;
+	for(h=0;h<ph;h++) {
+		if(xsd) xx = xss;
+		if(ysd) yy = yss;
+		//    for(w=0;w<(pw/8);w++) {
+		bits = pw;
+		for(w=0;w<((pw+4)/8);w++) {
+			mask = 0x80;
+			for(bit=0;bit<8;bit++) {
+				bits--;
+				if (bits < 0) continue;
+				//if(_DEBUG_)printf("xx=%d yy=%d mask=%02x fonts[%d]=%02x\n",xx,yy,mask,ofs,fonts[ofs]);
+				if (fonts[ofs] & mask) {
+					lcdDrawPixel(dev, xx, yy, color);
+				} else {
+					//if (dev->_font_fill) lcdDrawPixel(dev, xx, yy, dev->_font_fill_color);
+				}
+				if (h == (ph-2) && dev->_font_underline)
+					lcdDrawPixel(dev, xx, yy, dev->_font_underline_color);
+				if (h == (ph-1) && dev->_font_underline)
+					lcdDrawPixel(dev, xx, yy, dev->_font_underline_color);
+				xx = xx + xd1;
+				yy = yy + yd2;
+				mask = mask >> 1;
+			}
+			ofs++;
+		}
+		yy = yy + yd1;
+		xx = xx + xd2;
+	}
+
+	if (next < 0) next = 0;
+	return next;
 }
 
 TickType_t print_png(TFT_t * dev, char * file, int width, int height) {
@@ -208,7 +338,13 @@ void print_png_draw(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t
 
 }
 
-void print_png_finish(pngle_t *pngle) {
+void print_png_finish(pngle_t *pngle) 
+{
 	ESP_LOGD(__FUNCTION__, "print_png_finish");
+}
+
+void lcdUpdate(TFT_t * dev)
+{
+
 }
 
