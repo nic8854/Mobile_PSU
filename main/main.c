@@ -1226,7 +1226,7 @@ void ILI9341(void *pvParameters)
 		ypos = 90;
 		print_value(dev, color, fx16G, xpos, ypos, Inhalt[2], -1);
 		vTaskDelay(5000);
-
+		VlcdUpdate(&dev);
 		WAIT;
 
 /*

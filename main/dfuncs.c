@@ -11,7 +11,7 @@
 #include "decode_image.h"
 #include "dfuncs.h"
 
-uint16_t vscreen[192][160];
+uint16_t vscreen[128][160]; // [x][y]
 
 void print_value(TFT_t dev, uint16_t color, FontxFile font[2], uint16_t xpos, uint16_t ypos, int int_value, float float_value)
 {
@@ -29,7 +29,7 @@ void print_value(TFT_t dev, uint16_t color, FontxFile font[2], uint16_t xpos, ui
 		sprintf(text, "%.2f", float_value);
 	}
 	strcpy((char *)ascii, text);
-	lcdDrawString(&dev, font, xpos, ypos, ascii, color);
+	print_string(&dev, font, xpos, ypos, ascii, color);
 	
 }
 
@@ -39,13 +39,13 @@ int print_string(TFT_t * dev, FontxFile *fx, uint16_t x, uint16_t y, uint8_t * a
 	for(int i=0;i<length;i++) {
 		//printf("ascii[%d]=%x x=%d y=%d\n",i,ascii[i],x,y);
 		if (dev->_font_direction == 0)
-			x = lcdDrawChar(dev, fx, x, y, ascii[i], color);
+			x = print_char(dev, fx, x, y, ascii[i], color);
 		if (dev->_font_direction == 1)
-			y = lcdDrawChar(dev, fx, x, y, ascii[i], color);
+			y = print_char(dev, fx, x, y, ascii[i], color);
 		if (dev->_font_direction == 2)
-			x = lcdDrawChar(dev, fx, x, y, ascii[i], color);
+			x = print_char(dev, fx, x, y, ascii[i], color);
 		if (dev->_font_direction == 3)
-			y = lcdDrawChar(dev, fx, x, y, ascii[i], color);
+			y = print_char(dev, fx, x, y, ascii[i], color);
 	}
 	if (dev->_font_direction == 0) return x;
 	if (dev->_font_direction == 2) return x;
@@ -62,9 +62,9 @@ int print_char(TFT_t * dev, FontxFile *fxs, uint16_t x, uint16_t y, uint8_t asci
 	uint16_t mask;
 	bool rc;
 
-	if(_DEBUG_)printf("_font_direction=%d\n",dev->_font_direction);
+	//printf("_font_direction=%d\n",dev->_font_direction);
 	rc = GetFontx(fxs, ascii, fonts, &pw, &ph);
-	if(_DEBUG_)printf("GetFontx rc=%d pw=%d ph=%d\n",rc,pw,ph);
+	//printf("GetFontx rc=%d pw=%d ph=%d\n",rc,pw,ph);
 	if (!rc) return 0;
 
 	uint16_t xd1 = 0;
@@ -145,7 +145,7 @@ int print_char(TFT_t * dev, FontxFile *fxs, uint16_t x, uint16_t y, uint8_t asci
         if (dev->_font_fill) lcdDrawFillRect(dev, x0, y0, x1, y1, dev->_font_fill_color);
 
 	int bits;
-	if(_DEBUG_)printf("xss=%d yss=%d\n",xss,yss);
+	//printf("xss=%d yss=%d\n",xss,yss);
 	ofs = 0;
 	yy = yss;
 	xx = xss;
@@ -161,7 +161,8 @@ int print_char(TFT_t * dev, FontxFile *fxs, uint16_t x, uint16_t y, uint8_t asci
 				if (bits < 0) continue;
 				//if(_DEBUG_)printf("xx=%d yy=%d mask=%02x fonts[%d]=%02x\n",xx,yy,mask,ofs,fonts[ofs]);
 				if (fonts[ofs] & mask) {
-					lcdDrawPixel(dev, xx, yy, color);
+					vscreen[x][y] = color;
+					//lcdDrawPixel(dev, xx, yy, color);
 				} else {
 					//if (dev->_font_fill) lcdDrawPixel(dev, xx, yy, dev->_font_fill_color);
 				}
@@ -266,7 +267,6 @@ TickType_t print_png(TFT_t * dev, char * file, int width, int height) {
 		}
 	}
 #endif
-	//pixel_png vscreen[width][height];
 
 	for(int y = 0; y < pngHeight; y++){
 		for(int x = 0;x < pngWidth; x++){
@@ -274,16 +274,14 @@ TickType_t print_png(TFT_t * dev, char * file, int width, int height) {
 			colors[x] = rgb565_conv(pixel.blue, pixel.green, pixel.red);
 			//uint16_t color = rgb565_conv(pixel.red, pixel.green, pixel.blue);
 			//colors[x] = ~color;
-
-			//vscreen[x][y] = pngle->pixels[y][x];
+			vscreen[x][y] = colors[x];
 
 		}
-		lcdDrawMultiPixels(dev, offsetX, y+offsetY, pngWidth, colors);
+		//lcdDrawMultiPixels(dev, offsetX, y+offsetY, pngWidth, colors);
 		vTaskDelay(1);
 	}
 	free(colors);
 	pngle_destroy(pngle, _width, _height);
-	//return *vscreen;
 	endTick = xTaskGetTickCount();
 	diffTick = endTick - startTick;
 	ESP_LOGI(__FUNCTION__, "printing value");
@@ -343,8 +341,24 @@ void print_png_finish(pngle_t *pngle)
 	ESP_LOGD(__FUNCTION__, "print_png_finish");
 }
 
-void lcdUpdate(TFT_t * dev)
+void VlcdUpdate(TFT_t * dev)
 {
+	uint16_t pngHeight = 160;
+	uint16_t pngWidth = 128;
+	uint16_t offsetX = 0;
+	uint16_t offsetY = 0;
+	uint16_t *colors = (uint16_t*)malloc(sizeof(uint16_t) * pngWidth);
 
+	for(int y = 0; y < pngHeight; y++){
+		for(int x = 0;x < pngWidth; x++){
+			//pixel_png pixel = pngle->pixels[y][x];
+			colors[x] = vscreen[x][y];
+			//uint16_t color = rgb565_conv(pixel.red, pixel.green, pixel.blue);
+			//colors[x] = ~color;
+			printf(colors[x]);
+		}
+		lcdDrawMultiPixels(dev, offsetX, y+offsetY, pngWidth, colors);
+		vTaskDelay(1);
+	}
 }
 
