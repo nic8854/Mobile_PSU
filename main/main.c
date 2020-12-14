@@ -1064,7 +1064,6 @@ TickType_t PNGTest(TFT_t * dev, char * file, int width, int height) {
 	}
 	free(colors);
 	pngle_destroy(pngle, _width, _height);
-	//return *vscreen;
 	endTick = xTaskGetTickCount();
 	diffTick = endTick - startTick;
 	ESP_LOGI(__FUNCTION__, "printing value");
@@ -1225,7 +1224,6 @@ void ILI9341(void *pvParameters)
 		xpos = 80;
 		ypos = 90;
 		print_value(dev, color, fx16G, xpos, ypos, Inhalt[2], -1);
-		vTaskDelay(5000);
 		VlcdUpdate(&dev);
 		WAIT;
 

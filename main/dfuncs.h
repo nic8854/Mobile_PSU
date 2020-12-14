@@ -29,8 +29,7 @@ TickType_t print_png(TFT_t * dev, char * file, int width, int height);
 void print_png_init(pngle_t *pngle, uint32_t w, uint32_t h);
 void print_png_draw(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t rgba[4]);
 void print_png_finish(pngle_t *pngle);
-void lcdDrawPixel(TFT_t * dev, uint16_t x, uint16_t y, uint16_t color);
-void lcdDrawMultiPixels(TFT_t * dev, uint16_t x, uint16_t y, uint16_t size, uint16_t * colors);
+void print_Vpixel(uint16_t x, uint16_t y, uint16_t color);
 void VlcdUpdate(TFT_t * dev);
 
 
