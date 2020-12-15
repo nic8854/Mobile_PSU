@@ -142,7 +142,7 @@ int print_char(TFT_t * dev, FontxFile *fxs, uint16_t x, uint16_t y, uint8_t asci
                 y1  = y;
 	}
 
-        //if (dev->_font_fill) lcdDrawFillRect(dev, x0, y0, x1, y1, dev->_font_fill_color);
+        if (dev->_font_fill) print_rect(x0, y0, x1, y1, dev->_font_fill_color);
 
 	int bits;
 	//printf("xss=%d yss=%d\n",xss,yss);
@@ -370,3 +370,51 @@ void print_Vpixel(uint16_t x, uint16_t y, uint16_t color)
 	vscreen[x][y] = color;
 }
 
+void print_rect(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color) {
+	print_line(x1, y1, x2, y1, color);
+	print_line(x2, y1, x2, y2, color);
+	print_line(x2, y2, x1, y2, color);
+	print_line(x1, y2, x1, y1, color);
+}
+
+void print_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color) {
+	int i;
+	int dx,dy;
+	int sx,sy;
+	int E;
+
+	/* distance between two points */
+	dx = ( x2 > x1 ) ? x2 - x1 : x1 - x2;
+	dy = ( y2 > y1 ) ? y2 - y1 : y1 - y2;
+
+	/* direction of two point */
+	sx = ( x2 > x1 ) ? 1 : -1;
+	sy = ( y2 > y1 ) ? 1 : -1;
+
+	/* inclination < 1 */
+	if ( dx > dy ) {
+		E = -dx;
+		for ( i = 0 ; i <= dx ; i++ ) {
+			print_Vpixel(x1, y1, color);
+			x1 += sx;
+			E += 2 * dy;
+			if ( E >= 0 ) {
+			y1 += sy;
+			E -= 2 * dx;
+		}
+	}
+
+/* inclination >= 1 */
+	} else {
+		E = -dy;
+		for ( i = 0 ; i <= dy ; i++ ) {
+			print_Vpixel(x1, y1, color);
+			y1 += sy;
+			E += 2 * dx;
+			if ( E >= 0 ) {
+				x1 += sx;
+				E -= 2 * dy;
+			}
+		}
+	}
+}

@@ -31,6 +31,8 @@ void print_png_draw(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t
 void print_png_finish(pngle_t *pngle);
 void print_Vpixel(uint16_t x, uint16_t y, uint16_t color);
 void VlcdUpdate(TFT_t * dev);
+void print_rect(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
+void print_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
 
 
 #endif
