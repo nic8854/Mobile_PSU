@@ -1225,7 +1225,7 @@ void ILI9341(void *pvParameters)
 		ypos = 90;
 		print_value(dev, color, fx16G, xpos, ypos, Inhalt[2], -1);
 		VlcdUpdate(&dev);
-		WAIT;
+		vTaskDelay(500);
 
 /*
 		ScrollTest(&dev, fx16G, CONFIG_WIDTH, CONFIG_HEIGHT);
