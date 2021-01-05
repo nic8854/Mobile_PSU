@@ -8,18 +8,13 @@
 #include "esp_log.h"
 #include "ili9340.h"
 #include "ui_driver.h"
+#include "dfuncs.h"
 
-#define up 0
-#define down 1
-#define left 2
-#define right 3
-#define middle 4
-#define clkwise 5
-#define cclkwise 6
+
 
 /*
 page_select
-------------
+-----------------------------
 0 = 24V  OUT
 1 = 5V   OUT
 2 = VAR  OUT
@@ -29,12 +24,55 @@ page_select
 6 = More Measurements
 7 = INA220 calibratrion
 8 = change Display Settings
+
+vaule_select page 0 - 4
+-----------------------------
+0 = nothing
+1 = Output On/Off
+2 = More Measurements
+
+vaule_select page 5
+-----------------------------
+0 = nothing
+1 = INA220 calibration
+2 = change display options
+3 = Output On/Off
+4 = More Measurements
+
+vaule_select page 6
+-----------------------------
+0 = nothing
+
+vaule_select page 7
+-----------------------------
+0 = nothing
+1 = calibrate INA1
+2 = calibrate INA2
+3 = calibrate INA3
+
+vaule_select page 7
+-----------------------------
+0 = nothing
+1 = digits displayed
+2 = Output On/Off
+3 = More Measurements
 */
+
+#define OUT24   0
+#define OUT5    1
+#define OUTVAR  2
+#define OUT33   3
+#define TCBUS   4
+#define OPTIONS 5
+#define MEASURE 6
+#define INA220  7
+#define DISPSET 8
 
 int page_select = 0;
 int value_select = 0;
 double value_selected = 0;
 int output_state = 0;
+int value_select_max = 0;
 
 int up_state = 0;
 int down_state = 0;
@@ -54,11 +92,20 @@ int cclkwise_state_last = 0;
 
 void enter_page()
 {
-
+    
 }
-void change_value()
+void change_sel_value()
 {
-
+    if(up_state)
+    {
+        if(value_select != 0) value_select--;
+        else value_select = value_select_max;
+    }
+    if(down_state)
+    {
+        if(value_select != value_select_max) value_select++;
+        else value_select = 0;
+    }
 }
 
 void change_page()
