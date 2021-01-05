@@ -73,6 +73,7 @@ int value_select = 0;
 double value_selected = 0;
 int output_state = 0;
 int value_select_max = 0;
+int page_select_max = 5;
 
 int up_state = 0;
 int down_state = 0;
@@ -92,7 +93,7 @@ int cclkwise_state_last = 0;
 
 void enter_page()
 {
-    
+
 }
 void change_sel_value()
 {
@@ -110,8 +111,16 @@ void change_sel_value()
 
 void change_page()
 {
-    if(right_state) page_select++;
-    if(left_state) page_select--;
+    if(right_state)
+    {
+       if(page_select != page_select_max) page_select++;
+       else value_select = 0; 
+    } 
+    if(left_state)
+    {
+        if(page_select != 0) page_select--;
+        else value_select = page_select_max;
+    } 
 }
 
 void refresh_GUI()
