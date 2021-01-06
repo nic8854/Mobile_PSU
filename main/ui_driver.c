@@ -15,23 +15,23 @@
 /*
 page_select
 -----------------------------
-0 = 24V  OUT
-1 = 5V   OUT
-2 = VAR  OUT
-3 = 3.3V OUT
-4 = TC-Bus
-5 = Options
-6 = More Measurements
-7 = INA220 calibratrion
-8 = change Display Settings
+1 = 24V  OUT
+2 = 5V   OUT
+3 = VAR  OUT
+4 = 3.3V OUT
+5 = TC-Bus
+6 = Options
+7 = More Measurements
+8 = INA220 calibratrion
+9 = change Display Settings
 
-vaule_select page 0 - 4
+value_select page 1 - 5
 -----------------------------
 0 = nothing
 1 = Output On/Off
 2 = More Measurements
 
-vaule_select page 5
+value_select page 6
 -----------------------------
 0 = nothing
 1 = INA220 calibration
@@ -39,18 +39,18 @@ vaule_select page 5
 3 = Output On/Off
 4 = More Measurements
 
-vaule_select page 6
+value_select page 7
 -----------------------------
 0 = nothing
 
-vaule_select page 7
+value_select page 8
 -----------------------------
 0 = nothing
 1 = calibrate INA1
 2 = calibrate INA2
 3 = calibrate INA3
 
-vaule_select page 7
+value_select page 9
 -----------------------------
 0 = nothing
 1 = digits displayed
@@ -58,17 +58,18 @@ vaule_select page 7
 3 = More Measurements
 */
 
-#define OUT24   0
-#define OUT5    1
-#define OUTVAR  2
-#define OUT33   3
-#define TCBUS   4
-#define OPTIONS 5
-#define MEASURE 6
-#define INA220  7
-#define DISPSET 8
+#define OUT24   1
+#define OUT5    2
+#define OUTVAR  3
+#define OUT33   4
+#define TCBUS   5
+#define OPTIONS 6
+#define MEASURE 7
+#define INA220  8
+#define DISPSET 9
 
 int page_select = 0;
+int page_select_last = 0;
 int value_select = 0;
 double value_selected = 0;
 int output_state = 0;
@@ -93,7 +94,18 @@ int cclkwise_state_last = 0;
 
 void enter_page()
 {
-
+    switch(page_select)
+    {
+        case 1:     func_page_1_5();
+        case 2:     func_page_1_5();
+        case 3:     func_page_1_5();
+        case 4:     func_page_1_5();
+        case 5:     func_page_1_5();
+        case 6:     func_page_6();
+        case 8:     func_page_8();
+        case 9:     func_page_9();
+        default:    vtaskdelay(10);
+    }
 }
 void change_sel_value()
 {
@@ -145,5 +157,39 @@ void ui_driver(void *pvParameters)
     if(middle_state_last < middle_state) enter_page();
 
     refresh_GUI();
+}
+
+void func_page_1_4()
+{
+    switch(value_select)
+    {
+        case 1: toggle_outs();
+        case 2: page_select = 6;
+    }
+}
+
+void func_page_6()
+{
+    switch(value_select)
+    {
+        case 1: page_select = 8;
+        case 2: page_select = 9;
+        case 3: toggle_outs();
+        case 4: page_select = 6;
+    }
+}
+
+void func_page_8()
+{
+
+}
+
+void func_page_9()
+{
+
+}
+
+void toggle_outs()
+{
 
 }
