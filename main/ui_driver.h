@@ -5,6 +5,7 @@
 #include "fontx.h"
 #include "ili9340.h"
 #include "pngle.h"
+#include "dfuncs.h"
 
 void enter_page();
 void change_value();
