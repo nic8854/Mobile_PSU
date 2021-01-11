@@ -25,13 +25,13 @@ page_select
 8 = INA220 calibratrion
 9 = change Display Settings
 
-value_select page 1 - 5
+value_select page 0 - 4
 -----------------------------
 0 = nothing
 1 = Output On/Off
 2 = More Measurements
 
-value_select page 6
+value_select page 5
 -----------------------------
 0 = nothing
 1 = INA220 calibration
@@ -39,11 +39,11 @@ value_select page 6
 3 = Output On/Off
 4 = More Measurements
 
-value_select page 7
+value_select page 6
 -----------------------------
 0 = nothing
 
-value_select page 8
+value_select page 7
 -----------------------------
 0 = nothing
 1 = calibrate INA1
@@ -58,15 +58,15 @@ vaule_select page 8
 3 = More Measurements
 */
 
-#define OUT24   1
-#define OUT5    2
-#define OUTVAR  3
-#define OUT33   4
-#define TCBUS   5
-#define OPTIONS 6
-#define MEASURE 7
-#define INA220  8
-#define DISPSET 9
+#define OUT24   0
+#define OUT5    1
+#define OUTVAR  2
+#define OUT33   3
+#define TCBUS   4
+#define OPTIONS 5
+#define MEASURE 6
+#define INA220  7
+#define DISPSET 8
 
 int page_select = 0;
 int page_select_last = 0;
