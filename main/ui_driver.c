@@ -50,7 +50,7 @@ vaule_select page 7
 2 = calibrate INA2
 3 = calibrate INA3
 
-vaule_select page 7
+vaule_select page 8
 -----------------------------
 0 = nothing
 1 = digits displayed
@@ -93,8 +93,80 @@ int cclkwise_state_last = 0;
 
 void enter_page()
 {
+    if(page_select <= 4)
+    {
+        switch(value_select)
+        {
+            case 1:
+                if(!output_state) output_state = 1;
+                if(output_state) output_state = 0;
+            break;
 
+            case 2:
+                page_select = 6;
+            break;
+
+            default:
+                vTaskDelay(20);
+            break;
+        }
+    }
+
+    if(page_select == 5)
+    {
+        switch(value_select)
+        {
+            case 1:
+                page_select = 7;
+            break;
+
+            case 2:
+                page_select = 8;
+            break;
+
+            case = 3:
+                if(!output_state) output_state = 1;
+                if(output_state) output_state = 0;
+            break;
+
+            case 4:
+                page_select = 6;
+            break;
+
+            default:
+                vTaskDelay(20);
+            break;
+        }
+    }
+
+    if(page_select == 6)
+    {
+        vTaskDelay(20);
+    }
+
+    if(page_select == 7)
+    {
+        switch(value_select)
+        {
+            case 1:
+                ina_cal(1);
+            break;
+
+            case 2:
+                ina_cal(2);
+            break;
+
+            case 3:
+                ina_cal(3);
+            break;
+
+            default:
+                vTaskDelay(20);
+            break;
+        }
+    }
 }
+
 void change_sel_value()
 {
     if(up_state)
