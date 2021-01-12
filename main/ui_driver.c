@@ -75,6 +75,7 @@ double value_selected = 0;
 int output_state = 0;
 int value_select_max = 0;
 int page_select_max = 5;
+int digit_select = 0;
 
 int up_state = 0;
 int down_state = 0;
@@ -164,8 +165,8 @@ void func_page_1_4()
 {
     switch(value_select)
     {
-        case 1: toggle_outs();
-        case 2: page_select = OPTIONS;
+        case 1: toggle_outs(); break;
+        case 2: page_select = OPTIONS; break;
     }
 }
 
@@ -173,10 +174,10 @@ void func_page_6()
 {
     switch(value_select)
     {
-        case 1: page_select = INA220;
-        case 2: page_select = DISPSET;
-        case 3: toggle_outs();
-        case 4: page_select = OPTIONS;
+        case 1: page_select = INA220; break;
+        case 2: page_select = DISPSET; break;
+        case 3: toggle_outs(); break;
+        case 4: page_select = OPTIONS; break;
     }
 }
 
@@ -184,18 +185,45 @@ void func_page_8()
 {
     switch(value_select)
     {
-        case 1: INA_cal(1);
-        case 2: INA_cal(2);
-        case 3: INA_cal(3);
+        case 1: INA_cal(1); break;
+        case 2: INA_cal(2); break;
+        case 3: INA_cal(3); break;
     }
 }
 
 void func_page_9()
 {
-
+    switch(value_select)
+    {
+        case 1: change_digit(); break;
+        case 2: toggle_outs(); break;
+        case 3: page_select = OPTIONS; break;
+    }
 }
 
 void toggle_outs()
 {
+    /*
+    output_state
+    -------------
+    0 = OFF
+    1 = ON
+    */
 
+    if(output_state) output_state = 0;
+    else output_state = 1;
+}
+
+void change_digit()
+{
+    /*
+    digit_select
+    -------------
+    0 = .00
+    1 = .0
+    2 = .
+    */
+
+    if(digit_select < 2) digit_select++;
+    else digit_select = 0;
 }
