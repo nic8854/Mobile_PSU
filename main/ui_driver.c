@@ -25,13 +25,13 @@ page_select
 8 = INA220 calibratrion
 9 = change Display Settings
 
-value_select page 0 - 4
+value_select page 1 - 5
 -----------------------------
 0 = nothing
 1 = Output On/Off
 2 = More Measurements
 
-value_select page 5
+value_select page 6
 -----------------------------
 0 = nothing
 1 = INA220 calibration
@@ -39,18 +39,18 @@ value_select page 5
 3 = Output On/Off
 4 = More Measurements
 
-value_select page 6
+value_select page 7
 -----------------------------
 0 = nothing
 
-value_select page 7
+value_select page 8
 -----------------------------
 0 = nothing
 1 = calibrate INA1
 2 = calibrate INA2
 3 = calibrate INA3
 
-vaule_select page 8
+vaule_select page 9
 -----------------------------
 0 = nothing
 1 = digits displayed
@@ -58,15 +58,15 @@ vaule_select page 8
 3 = More Measurements
 */
 
-#define OUT24   0
-#define OUT5    1
-#define OUTVAR  2
-#define OUT33   3
-#define TCBUS   4
-#define OPTIONS 5
-#define MEASURE 6
-#define INA220  7
-#define DISPSET 8
+#define OUT24   1
+#define OUT5    2
+#define OUTVAR  3
+#define OUT33   4
+#define TCBUS   5
+#define OPTIONS 6
+#define MEASURE 7
+#define INA220  8
+#define DISPSET 9
 
 int page_select = 0;
 int page_select_last = 0;
@@ -94,77 +94,17 @@ int cclkwise_state_last = 0;
 
 void enter_page()
 {
-    if(page_select <= 4)
+    switch(page_select)
     {
-        switch(value_select)
-        {
-            case 1:
-                if(!output_state) output_state = 1;
-                if(output_state) output_state = 0;
-            break;
-
-            case 2:
-                page_select = 6;
-            break;
-
-            default:
-                vTaskDelay(20);
-            break;
-        }
-    }
-
-    if(page_select == 5)
-    {
-        switch(value_select)
-        {
-            case 1:
-                page_select = 7;
-            break;
-
-            case 2:
-                page_select = 8;
-            break;
-
-            case = 3:
-                if(!output_state) output_state = 1;
-                if(output_state) output_state = 0;
-            break;
-
-            case 4:
-                page_select = 6;
-            break;
-
-            default:
-                vTaskDelay(20);
-            break;
-        }
-    }
-
-    if(page_select == 6)
-    {
-        vTaskDelay(20);
-    }
-
-    if(page_select == 7)
-    {
-        switch(value_select)
-        {
-            case 1:
-                ina_cal(1);
-            break;
-
-            case 2:
-                ina_cal(2);
-            break;
-
-            case 3:
-                ina_cal(3);
-            break;
-
-            default:
-                vTaskDelay(20);
-            break;
-        }
+        case OUT24:     func_page_1_4();
+        case OUT5:      func_page_1_4();
+        case OUTVAR:    func_page_1_4();
+        case OUT33:     func_page_1_4();
+        case TCBUS:     func_page_5();
+        case OPTIONS:   func_page_6();
+        case MEASURE:   func_page_7();
+        case INA220:    func_page_8();
+        case DISPSET:   func_page_9();
     }
 }
 
@@ -225,7 +165,7 @@ void func_page_1_4()
     switch(value_select)
     {
         case 1: toggle_outs();
-        case 2: page_select = 6;
+        case 2: page_select = OPTIONS;
     }
 }
 
@@ -233,16 +173,21 @@ void func_page_6()
 {
     switch(value_select)
     {
-        case 1: page_select = 8;
-        case 2: page_select = 9;
+        case 1: page_select = INA220;
+        case 2: page_select = DISPSET;
         case 3: toggle_outs();
-        case 4: page_select = 6;
+        case 4: page_select = OPTIONS;
     }
 }
 
 void func_page_8()
 {
-
+    switch(value_select)
+    {
+        case 1: INA_cal(1);
+        case 2: INA_cal(2);
+        case 3: INA_cal(3);
+    }
 }
 
 void func_page_9()
