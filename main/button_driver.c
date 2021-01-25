@@ -11,7 +11,7 @@
 
 #define I2C_FREQ_HZ 1000000
 
-static const char *TAG = "INA219";
+static const char *TAG = "EXPANDER";
 
 #define REG_IN_LOWER 0
 #define REG_IN_UPPER 1
