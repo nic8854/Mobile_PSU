@@ -15,4 +15,7 @@ typedef struct
     float i_lsb, p_lsb;
 } expander_t;
 
+#define expander_addr_low 0x20
+#define expander_addr_high 0x21
+
 #endif
