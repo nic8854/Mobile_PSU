@@ -45,11 +45,35 @@ static esp_err_t write_reg_8(expander_t *dev, uint8_t reg, uint16_t val)
     return ESP_OK;
 }
 
+static esp_err_t read_reg_16(expander_t *dev, uint8_t reg, uint16_t *val)
+{
+    CHECK_ARG(val);
+
+    I2C_DEV_TAKE_MUTEX(&dev->i2c_dev);
+    I2C_DEV_CHECK(&dev->i2c_dev, i2c_dev_read_reg(&dev->i2c_dev, reg, val, 2));
+    I2C_DEV_GIVE_MUTEX(&dev->i2c_dev);
+
+    *val = (*val >> 8) | (*val << 8);
+
+    return ESP_OK;
+}
+
+static esp_err_t write_reg_16(expander_t *dev, uint8_t reg, uint16_t val)
+{
+    uint16_t v = (val >> 8) | (val << 8);
+
+    I2C_DEV_TAKE_MUTEX(&dev->i2c_dev);
+    I2C_DEV_CHECK(&dev->i2c_dev, i2c_dev_write_reg(&dev->i2c_dev, reg, &v, 2));
+    I2C_DEV_GIVE_MUTEX(&dev->i2c_dev);
+
+    return ESP_OK;
+}
+
 esp_err_t expander_init(expander_t *dev)
 {
     CHECK_ARG(dev);
 
-    CHECK(read_reg_8(dev, REG_CONFIG, &dev->config));
+    CHECK(read_reg_16(dev, REG_CONFIG, &dev->config));
 
     ESP_LOGD(TAG, "Initialize, config: 0x%04x", dev->config);
 

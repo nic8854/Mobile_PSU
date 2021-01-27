@@ -3,6 +3,8 @@
 
 static esp_err_t read_reg_8(expander_t *dev, uint8_t reg, uint16_t *val);
 static esp_err_t write_reg_8(expander_t *dev, uint8_t reg, uint16_t val);
+static esp_err_t read_reg_16(expander_t *dev, uint8_t reg, uint16_t *val);
+static esp_err_t write_reg_16(expander_t *dev, uint8_t reg, uint16_t val);
 esp_err_t expander_init(expander_t *dev);
 
 typedef struct
