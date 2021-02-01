@@ -100,3 +100,25 @@ esp_err_t expander_init_desc(expander_t *dev, uint8_t addr, i2c_port_t port, gpi
 
     return i2c_dev_create_mutex(&dev->i2c_dev);
 }
+
+esp_err_t ina219_configure(ina219_t *dev, ina219_bus_voltage_range_t u_range,
+        ina219_gain_t gain, ina219_resolution_t u_res,
+        ina219_resolution_t i_res, ina219_mode_t mode)
+{
+    CHECK_ARG(dev);
+    CHECK_ARG(u_range <= INA219_BUS_RANGE_32V);
+    CHECK_ARG(gain <= INA219_GAIN_0_125);
+    CHECK_ARG(u_res <= INA219_RES_12BIT_128S);
+    CHECK_ARG(i_res <= INA219_RES_12BIT_128S);
+    CHECK_ARG(mode <= INA219_MODE_CONT_SHUNT_BUS);
+
+    dev->config = (u_range << BIT_BRNG) |
+                  (gain << BIT_PG0) |
+                  (u_res << BIT_BADC0) |
+                  (i_res << BIT_SADC0) |
+                  (mode << BIT_MODE);
+
+    ESP_LOGD(TAG, "Config: 0x%04x", dev->config);
+
+    return write_reg_16(dev, REG_CONFIG, dev->config);
+}
