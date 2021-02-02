@@ -36,7 +36,7 @@ static esp_err_t read_reg_8(expander_t *dev, uint8_t reg, uint8_t *val)
     return ESP_OK;
 }
 
-static esp_err_t write_reg_8(expander_t *dev, uint8_t reg, uint16_t val)
+static esp_err_t write_reg_8(expander_t *dev, uint8_t reg, uint8_t val)
 {
     I2C_DEV_TAKE_MUTEX(&dev->i2c_dev);
     I2C_DEV_CHECK(&dev->i2c_dev, i2c_dev_write_reg(&dev->i2c_dev, reg, &v, 1));
