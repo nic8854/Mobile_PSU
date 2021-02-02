@@ -24,7 +24,7 @@ static const char *TAG = "EXPANDER";
 
 #define CHECK_ARG(VAL) do { if (!(VAL)) return ESP_ERR_INVALID_ARG; } while (0)
 
-static esp_err_t read_reg_8(expander_t *dev, uint8_t reg, uint16_t *val)
+static esp_err_t read_reg_8(expander_t *dev, uint8_t reg, uint8_t *val)
 {
     CHECK_ARG(val);
 
