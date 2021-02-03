@@ -13,15 +13,6 @@
 
 static const char *TAG = "EXPANDER";
 
-#define REG_IN_LOWER 0
-#define REG_IN_UPPER 1
-#define REG_OUT_LOWER 2
-#define REG_OUT_UPPER 3
-#define REG_POL_INV_LOWER 4
-#define REG_POL_INV_UPPER 5
-#define REG_CONF_LOWER 6
-#define REG_CONF_UPPER 7
-
 #define CHECK_ARG(VAL) do { if (!(VAL)) return ESP_ERR_INVALID_ARG; } while (0)
 
 static esp_err_t read_reg_8(expander_t *dev, uint8_t reg, uint8_t *val)
@@ -121,4 +112,25 @@ esp_err_t ina219_configure(ina219_t *dev, ina219_bus_voltage_range_t u_range,
     ESP_LOGD(TAG, "Config: 0x%04x", dev->config);
 
     return write_reg_16(dev, REG_CONFIG, dev->config);
+}
+
+esp_err_t ina219_init_desc(ina219_t *dev, uint8_t addr, i2c_port_t port, gpio_num_t sda_gpio, gpio_num_t scl_gpio)
+{
+    CHECK_ARG(dev);
+
+    if (addr < INA219_ADDR_GND_GND || addr > INA219_ADDR_SCL_SCL)
+    {
+        ESP_LOGE(TAG, "Invalid I2C address");
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    dev->i2c_dev.port = port;
+    dev->i2c_dev.addr = addr;
+    dev->i2c_dev.cfg.sda_io_num = sda_gpio;
+    dev->i2c_dev.cfg.scl_io_num = scl_gpio;
+#if HELPER_TARGET_IS_ESP32
+    dev->i2c_dev.cfg.master.clk_speed = I2C_FREQ_HZ;
+#endif
+
+    return i2c_dev_create_mutex(&dev->i2c_dev);
 }
