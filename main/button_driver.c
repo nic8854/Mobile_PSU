@@ -91,7 +91,7 @@ esp_err_t expander_init_desc(expander_t *dev, uint8_t addr, i2c_port_t port, gpi
 
     return i2c_dev_create_mutex(&dev->i2c_dev);
 }
-
+/*
 esp_err_t ina219_configure(ina219_t *dev, ina219_bus_voltage_range_t u_range,
         ina219_gain_t gain, ina219_resolution_t u_res,
         ina219_resolution_t i_res, ina219_mode_t mode)
@@ -113,12 +113,12 @@ esp_err_t ina219_configure(ina219_t *dev, ina219_bus_voltage_range_t u_range,
 
     return write_reg_16(dev, REG_CONFIG, dev->config);
 }
-
-esp_err_t ina219_init_desc(ina219_t *dev, uint8_t addr, i2c_port_t port, gpio_num_t sda_gpio, gpio_num_t scl_gpio)
+*/
+esp_err_t expander_init_desc(expander_t *dev, uint8_t addr, i2c_port_t port, gpio_num_t sda_gpio, gpio_num_t scl_gpio)
 {
     CHECK_ARG(dev);
 
-    if (addr < INA219_ADDR_GND_GND || addr > INA219_ADDR_SCL_SCL)
+    if (addr < expander_addr_low || addr > expander_addr_high)
     {
         ESP_LOGE(TAG, "Invalid I2C address");
         return ESP_ERR_INVALID_ARG;
