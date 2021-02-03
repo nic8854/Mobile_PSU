@@ -30,7 +30,7 @@ static esp_err_t read_reg_8(expander_t *dev, uint8_t reg, uint8_t *val)
 static esp_err_t write_reg_8(expander_t *dev, uint8_t reg, uint8_t val)
 {
     I2C_DEV_TAKE_MUTEX(&dev->i2c_dev);
-    I2C_DEV_CHECK(&dev->i2c_dev, i2c_dev_write_reg(&dev->i2c_dev, reg, &v, 1));
+    I2C_DEV_CHECK(&dev->i2c_dev, i2c_dev_write_reg(&dev->i2c_dev, reg, &val, 1));
     I2C_DEV_GIVE_MUTEX(&dev->i2c_dev);
 
     return ESP_OK;
@@ -59,7 +59,7 @@ static esp_err_t write_reg_16(expander_t *dev, uint8_t reg, uint16_t val)
 
     return ESP_OK;
 }
-
+/*
 esp_err_t expander_init(expander_t *dev)
 {
     CHECK_ARG(dev);
@@ -70,7 +70,7 @@ esp_err_t expander_init(expander_t *dev)
 
     return ESP_OK;
 }
-
+*/
 esp_err_t expander_init_desc(expander_t *dev, uint8_t addr, i2c_port_t port, gpio_num_t sda_gpio, gpio_num_t scl_gpio)
 {
     CHECK_ARG(dev);
@@ -114,23 +114,3 @@ esp_err_t ina219_configure(ina219_t *dev, ina219_bus_voltage_range_t u_range,
     return write_reg_16(dev, REG_CONFIG, dev->config);
 }
 */
-esp_err_t expander_init_desc(expander_t *dev, uint8_t addr, i2c_port_t port, gpio_num_t sda_gpio, gpio_num_t scl_gpio)
-{
-    CHECK_ARG(dev);
-
-    if (addr < expander_addr_low || addr > expander_addr_high)
-    {
-        ESP_LOGE(TAG, "Invalid I2C address");
-        return ESP_ERR_INVALID_ARG;
-    }
-
-    dev->i2c_dev.port = port;
-    dev->i2c_dev.addr = addr;
-    dev->i2c_dev.cfg.sda_io_num = sda_gpio;
-    dev->i2c_dev.cfg.scl_io_num = scl_gpio;
-#if HELPER_TARGET_IS_ESP32
-    dev->i2c_dev.cfg.master.clk_speed = I2C_FREQ_HZ;
-#endif
-
-    return i2c_dev_create_mutex(&dev->i2c_dev);
-}

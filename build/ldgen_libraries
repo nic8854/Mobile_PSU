@@ -22,6 +22,7 @@
  /home/michael/esp/PSU_display/build/esp_http_server/libesp_http_server.a
  /home/michael/esp/PSU_display/build/esp_https_ota/libesp_https_ota.a
  /home/michael/esp/PSU_display/build/esp_hw_support/libesp_hw_support.a
+ /home/michael/esp/PSU_display/build/esp_idf_lib_helpers/libesp_idf_lib_helpers.a
  /home/michael/esp/PSU_display/build/esp_ipc/libesp_ipc.a
  /home/michael/esp/PSU_display/build/esp_local_ctrl/libesp_local_ctrl.a
  /home/michael/esp/PSU_display/build/esp_netif/libesp_netif.a
@@ -40,6 +41,7 @@
  /home/michael/esp/PSU_display/build/freertos/libfreertos.a
  /home/michael/esp/PSU_display/build/hal/libhal.a
  /home/michael/esp/PSU_display/build/heap/libheap.a
+ /home/michael/esp/PSU_display/build/i2cdev/libi2cdev.a
  /home/michael/esp/PSU_display/build/idf_test/libidf_test.a
  /home/michael/esp/PSU_display/build/jsmn/libjsmn.a
  /home/michael/esp/PSU_display/build/json/libjson.a

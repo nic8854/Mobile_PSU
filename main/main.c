@@ -1126,6 +1126,11 @@ void ILI9341(void *pvParameters)
 	int yd = 1;
 	int Inhalt[3] = {987, 654, 321};
 
+	#define I2C_PORT 0
+	#define I2C_ADDR 0x20
+	#define SDA_GPIO 21
+	#define SCL_GPIO 19
+
 	while(1) {
 
 		/*
@@ -1191,9 +1196,14 @@ void ILI9341(void *pvParameters)
 		WAIT;
 */		
 
+		memset(&dev, 0, sizeof(ina219_t));
+		expander_init_desc(&dev, I2C_ADDR, I2C_PORT, SDA_GPIO, SCL_GPIO);
+		
+
+
 		strcpy(file, "/spiffs/background.png");
 		print_png(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
-		
+
 		color = WHITE;
 		xpos = 35;
 		ypos = 25;
