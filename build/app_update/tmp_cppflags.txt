@@ -1,1 +1,1 @@
-0fd1a27-dirty ili9340 v4.3-dev-1720-g494a124
+68782c6-dirty ili9340 v4.3-dev-1720-g494a124
