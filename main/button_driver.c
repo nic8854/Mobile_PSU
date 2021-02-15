@@ -6,7 +6,6 @@
 #include <driver/spi_master.h>
 #include <driver/gpio.h>
 #include "esp_log.h"
-#include "i2cdev.h"
 #include "button_driver.h"
 
 #define I2C_FREQ_HZ 1000000
@@ -15,7 +14,7 @@ static const char *TAG = "EXPANDER";
 
 #define CHECK_ARG(VAL) do { if (!(VAL)) return ESP_ERR_INVALID_ARG; } while (0)
 
-static esp_err_t read_reg_8(expander_t *dev, uint8_t reg, uint8_t *val)
+esp_err_t read_reg_8(expander_t *dev, uint8_t reg, uint8_t *val)
 {
     CHECK_ARG(val);
 
@@ -27,7 +26,7 @@ static esp_err_t read_reg_8(expander_t *dev, uint8_t reg, uint8_t *val)
     return ESP_OK;
 }
 
-static esp_err_t write_reg_8(expander_t *dev, uint8_t reg, uint8_t val)
+esp_err_t write_reg_8(expander_t *dev, uint8_t reg, uint8_t val)
 {
     I2C_DEV_TAKE_MUTEX(&dev->i2c_dev);
     I2C_DEV_CHECK(&dev->i2c_dev, i2c_dev_write_reg(&dev->i2c_dev, reg, &val, 1));
@@ -36,7 +35,7 @@ static esp_err_t write_reg_8(expander_t *dev, uint8_t reg, uint8_t val)
     return ESP_OK;
 }
 
-static esp_err_t read_reg_16(expander_t *dev, uint8_t reg, uint16_t *val)
+esp_err_t read_reg_16(expander_t *dev, uint8_t reg, uint16_t *val)
 {
     CHECK_ARG(val);
 
@@ -49,7 +48,7 @@ static esp_err_t read_reg_16(expander_t *dev, uint8_t reg, uint16_t *val)
     return ESP_OK;
 }
 
-static esp_err_t write_reg_16(expander_t *dev, uint8_t reg, uint16_t val)
+esp_err_t write_reg_16(expander_t *dev, uint8_t reg, uint16_t val)
 {
     uint16_t v = (val >> 8) | (val << 8);
 

@@ -80,6 +80,7 @@ button_driver.o: /home/michael/esp/PSU_display/main/button_driver.c \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/gpio.h \
  /home/michael/esp/esp-idf/components/log/include/esp_log.h \
  /home/michael/esp/esp-idf/components/log/include/esp_log_internal.h \
+ /home/michael/esp/PSU_display/main/button_driver.h \
  /home/michael/esp/PSU_display/components/i2cdev/i2cdev.h \
  /home/michael/esp/esp-idf/components/driver/include/driver/i2c.h \
  /home/michael/esp/esp-idf/components/freertos/include/freertos/semphr.h \
@@ -89,8 +90,7 @@ button_driver.o: /home/michael/esp/PSU_display/main/button_driver.c \
  /home/michael/esp/esp-idf/components/esp_ringbuf/include/freertos/ringbuf.h \
  /home/michael/esp/esp-idf/components/hal/include/hal/i2c_types.h \
  /home/michael/esp/PSU_display/components/esp_idf_lib_helpers/esp_idf_lib_helpers.h \
- /home/michael/esp/esp-idf/components/soc/esp32/include/soc/i2c_reg.h \
- /home/michael/esp/PSU_display/main/button_driver.h
+ /home/michael/esp/esp-idf/components/soc/esp32/include/soc/i2c_reg.h
 
 /home/michael/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h:
 
@@ -254,6 +254,8 @@ button_driver.o: /home/michael/esp/PSU_display/main/button_driver.c \
 
 /home/michael/esp/esp-idf/components/log/include/esp_log_internal.h:
 
+/home/michael/esp/PSU_display/main/button_driver.h:
+
 /home/michael/esp/PSU_display/components/i2cdev/i2cdev.h:
 
 /home/michael/esp/esp-idf/components/driver/include/driver/i2c.h:
@@ -273,6 +275,4 @@ button_driver.o: /home/michael/esp/PSU_display/main/button_driver.c \
 /home/michael/esp/PSU_display/components/esp_idf_lib_helpers/esp_idf_lib_helpers.h:
 
 /home/michael/esp/esp-idf/components/soc/esp32/include/soc/i2c_reg.h:
-
-/home/michael/esp/PSU_display/main/button_driver.h:
 /home/michael/esp/PSU_display/main/./button_driver.c:

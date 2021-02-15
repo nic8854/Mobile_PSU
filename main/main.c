@@ -11,6 +11,7 @@
 #include "esp_spiffs.h"
 #include "esp_heap_caps.h"
 #include "dfuncs.h"
+#include "button_driver.h"
 
 #include "ili9340.h"
 #include "fontx.h"
@@ -1130,6 +1131,15 @@ void ILI9341(void *pvParameters)
 	#define I2C_ADDR 0x20
 	#define SDA_GPIO 21
 	#define SCL_GPIO 19
+	#define reg_out_port_1 	0x03
+	#define reg_in_port_0   0x00
+
+	uint8_t bitmask = 0b11111111;
+	uint8_t value = 0;
+
+	expander_t dev_port_expander;
+	memset(&dev_port_expander, 0, sizeof(expander_t));
+	expander_init_desc(&dev_port_expander, I2C_ADDR, I2C_PORT, SDA_GPIO, SCL_GPIO);
 
 	while(1) {
 
@@ -1195,11 +1205,12 @@ void ILI9341(void *pvParameters)
 		JPEGTest(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
 		WAIT;
 */		
-
-		memset(&dev, 0, sizeof(ina219_t));
-		expander_init_desc(&dev, I2C_ADDR, I2C_PORT, SDA_GPIO, SCL_GPIO);
+		
 		
 
+		read_reg_8(&dev_port_expander, reg_in_port_0, value);
+
+		ESP_LOGI(__FUNCTION__, "%d", value);
 
 		strcpy(file, "/spiffs/background.png");
 		print_png(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
@@ -1319,6 +1330,8 @@ void app_main(void)
 	// Use settings defined above toinitialize and mount SPIFFS filesystem.
 	// Note: esp_vfs_spiffs_register is anall-in-one convenience function.
 	esp_err_t ret =esp_vfs_spiffs_register(&conf);
+
+	i2cdev_init();
 
 	if (ret != ESP_OK) {
 		if (ret == ESP_FAIL) {

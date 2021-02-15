@@ -83,6 +83,23 @@ main.o: /home/michael/esp/PSU_display/main/main.c \
  /home/michael/esp/PSU_display/main/ili9340.h \
  /home/michael/esp/PSU_display/main/pngle.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/miniz.h \
+ /home/michael/esp/PSU_display/main/button_driver.h \
+ /home/michael/esp/PSU_display/components/i2cdev/i2cdev.h \
+ /home/michael/esp/esp-idf/components/driver/include/driver/i2c.h \
+ /home/michael/esp/esp-idf/components/esp_common/include/esp_types.h \
+ /home/michael/esp/esp-idf/components/esp_system/include/esp_intr_alloc.h \
+ /home/michael/esp/esp-idf/components/freertos/include/freertos/queue.h \
+ /home/michael/esp/esp-idf/components/esp_ringbuf/include/freertos/ringbuf.h \
+ /home/michael/esp/esp-idf/components/driver/include/driver/gpio.h \
+ /home/michael/esp/esp-idf/components/soc/include/soc/gpio_periph.h \
+ /home/michael/esp/esp-idf/components/soc/esp32/include/soc/io_mux_reg.h \
+ /home/michael/esp/esp-idf/components/soc/esp32/include/soc/gpio_struct.h \
+ /home/michael/esp/esp-idf/components/soc/esp32/include/soc/gpio_reg.h \
+ /home/michael/esp/esp-idf/components/hal/include/hal/gpio_types.h \
+ /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/gpio.h \
+ /home/michael/esp/esp-idf/components/hal/include/hal/i2c_types.h \
+ /home/michael/esp/PSU_display/components/esp_idf_lib_helpers/esp_idf_lib_helpers.h \
+ /home/michael/esp/esp-idf/components/soc/esp32/include/soc/i2c_reg.h \
  /home/michael/esp/PSU_display/main/bmpfile.h \
  /home/michael/esp/PSU_display/main/decode_image.h
 
@@ -253,6 +270,40 @@ main.o: /home/michael/esp/PSU_display/main/main.c \
 /home/michael/esp/PSU_display/main/pngle.h:
 
 /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/miniz.h:
+
+/home/michael/esp/PSU_display/main/button_driver.h:
+
+/home/michael/esp/PSU_display/components/i2cdev/i2cdev.h:
+
+/home/michael/esp/esp-idf/components/driver/include/driver/i2c.h:
+
+/home/michael/esp/esp-idf/components/esp_common/include/esp_types.h:
+
+/home/michael/esp/esp-idf/components/esp_system/include/esp_intr_alloc.h:
+
+/home/michael/esp/esp-idf/components/freertos/include/freertos/queue.h:
+
+/home/michael/esp/esp-idf/components/esp_ringbuf/include/freertos/ringbuf.h:
+
+/home/michael/esp/esp-idf/components/driver/include/driver/gpio.h:
+
+/home/michael/esp/esp-idf/components/soc/include/soc/gpio_periph.h:
+
+/home/michael/esp/esp-idf/components/soc/esp32/include/soc/io_mux_reg.h:
+
+/home/michael/esp/esp-idf/components/soc/esp32/include/soc/gpio_struct.h:
+
+/home/michael/esp/esp-idf/components/soc/esp32/include/soc/gpio_reg.h:
+
+/home/michael/esp/esp-idf/components/hal/include/hal/gpio_types.h:
+
+/home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/gpio.h:
+
+/home/michael/esp/esp-idf/components/hal/include/hal/i2c_types.h:
+
+/home/michael/esp/PSU_display/components/esp_idf_lib_helpers/esp_idf_lib_helpers.h:
+
+/home/michael/esp/esp-idf/components/soc/esp32/include/soc/i2c_reg.h:
 
 /home/michael/esp/PSU_display/main/bmpfile.h:
 
