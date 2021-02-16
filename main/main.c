@@ -1133,13 +1133,18 @@ void ILI9341(void *pvParameters)
 	#define SCL_GPIO 19
 	#define reg_out_port_1 	0x03
 	#define reg_in_port_0   0x00
+	#define reg_conf_port_0	0x06
+	#define reg_conf_port_1	0x07
 
-	uint8_t bitmask = 0b11111111;
-	uint8_t value = 0;
+	uint8_t in_value = 0x01;
+	uint8_t out_value = 0x00;
 
 	expander_t dev_port_expander;
 	memset(&dev_port_expander, 0, sizeof(expander_t));
 	expander_init_desc(&dev_port_expander, I2C_ADDR, I2C_PORT, SDA_GPIO, SCL_GPIO);
+	write_reg_8(&dev_port_expander, reg_conf_port_0, 0xFF);
+	write_reg_8(&dev_port_expander, reg_conf_port_1, 0x00);
+	
 
 	while(1) {
 
@@ -1208,9 +1213,11 @@ void ILI9341(void *pvParameters)
 		
 		
 
-		read_reg_8(&dev_port_expander, reg_in_port_0, value);
+		read_reg_8(&dev_port_expander, reg_in_port_0, out_value);
+		write_reg_8(&dev_port_expander, reg_out_port_1, in_value);
 
-		ESP_LOGI(__FUNCTION__, "%d", value);
+		ESP_LOGI(__FUNCTION__, "Output Value = %x", out_value);
+		ESP_LOGI(__FUNCTION__, "Input Value = %x", in_value);
 
 		strcpy(file, "/spiffs/background.png");
 		print_png(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
