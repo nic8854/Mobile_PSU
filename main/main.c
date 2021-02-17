@@ -1136,7 +1136,7 @@ void ILI9341(void *pvParameters)
 	#define reg_conf_port_0	0x06
 	#define reg_conf_port_1	0x07
 
-	uint8_t in_value = 0x01;
+	uint8_t in_value = 0xFF;
 	uint8_t out_value = 0x00;
 
 	expander_t dev_port_expander;
