@@ -1138,6 +1138,7 @@ void ILI9341(void *pvParameters)
 
 	uint8_t in_value = 0xFF;
 	uint8_t out_value = 0x00;
+	uint8_t error_code = 0;
 
 	expander_t dev_port_expander;
 	memset(&dev_port_expander, 0, sizeof(expander_t));
@@ -1211,13 +1212,27 @@ void ILI9341(void *pvParameters)
 		WAIT;
 */		
 		
-		
-
-		read_reg_8(&dev_port_expander, reg_in_port_0, out_value);
-		write_reg_8(&dev_port_expander, reg_out_port_1, in_value);
-
+		write_reg_8(&dev_port_expander, reg_out_port_1, 0x01);
+		vTaskDelay(100);
+		write_reg_8(&dev_port_expander, reg_out_port_1, 0x03);
+		vTaskDelay(1);
+		error_code = read_reg_8(&dev_port_expander, reg_in_port_0, &out_value);
+		vTaskDelay(1);
+		ESP_LOGI(__FUNCTION__, "Error Code = %x", error_code);
 		ESP_LOGI(__FUNCTION__, "Output Value = %x", out_value);
-		ESP_LOGI(__FUNCTION__, "Input Value = %x", in_value);
+		
+		write_reg_8(&dev_port_expander, reg_out_port_1, 0x02);
+		vTaskDelay(1);
+		write_reg_8(&dev_port_expander, reg_out_port_1, 0x01);
+		vTaskDelay(1);
+		write_reg_8(&dev_port_expander, reg_out_port_1, 0x02);
+		vTaskDelay(10);
+		write_reg_8(&dev_port_expander, reg_out_port_1, 0x01);
+		vTaskDelay(10);
+		write_reg_8(&dev_port_expander, reg_out_port_1, 0x00);
+		vTaskDelay(10);
+
+		
 
 		strcpy(file, "/spiffs/background.png");
 		print_png(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
@@ -1253,7 +1268,7 @@ void ILI9341(void *pvParameters)
 		ypos = 90;
 		print_value(dev, color, fx16G, xpos, ypos, Inhalt[2], -1);
 		VlcdUpdate(&dev);
-		vTaskDelay(500);
+		vTaskDelay(50);
 
 /*
 		ScrollTest(&dev, fx16G, CONFIG_WIDTH, CONFIG_HEIGHT);
