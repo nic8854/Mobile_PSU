@@ -58,18 +58,7 @@ esp_err_t write_reg_16(expander_t *dev, uint8_t reg, uint16_t val)
 
     return ESP_OK;
 }
-/*
-esp_err_t expander_init(expander_t *dev)
-{
-    CHECK_ARG(dev);
 
-    CHECK(read_reg_16(dev, REG_CONFIG, &dev->config));
-
-    ESP_LOGD(TAG, "Initialize, config: 0x%04x", dev->config);
-
-    return ESP_OK;
-}
-*/
 esp_err_t expander_init_desc(expander_t *dev, uint8_t addr, i2c_port_t port, gpio_num_t sda_gpio, gpio_num_t scl_gpio)
 {
     CHECK_ARG(dev);

@@ -1131,10 +1131,11 @@ void ILI9341(void *pvParameters)
 	#define I2C_ADDR 0x20
 	#define SDA_GPIO 21
 	#define SCL_GPIO 19
-	#define reg_out_port_1 	0x03
-	#define reg_in_port_0   0x00
-	#define reg_conf_port_0	0x06
-	#define reg_conf_port_1	0x07
+	#define reg_out_port_1 			0x03
+	#define reg_in_port_0   		0x00
+	#define reg_conf_port_0			0x06
+	#define reg_conf_port_1			0x07
+	#define reg_polinv_port_0       0x04
 
 	uint8_t in_value = 0xFF;
 	uint8_t out_value = 0x00;
@@ -1145,6 +1146,7 @@ void ILI9341(void *pvParameters)
 	expander_init_desc(&dev_port_expander, I2C_ADDR, I2C_PORT, SDA_GPIO, SCL_GPIO);
 	write_reg_8(&dev_port_expander, reg_conf_port_0, 0xFF);
 	write_reg_8(&dev_port_expander, reg_conf_port_1, 0x00);
+	write_reg_8(&dev_port_expander, reg_polinv_port_0, 0xFF);
 	
 
 	while(1) {
@@ -1218,8 +1220,8 @@ void ILI9341(void *pvParameters)
 		vTaskDelay(1);
 		error_code = read_reg_8(&dev_port_expander, reg_in_port_0, &out_value);
 		vTaskDelay(1);
-		ESP_LOGI(__FUNCTION__, "Error Code = %x", error_code);
-		ESP_LOGI(__FUNCTION__, "Output Value = %x", out_value);
+		ESP_LOGI(__FUNCTION__, "Error Code = 0x%x", error_code);
+		ESP_LOGI(__FUNCTION__, "Output Value = 0x%x", out_value);
 		
 		write_reg_8(&dev_port_expander, reg_out_port_1, 0x02);
 		vTaskDelay(1);
