@@ -79,26 +79,42 @@ esp_err_t expander_init_desc(expander_t *dev, uint8_t addr, i2c_port_t port, gpi
 
     return i2c_dev_create_mutex(&dev->i2c_dev);
 }
-/*
-esp_err_t ina219_configure(ina219_t *dev, ina219_bus_voltage_range_t u_range,
-        ina219_gain_t gain, ina219_resolution_t u_res,
-        ina219_resolution_t i_res, ina219_mode_t mode)
+
+esp_err_t ina219_configure(expander_t *dev, 
+uint8_t conf_port_0, uint8_t conf_port_1, 
+uint8_t pol_inv_0, uint8_t pol_inv_1, 
+uint16_t drive_port_0, uint16_t drive_port_1,
+uint8_t latch_port_0, uint8_t latch_port_1,
+uint8_t pull_en_port_0, uint8_t pull_en_port_1,
+uint8_t pull_sel_port_0, uint8_t pull_sel_port_1,
+uint8_t interr_mask_port_0, uint8_t interr_mask_port_1,
+uint8_t out_port_conf)
 {
-    CHECK_ARG(dev);
-    CHECK_ARG(u_range <= INA219_BUS_RANGE_32V);
-    CHECK_ARG(gain <= INA219_GAIN_0_125);
-    CHECK_ARG(u_res <= INA219_RES_12BIT_128S);
-    CHECK_ARG(i_res <= INA219_RES_12BIT_128S);
-    CHECK_ARG(mode <= INA219_MODE_CONT_SHUNT_BUS);
-
-    dev->config = (u_range << BIT_BRNG) |
-                  (gain << BIT_PG0) |
-                  (u_res << BIT_BADC0) |
-                  (i_res << BIT_SADC0) |
-                  (mode << BIT_MODE);
-
-    ESP_LOGD(TAG, "Config: 0x%04x", dev->config);
-
-    return write_reg_16(dev, REG_CONFIG, dev->config);
+    if(conf_port_0) write_reg_8(&dev, reg_conf_port_0, conf_port_0);
+    if(conf_port_1) write_reg_8(&dev, reg_conf_port_1, conf_port_1);
+    if(pol_inv_0) write_reg_8(&dev, reg_polinv_port_0, pol_inv_0);
+    if(pol_inv_1) write_reg_8(&dev, reg_polinv_port_1, pol_inv_1);
+    if(drive_port_0) 
+    {
+        uint8_t drive_0_low = (uint8_t)(drive_port_0 & 0x00FF);
+        write_reg_8(&dev, reg_outdr_port_0_low, drive_0_low);
+        uint8_t drive_0_high = (uint8_t)(drive_port_0 >> 8);
+        write_reg_8(&dev, reg_outdr_port_0_high, drive_0_high);
+    }
+    if(drive_port_1) 
+    {
+        uint8_t drive_1_low = (uint8_t)(drive_port_1 & 0x00FF);
+        write_reg_8(&dev, reg_outdr_port_1_low, drive_0_low);
+        uint8_t drive_1_high = (uint8_t)(drive_port_1 >> 8);
+        write_reg_8(&dev, reg_outdr_port_1_high, drive_0_high);
+    }
+    if(latch_port_0) write_reg_8(&dev, reg_latch_port_0, latch_port_0);
+    if(latch_port_1) write_reg_8(&dev, reg_latch_port_1 , latch_port_1;
+    if(pull_en_port_0) write_reg_8(&dev, reg_pull_en_port_0, pull_en_port_0;
+    if(pull_en_port_1) write_reg_8(&dev, reg_pull_en_port_1, pull_en_port_1);
+    if(pull_sel_port_0) write_reg_8(&dev, reg_pull_select_port_0, pull_sel_port_0;
+    if(pull_sel_port_1) write_reg_8(&dev, reg_pull_select_port_1, pull_sel_port_1);
+    if(interr_mask_port_0) write_reg_8(&dev, reg_interr_mask_port_0, interr_mask_port_0;
+    if(interr_mask_port_1) write_reg_8(&dev, reg_interr_mask_port_1, interr_mask_port_1);
+    if(out_port_conf) write_reg_8(&dev, reg_out_port_conf, out_port_conf);
 }
-*/

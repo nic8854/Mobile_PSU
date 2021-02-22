@@ -43,10 +43,19 @@ esp_err_t read_reg_8(expander_t *dev, uint8_t reg, uint8_t *val);
 esp_err_t write_reg_8(expander_t *dev, uint8_t reg, uint8_t val);
 esp_err_t read_reg_16(expander_t *dev, uint8_t reg, uint16_t *val);
 esp_err_t write_reg_16(expander_t *dev, uint8_t reg, uint16_t val);
-/*esp_err_t ina219_configure(ina219_t *dev, ina219_bus_voltage_range_t u_range,
-        ina219_gain_t gain, ina219_resolution_t u_res,
-        ina219_resolution_t i_res, ina219_mode_t mode);
-        */
 esp_err_t expander_init_desc(expander_t *dev, uint8_t addr, i2c_port_t port, gpio_num_t sda_gpio, gpio_num_t scl_gpio);
+/*
+esp_err_t ina219_configure(expander_t *dev, 
+uint8_t conf_port_0, uint8_t conf_port_1, 
+uint8_t pol_inv_0, uint8_t pol_inv_1, 
+uint16_t drive_port_0, uint16_t drive_port_1,
+uint8_t latch_port_0, uint8_t latch_port_1,
+uint8_t pull_en_port_0, uint8_t pull_en_port_1,
+uint8_t pull_sel_port_0, uint8_t pull_sel_port_1,
+uint8_t interr_mask_port_0, uint8_t interr_mask_port_1,
+uint8_t interr_stat_port_0, uint8_t interr_stat_port_1,
+uint8_t out_port_conf);
+*/
+
 
 #endif

@@ -1220,7 +1220,11 @@ void ILI9341(void *pvParameters)
 		vTaskDelay(1);
 		error_code = read_reg_8(&dev_port_expander, reg_in_port_0, &out_value);
 		vTaskDelay(1);
-		ESP_LOGI(__FUNCTION__, "Error Code = 0x%x", error_code);
+		uint16_t test = 0x55AA;
+		uint8_t test_out_low = (uint8_t)(test & 0x00FF);
+		ESP_LOGI(__FUNCTION__, "test out = 0x%x", test_out_low);
+		uint8_t test_out_high = (uint8_t)(test >> 8);
+		ESP_LOGI(__FUNCTION__, "test out = 0x%x", test_out_high);
 		ESP_LOGI(__FUNCTION__, "Output Value = 0x%x", out_value);
 		
 		write_reg_8(&dev_port_expander, reg_out_port_1, 0x02);
@@ -1234,6 +1238,7 @@ void ILI9341(void *pvParameters)
 		write_reg_8(&dev_port_expander, reg_out_port_1, 0x00);
 		vTaskDelay(10);
 
+		
 		
 
 		strcpy(file, "/spiffs/background.png");
