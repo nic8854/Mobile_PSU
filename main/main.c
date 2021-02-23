@@ -24,6 +24,18 @@
 
 static const char *TAG = "ILI9340";
 
+#define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
+#define BYTE_TO_BINARY(byte)  \
+  (byte & 0x80 ? '1' : '0'), \
+  (byte & 0x40 ? '1' : '0'), \
+  (byte & 0x20 ? '1' : '0'), \
+  (byte & 0x10 ? '1' : '0'), \
+  (byte & 0x08 ? '1' : '0'), \
+  (byte & 0x04 ? '1' : '0'), \
+  (byte & 0x02 ? '1' : '0'), \
+  (byte & 0x01 ? '1' : '0') 
+
+
 static void SPIFFS_Directory(char * path) {
 	DIR* dir = opendir(path);
 	assert(dir != NULL);
@@ -1144,9 +1156,18 @@ void ILI9341(void *pvParameters)
 	expander_t dev_port_expander;
 	memset(&dev_port_expander, 0, sizeof(expander_t));
 	expander_init_desc(&dev_port_expander, I2C_ADDR, I2C_PORT, SDA_GPIO, SCL_GPIO);
-	write_reg_8(&dev_port_expander, reg_conf_port_0, 0xFF);
-	write_reg_8(&dev_port_expander, reg_conf_port_1, 0x00);
-	write_reg_8(&dev_port_expander, reg_polinv_port_0, 0xFF);
+	ina219_configure(expander_t *dev, 
+	0xFF, 0x00, 
+	0xFF, -1, 
+	-1, -1,
+	-1, -1,
+	-1, -1,
+	-1, -1,
+	-1, -1,
+	-1)
+	//write_reg_8(&dev_port_expander, reg_conf_port_0, 0xFF);
+	//write_reg_8(&dev_port_expander, reg_conf_port_1, 0x00);
+	//write_reg_8(&dev_port_expander, reg_polinv_port_0, 0xFF);
 	
 
 	while(1) {
@@ -1252,7 +1273,7 @@ void ILI9341(void *pvParameters)
 
 		xpos = 20;
 		ypos = 50;
-		strcpy((char *)ascii, "Inhalt:");
+		strcpy((char *)ascii, "Tasten:");
 		print_string(&dev, fx16G, xpos, ypos, ascii, color);
 		xpos = 20;
 		ypos = 70;
@@ -1263,11 +1284,14 @@ void ILI9341(void *pvParameters)
 		strcpy((char *)ascii, "Inhalt:");
 		print_string(&dev, fx16G, xpos, ypos, ascii, color);
 		
-		float float_value = 9.87;
 		color = RED;
 		xpos = 80;
 		ypos = 50;
-		print_value(dev, color, fx16G, xpos, ypos, -1, float_value);
+		sprintf(text, "Buttons = " BYTE_TO_BINARY_PATTERN"\n", BYTE_TO_BINARY(out_value));
+		strcpy((char *)ascii, text);
+		print("%s*")
+		//print_string(&dev, fx16G, xpos, ypos, ascii, color);
+		//print_value(dev, color, fx16G, xpos, ypos, out_value, -1);
 		xpos = 80;
 		ypos = 70;
 		print_value(dev, color, fx16G, xpos, ypos, Inhalt[1], -1);
