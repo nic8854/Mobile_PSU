@@ -6,7 +6,7 @@
 #include <driver/spi_master.h>
 #include <driver/gpio.h>
 #include "esp_log.h"
-#include "button_driver.h"
+#include "expander_driver.h"
 
 #define I2C_FREQ_HZ 1000000
 

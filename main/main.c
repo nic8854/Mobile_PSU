@@ -11,7 +11,7 @@
 #include "esp_spiffs.h"
 #include "esp_heap_caps.h"
 #include "dfuncs.h"
-#include "button_driver.h"
+#include "expander_driver.h"
 
 #include "ili9340.h"
 #include "fontx.h"
@@ -788,7 +788,7 @@ void ILI9341(void *pvParameters)
 	while(1) {
 		
 		read_reg_8(&dev_port_expander, reg_in_port_0, &out_value);
-		
+		vTaskDelay(50);
 		for(int i = 0; i < 5; i++)
 		{
 			write_reg_8(&dev_port_expander, reg_out_port_1, 0x01);	
