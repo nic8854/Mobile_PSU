@@ -780,7 +780,6 @@ void ILI9341(void *pvParameters)
 	config.conf_port_1 = 0x00;
 	config.pol_inv_0 = 0xFF;
 	config.pol_inv_1 = 0x00;
-	ESP_LOGE(__FUNCTION__, "%x", config.conf_port_1);
 	expander_init_desc(&dev_port_expander, I2C_ADDR, I2C_PORT, SDA_GPIO, SCL_GPIO);
 	expander_configure(&dev_port_expander, &config);
 	
@@ -839,7 +838,7 @@ void ILI9341(void *pvParameters)
 		ypos = 90;
 		return_value = print_value(&dev, color, fx16G, xpos, ypos, Inhalt[2], -1);
 		if(return_value < error_code) error_code = return_value;
-		if(error_code == -1) 
+		if(error_code < 0) 
 		{
 			ESP_LOGE(__FUNCTION__, "Error accured in print_string function");
 		}
