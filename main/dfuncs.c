@@ -13,7 +13,7 @@
 
 uint16_t vscreen[128][160]; // [x][y]
 
-void print_value(TFT_t dev, uint16_t color, FontxFile font[2], uint16_t xpos, uint16_t ypos, int int_value, float float_value)
+int print_value(TFT_t * dev, uint16_t color, FontxFile font[2], uint16_t xpos, uint16_t ypos, int int_value, float float_value)
 {
 	lcdSetFontDirection(&dev, 0);
 	char text[40];
@@ -29,14 +29,21 @@ void print_value(TFT_t dev, uint16_t color, FontxFile font[2], uint16_t xpos, ui
 		sprintf(text, "%.2f", float_value);
 	}
 	strcpy((char *)ascii, text);
-	print_string(&dev, font, xpos, ypos, ascii, color);
+	return print_string(dev, font, xpos, ypos, ascii, color);
+
 	
 }
 
 int print_string(TFT_t * dev, FontxFile *fx, uint16_t x, uint16_t y, uint8_t * ascii, uint16_t color) {
 	int length = strlen((char *)ascii);
+	bool error = 0;
 	ESP_LOGW(__FUNCTION__,"lcdDrawString length=%d",length);
 	for(int i=0;i<length;i++) {
+		if(x > 128 || y > 160) 
+		{
+			error = 1;
+			break;
+		}
 		//printf("ascii[%d]=%x x=%d y=%d\n",i,ascii[i],x,y);
 		if (dev->_font_direction == 0)
 			x = print_char(dev, fx, x, y, ascii[i], color);
@@ -47,6 +54,7 @@ int print_string(TFT_t * dev, FontxFile *fx, uint16_t x, uint16_t y, uint8_t * a
 		if (dev->_font_direction == 3)
 			y = print_char(dev, fx, x, y, ascii[i], color);
 	}
+	if(error == 1) return -1;
 	if (dev->_font_direction == 0) return x;
 	if (dev->_font_direction == 2) return x;
 	if (dev->_font_direction == 1) return y;
@@ -363,6 +371,7 @@ void VlcdUpdate(TFT_t * dev)
 		}
 		lcdDrawMultiPixels(dev, offsetX, y+offsetY, pngWidth, colors);
 	}
+	free(colors);
 }
 
 void print_Vpixel(uint16_t x, uint16_t y, uint16_t color)

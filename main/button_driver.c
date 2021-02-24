@@ -80,43 +80,36 @@ esp_err_t expander_init_desc(expander_t *dev, uint8_t addr, i2c_port_t port, gpi
     return i2c_dev_create_mutex(&dev->i2c_dev);
 }
 
-esp_err_t ina219_configure(expander_t *dev, 
-uint8_t conf_port_0, uint8_t conf_port_1, 
-uint8_t pol_inv_0, uint8_t pol_inv_1, 
-uint16_t drive_port_0, uint16_t drive_port_1,
-uint8_t latch_port_0, uint8_t latch_port_1,
-uint8_t pull_en_port_0, uint8_t pull_en_port_1,
-uint8_t pull_sel_port_0, uint8_t pull_sel_port_1,
-uint8_t interr_mask_port_0, uint8_t interr_mask_port_1,
-uint8_t out_port_conf)
-{
-    if(conf_port_0 != -1) write_reg_8(&dev, reg_conf_port_0, conf_port_0);
-    if(conf_port_1 != -1) write_reg_8(&dev, reg_conf_port_1, conf_port_1);
-    if(pol_inv_0 != -1) write_reg_8(&dev, reg_polinv_port_0, pol_inv_0);
-    if(pol_inv_1 != -1) write_reg_8(&dev, reg_polinv_port_1, pol_inv_1);
-    if(drive_port_0 != -1) 
-    {
-        uint8_t drive_0_low = (uint8_t)(drive_port_0 & 0x00FF);
-        write_reg_8(&dev, reg_outdr_port_0_low, drive_0_low);
-        uint8_t drive_0_high = (uint8_t)(drive_port_0 >> 8);
-        write_reg_8(&dev, reg_outdr_port_0_high, drive_0_high);
-    }
-    if(drive_port_1 != -1) 
-    {
-        uint8_t drive_1_low = (uint8_t)(drive_port_1 & 0x00FF);
-        write_reg_8(&dev, reg_outdr_port_1_low, drive_1_low);
-        uint8_t drive_1_high = (uint8_t)(drive_port_1 >> 8);
-        write_reg_8(&dev, reg_outdr_port_1_high, drive_1_high);
-    }
-    if(latch_port_0 != -1) write_reg_8(&dev, reg_latch_port_0, latch_port_0);
-    if(latch_port_1 != -1) write_reg_8(&dev, reg_latch_port_1 , latch_port_1);
-    if(pull_en_port_0 != -1) write_reg_8(&dev, reg_pull_en_port_0, pull_en_port_0);
-    if(pull_en_port_1 != -1) write_reg_8(&dev, reg_pull_en_port_1, pull_en_port_1);
-    if(pull_sel_port_0 != -1) write_reg_8(&dev, reg_pull_select_port_0, pull_sel_port_0);
-    if(pull_sel_port_1 != -1) write_reg_8(&dev, reg_pull_select_port_1, pull_sel_port_1);
-    if(interr_mask_port_0 != -1) write_reg_8(&dev, reg_interr_mask_port_0, interr_mask_port_0);
-    if(interr_mask_port_1 != -1) write_reg_8(&dev, reg_interr_mask_port_1, interr_mask_port_1);
-    if(out_port_conf != -1) write_reg_8(&dev, reg_out_port_conf, out_port_conf);
 
-    return ESP_OK;
+
+esp_err_t expander_configure(expander_t *dev, conf_t *config)
+{
+    if(config->conf_port_0 != 0xFF) write_reg_8(dev, reg_conf_port_0, config->conf_port_0);
+    if(config->conf_port_1 != 0xFF)write_reg_8(dev, reg_conf_port_1, config->conf_port_1); 
+    if(config->pol_inv_0   != 0x00) write_reg_8(dev, reg_polinv_port_0, config->pol_inv_0);
+    if(config->pol_inv_1   != 0x00) write_reg_8(dev, reg_polinv_port_1, config->pol_inv_1);
+    if(config->drive_port_0 != 0xFF) 
+    {
+        uint8_t drive_0_low = (uint8_t)(config->drive_port_0 & 0x00FF);
+        write_reg_8(dev, reg_outdr_port_0_low, drive_0_low);
+        uint8_t drive_0_high = (uint8_t)(config->drive_port_0 >> 8);
+        write_reg_8(dev, reg_outdr_port_0_high, drive_0_high);
+    }
+    if(config->drive_port_1 != 0xFF) 
+    {
+        uint8_t drive_1_low = (uint8_t)(config->drive_port_1 & 0x00FF);
+        write_reg_8(dev, reg_outdr_port_1_low, drive_1_low);
+        uint8_t drive_1_high = (uint8_t)(config->drive_port_1 >> 8);
+        write_reg_8(dev, reg_outdr_port_1_high, drive_1_high);
+    }
+    if(config->latch_port_0 != 0x00) write_reg_8(dev, reg_latch_port_0, config->latch_port_0);
+    if(config->latch_port_1 != 0x00) write_reg_8(dev, reg_latch_port_1 , config->latch_port_1);
+    if(config->pull_en_port_0 != 0x00) write_reg_8(dev, reg_pull_en_port_0, config->pull_en_port_0);
+    if(config->pull_en_port_1 != 0x00) write_reg_8(dev, reg_pull_en_port_1, config->pull_en_port_1);
+    if(config->pull_sel_port_0 != 0xFF) write_reg_8(dev, reg_pull_select_port_0, config->pull_sel_port_0);
+    if(config->pull_sel_port_1 != 0xFF) write_reg_8(dev, reg_pull_select_port_1, config->pull_sel_port_1);
+    if(config->interr_mask_port_0 != 0xFF) write_reg_8(dev, reg_interr_mask_port_0, config->interr_mask_port_0);
+    if(config->interr_mask_port_1 != 0xFF) write_reg_8(dev, reg_interr_mask_port_1, config->interr_mask_port_1);
+    if(config->out_port_conf != 0x00) write_reg_8(dev, reg_out_port_conf, config->out_port_conf);
+   return ESP_OK;
 }

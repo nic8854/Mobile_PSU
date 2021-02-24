@@ -31,6 +31,43 @@
 #define reg_interr_stat_port_1 0x4D
 #define reg_out_port_conf      0x4F
 
+#define Default_Config { \
+    .conf_port_0 = 0xFF, \
+    .conf_port_1 = 0xFF, \
+    .pol_inv_0 = 0x00, \
+    .pol_inv_1 = 0x00, \
+    .drive_port_0 = 0xFFFF, \
+    .drive_port_1 = 0xFFFF, \
+    .latch_port_0 = 0x00, \
+    .latch_port_1 = 0x00, \
+    .pull_en_port_0 = 0x00, \
+    .pull_en_port_1 = 0x00, \
+    .pull_sel_port_0 = 0xFF, \
+    .pull_sel_port_1 = 0xFF, \
+    .interr_mask_port_0 = 0xFF, \
+    .interr_mask_port_1 = 0xFF, \
+    .out_port_conf = 0x00 \
+}
+
+typedef struct
+{
+    uint8_t conf_port_0;
+    uint8_t conf_port_1;
+    uint8_t pol_inv_0;
+    uint8_t pol_inv_1; 
+    uint16_t drive_port_0;
+    uint16_t drive_port_1;
+    uint8_t latch_port_0;
+    uint8_t latch_port_1;
+    uint8_t pull_en_port_0;
+    uint8_t pull_en_port_1;
+    uint8_t pull_sel_port_0;
+    uint8_t pull_sel_port_1;
+    uint8_t interr_mask_port_0;
+    uint8_t interr_mask_port_1;
+    uint8_t out_port_conf;
+} conf_t;
+
 typedef struct
 {
     i2c_dev_t i2c_dev;
@@ -44,18 +81,6 @@ esp_err_t write_reg_8(expander_t *dev, uint8_t reg, uint8_t val);
 esp_err_t read_reg_16(expander_t *dev, uint8_t reg, uint16_t *val);
 esp_err_t write_reg_16(expander_t *dev, uint8_t reg, uint16_t val);
 esp_err_t expander_init_desc(expander_t *dev, uint8_t addr, i2c_port_t port, gpio_num_t sda_gpio, gpio_num_t scl_gpio);
-/*
-esp_err_t ina219_configure(expander_t *dev, 
-uint8_t conf_port_0, uint8_t conf_port_1, 
-uint8_t pol_inv_0, uint8_t pol_inv_1, 
-uint16_t drive_port_0, uint16_t drive_port_1,
-uint8_t latch_port_0, uint8_t latch_port_1,
-uint8_t pull_en_port_0, uint8_t pull_en_port_1,
-uint8_t pull_sel_port_0, uint8_t pull_sel_port_1,
-uint8_t interr_mask_port_0, uint8_t interr_mask_port_1,
-uint8_t interr_stat_port_0, uint8_t interr_stat_port_1,
-uint8_t out_port_conf);
-*/
-
+esp_err_t expander_configure(expander_t *dev, conf_t *config);
 
 #endif

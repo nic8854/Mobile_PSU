@@ -22,7 +22,7 @@
 #define DIRECTION180		2
 #define DIRECTION270		3
 
-void print_value(TFT_t dev, uint16_t color, FontxFile font[2], uint16_t xpos, uint16_t ypos, int int_value, float float_value);
+int print_value(TFT_t * dev, uint16_t color, FontxFile font[2], uint16_t xpos, uint16_t ypos, int int_value, float float_value);
 int print_string(TFT_t * dev, FontxFile *fx, uint16_t x, uint16_t y, uint8_t * ascii, uint16_t color);
 int print_char(TFT_t * dev, FontxFile *fxs, uint16_t x, uint16_t y, uint8_t ascii, uint16_t color);
 TickType_t print_png(TFT_t * dev, char * file, int width, int height);

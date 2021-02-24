@@ -20,7 +20,7 @@
 #include "pngle.h"
 
 #define	INTERVAL		400
-#define WAIT	vTaskDelay(INTERVAL)
+#define WAIT			vTaskDelay(INTERVAL)
 
 static const char *TAG = "ILI9340";
 
@@ -67,36 +67,6 @@ TickType_t FillTest(TFT_t * dev, int width, int height) {
 	vTaskDelay(50);
 	lcdFillScreen(dev, BLUE);
 	vTaskDelay(50);
-
-	endTick = xTaskGetTickCount();
-	diffTick = endTick - startTick;
-	ESP_LOGI(__FUNCTION__, "elapsed time[ms]:%d",diffTick*portTICK_RATE_MS);
-	return diffTick;
-}
-
-TickType_t ColorBarTest(TFT_t * dev, int width, int height) {
-	TickType_t startTick, endTick, diffTick;
-	startTick = xTaskGetTickCount();
-
-	if (width < height) {
-		uint16_t y1,y2;
-		y1 = height/3;
-		y2 = (height/3)*2;
-		lcdDrawFillRect(dev, 0, 0, width-1, y1-1, RED);
-		vTaskDelay(1);
-		lcdDrawFillRect(dev, 0, y1-1, width-1, y2-1, GREEN);
-		vTaskDelay(1);
-		lcdDrawFillRect(dev, 0, y2-1, width-1, height-1, BLUE);
-	} else {
-		uint16_t x1,x2;
-		x1 = width/3;
-		x2 = (width/3)*2;
-		lcdDrawFillRect(dev, 0, 0, x1-1, height-1, RED);
-		vTaskDelay(1);
-		lcdDrawFillRect(dev, x1-1, 0, x2-1, height-1, GREEN);
-		vTaskDelay(1);
-		lcdDrawFillRect(dev, x2-1, 0, width-1, height-1, BLUE);
-	}
 
 	endTick = xTaskGetTickCount();
 	diffTick = endTick - startTick;
@@ -504,137 +474,6 @@ TickType_t ColorTest(TFT_t * dev, int width, int height) {
 	return diffTick;
 }
 
-#if CONFIG_ILI9340 || CONFIG_ILI9341 || CONFIG_ST7796
-TickType_t ScrollTest(TFT_t * dev, FontxFile *fx, int width, int height) {
-	TickType_t startTick, endTick, diffTick;
-	startTick = xTaskGetTickCount();
-
-	// get font width & height
-	uint8_t buffer[FontxGlyphBufSize];
-	uint8_t fontWidth;
-	uint8_t fontHeight;
-	GetFontx(fx, 0, buffer, &fontWidth, &fontHeight);
-	ESP_LOGD(__FUNCTION__,"fontWidth=%d fontHeight=%d",fontWidth,fontHeight);
-
-	uint16_t color;
-	uint8_t ascii[30];
-
-	int lines = (height - fontHeight) / fontHeight;
-	ESP_LOGD(__FUNCTION__, "height=%d fontHeight=%d lines=%d", height, fontHeight, lines);
-	int ymax = (lines+1) * fontHeight;
-	ESP_LOGD(__FUNCTION__, "ymax=%d",ymax);
-
-	lcdSetFontDirection(dev, 0);
-	lcdFillScreen(dev, BLACK);
-
-	strcpy((char *)ascii, "Vertical Smooth Scroll");
-	lcdDrawString(dev, fx, 0, fontHeight-1, ascii, RED);
-
-	color = CYAN;
-	uint16_t vsp = fontHeight*2;
-	uint16_t ypos = fontHeight*2-1;
-	//for(int i=0;i<30;i++) {
-	for(int i=0;i<lines+10;i++) {
-		ESP_LOGD(__FUNCTION__, "i=%d ypos=%d", i, ypos);
-		sprintf((char *)ascii, "This is text line %d", i);
-		if (i < lines) {
-			lcdDrawString(dev, fx, 0, ypos, ascii, color);
-		} else {
-			lcdDrawFillRect(dev, 0, ypos-fontHeight, width-1, ypos, BLACK);
-			lcdSetScrollArea(dev, fontHeight, (height-fontHeight), 0);
-			lcdScroll(dev, vsp);
-			vsp = vsp + fontHeight;
-			if (vsp > ymax) vsp = fontHeight*2;
-			lcdDrawString(dev, fx, 0, ypos, ascii, color);
-		}
-		ypos = ypos + fontHeight;
-		if (ypos > ymax) ypos = fontHeight*2-1;
-		vTaskDelay(25);
-	}
-
-	// Initialize scroll area
-	//lcdSetScrollArea(dev, 0, 0x0140, 0);
-
-	endTick = xTaskGetTickCount();
-	diffTick = endTick - startTick;
-	ESP_LOGI(__FUNCTION__, "elapsed time[ms]:%d",diffTick*portTICK_RATE_MS);
-	return diffTick;
-}
-
-void ScrollReset(TFT_t * dev, int width, int height) {
-	//lcdResetScrollArea(dev, 320);
-	//lcdResetScrollArea(dev, 240);
-	lcdResetScrollArea(dev, height);
-	lcdScroll(dev, 0);
-}
-#endif
-
-#if CONFIG_ILI9225 || CONFIG_ILI9225G
-TickType_t ScrollTest(TFT_t * dev, FontxFile *fx, int width, int height) {
-	TickType_t startTick, endTick, diffTick;
-	startTick = xTaskGetTickCount();
-
-	// get font width & height
-	uint8_t buffer[FontxGlyphBufSize];
-	uint8_t fontWidth;
-	uint8_t fontHeight;
-	GetFontx(fx, 0, buffer, &fontWidth, &fontHeight);
-	ESP_LOGD(__FUNCTION__,"fontWidth=%d fontHeight=%d",fontWidth,fontHeight);
-
-	uint16_t color;
-	uint8_t ascii[30];
-
-	int lines = (height - fontHeight) / fontHeight;
-	ESP_LOGD(__FUNCTION__, "height=%d fontHeight=%d lines=%d", height, fontHeight, lines);
-	int ymax = (lines+1) * fontHeight;
-	ESP_LOGD(__FUNCTION__, "ymax=%d",ymax);
-
-	lcdSetFontDirection(dev, 0);
-	lcdFillScreen(dev, BLACK);
-
-	// Reset scroll area
-	lcdSetScrollArea(dev, 0, 0, 0);
-
-	strcpy((char *)ascii, "Vertical Smooth Scroll");
-	lcdDrawString(dev, fx, 0, fontHeight-1, ascii, RED);
-
-	color = CYAN;
-	uint16_t vsp = fontHeight*1;
-	uint16_t ypos = fontHeight*2-1;
-	//for(int i=0;i<30;i++) {
-	for(int i=0;i<lines+10;i++) {
-		ESP_LOGD(__FUNCTION__, "i=%d ypos=%d vsp=%d", i, ypos, vsp);
-		sprintf((char *)ascii, "This is text line %d", i);
-		if (i < lines) {
-			lcdDrawString(dev, fx, 0, ypos, ascii, color);
-		} else {
-			lcdDrawFillRect(dev, 0, ypos-fontHeight, width-1, ypos, BLACK);
-			//lcdSetScrollArea(dev, fontHeight, height-fontHeight, 0);
-			lcdSetScrollArea(dev, fontHeight, ymax, 0);
-			lcdScroll(dev, vsp);
-			vsp = vsp + fontHeight;
-			if (vsp > (ymax-fontHeight)) vsp = fontHeight*1;
-			lcdDrawString(dev, fx, 0, ypos, ascii, color);
-		}
-		ypos = ypos + fontHeight;
-		if (ypos > ymax) ypos = fontHeight*2-1;
-		vTaskDelay(25);
-	}
-
-	// Reset scroll area
-	//lcdSetScrollArea(dev, 0, 0, 0);
-
-	endTick = xTaskGetTickCount();
-	diffTick = endTick - startTick;
-	ESP_LOGI(__FUNCTION__, "elapsed time[ms]:%d",diffTick*portTICK_RATE_MS);
-	return diffTick;
-}
-
-void ScrollReset(TFT_t * dev, int width, int height) {
-	lcdResetScrollArea(dev, 0);
-}
-#endif
-
 #if CONFIG_ST7735
 TickType_t ScrollTest(TFT_t * dev, FontxFile *fx, int width, int height) {
 	TickType_t startTick, endTick, diffTick;
@@ -712,218 +551,6 @@ void ScrollReset(TFT_t * dev, int width, int height) {
 
 }
 #endif
-
-TickType_t BMPTest(TFT_t * dev, char * file, int width, int height) {
-	TickType_t startTick, endTick, diffTick;
-	startTick = xTaskGetTickCount();
-
-	lcdSetFontDirection(dev, 0);
-	lcdFillScreen(dev, BLACK);
-
-	// open BMP file
-	esp_err_t ret;
-	FILE* fp = fopen(file, "rb");
-	if (fp == NULL) {
-		ESP_LOGW(__FUNCTION__, "File not found [%s]", file);
-		return 0;
-	}
-
-	// read bmp header
-	bmpfile_t *result = (bmpfile_t*)malloc(sizeof(bmpfile_t));
-	ret = fread(result->header.magic, 1, 2, fp);
-	assert(ret == 2);
-	ESP_LOGD(__FUNCTION__,"result->header.magic=%c %c", result->header.magic[0], result->header.magic[1]);
-	if (result->header.magic[0]!='B' || result->header.magic[1] != 'M') {
-		ESP_LOGW(__FUNCTION__, "File is not BMP");
-		free(result);
-		fclose(fp);
-		return 0;
-	}
-	ret = fread(&result->header.filesz, 4, 1 , fp);
-	assert(ret == 1);
-	ESP_LOGD(__FUNCTION__,"result->header.filesz=%d", result->header.filesz);
-	ret = fread(&result->header.creator1, 2, 1, fp);
-	assert(ret == 1);
-	ret = fread(&result->header.creator2, 2, 1, fp);
-	assert(ret == 1);
-	ret = fread(&result->header.offset, 4, 1, fp);
-	assert(ret == 1);
-
-	// read dib header
-	ret = fread(&result->dib.header_sz, 4, 1, fp);
-	assert(ret == 1);
-	ret = fread(&result->dib.width, 4, 1, fp);
-	assert(ret == 1);
-	ret = fread(&result->dib.height, 4, 1, fp);
-	assert(ret == 1);
-	ret = fread(&result->dib.nplanes, 2, 1, fp);
-	assert(ret == 1);
-	ret = fread(&result->dib.depth, 2, 1, fp);
-	assert(ret == 1);
-	ret = fread(&result->dib.compress_type, 4, 1, fp);
-	assert(ret == 1);
-	ret = fread(&result->dib.bmp_bytesz, 4, 1, fp);
-	assert(ret == 1);
-	ret = fread(&result->dib.hres, 4, 1, fp);
-	assert(ret == 1);
-	ret = fread(&result->dib.vres, 4, 1, fp);
-	assert(ret == 1);
-	ret = fread(&result->dib.ncolors, 4, 1, fp);
-	assert(ret == 1);
-	ret = fread(&result->dib.nimpcolors, 4, 1, fp);
-	assert(ret == 1);
-
-	if((result->dib.depth == 24) && (result->dib.compress_type == 0)) {
-		// BMP rows are padded (if needed) to 4-byte boundary
-		uint32_t rowSize = (result->dib.width * 3 + 3) & ~3;
-		int w = result->dib.width;
-		int h = result->dib.height;
-		ESP_LOGD(__FUNCTION__,"w=%d h=%d", w, h);
-		int _x;
-		int _w;
-		int _cols;
-		int _cole;
-		if (width >= w) {
-			_x = (width - w) / 2;
-			_w = w;
-			_cols = 0;
-			_cole = w - 1;
-		} else {
-			_x = 0;
-			_w = width;
-			_cols = (w - width) / 2;
-			_cole = _cols + width - 1;
-		}
-		ESP_LOGD(__FUNCTION__,"_x=%d _w=%d _cols=%d _cole=%d",_x, _w, _cols, _cole);
-
-		int _y;
-		int _rows;
-		int _rowe;
-		if (height >= h) {
-			_y = (height - h) / 2;
-			_rows = 0;
-			_rowe = h -1;
-		} else {
-			_y = 0;
-			_rows = (h - height) / 2;
-			_rowe = _rows + height - 1;
-		}
-		ESP_LOGD(__FUNCTION__,"_y=%d _rows=%d _rowe=%d", _y, _rows, _rowe);
-
-#define BUFFPIXEL 20
-		uint8_t sdbuffer[3*BUFFPIXEL]; // pixel buffer (R+G+B per pixel)
-		uint16_t *colors = (uint16_t*)malloc(sizeof(uint16_t) * w);
-
-		for (int row=0; row<h; row++) { // For each scanline...
-			if (row < _rows || row > _rowe) continue;
-			// Seek to start of scan line.	It might seem labor-
-			// intensive to be doing this on every line, but this
-			// method covers a lot of gritty details like cropping
-			// and scanline padding.  Also, the seek only takes
-			// place if the file position actually needs to change
-			// (avoids a lot of cluster math in SD library).
-			// Bitmap is stored bottom-to-top order (normal BMP)
-			int pos = result->header.offset + (h - 1 - row) * rowSize;
-			fseek(fp, pos, SEEK_SET);
-			int buffidx = sizeof(sdbuffer); // Force buffer reload
-
-			int index = 0;
-			for (int col=0; col<w; col++) { // For each pixel...
-				if (buffidx >= sizeof(sdbuffer)) { // Indeed
-					fread(sdbuffer, sizeof(sdbuffer), 1, fp);
-					buffidx = 0; // Set index to beginning
-				}
-				if (col < _cols || col > _cole) continue;
-				// Convert pixel from BMP to TFT format, push to display
-				uint8_t b = sdbuffer[buffidx++];
-				uint8_t g = sdbuffer[buffidx++];
-				uint8_t r = sdbuffer[buffidx++];
-				colors[index++] = rgb565_conv(r, g, b);
-			} // end for col
-			ESP_LOGD(__FUNCTION__,"lcdDrawMultiPixels row=%d",row);
-			//lcdDrawMultiPixels(dev, _x, row+_y, _w, colors);
-			lcdDrawMultiPixels(dev, _x, _y, _w, colors);
-			_y++;
-		} // end for row
-		free(colors);
-	} // end if 
-	free(result);
-	fclose(fp);
-
-	endTick = xTaskGetTickCount();
-	diffTick = endTick - startTick;
-	ESP_LOGI(__FUNCTION__, "elapsed time[ms]:%d",diffTick*portTICK_RATE_MS);
-	return diffTick;
-}
-
-TickType_t JPEGTest(TFT_t * dev, char * file, int width, int height) {
-	TickType_t startTick, endTick, diffTick;
-	startTick = xTaskGetTickCount();
-
-	lcdSetFontDirection(dev, 0);
-	lcdFillScreen(dev, BLACK);
-
-	int _width = width;
-	if (width > 240) _width = 240;
-	int _height = height;
-	if (height > 320) _height = 320;
-
-	pixel_s **pixels;
-	uint16_t imageWidth;
-	uint16_t imageHeight;
-	esp_err_t err = decode_image(&pixels, file, _width, _height, &imageWidth, &imageHeight);
-	if (err == ESP_OK) {
-		ESP_LOGI(__FUNCTION__, "imageWidth=%d imageHeight=%d", imageWidth, imageHeight);
-
-		uint16_t jpegWidth = width;
-		uint16_t offsetX = 0;
-		if (width > imageWidth) {
-			jpegWidth = imageWidth;
-			offsetX = (width - imageWidth) / 2;
-		}
-		ESP_LOGD(__FUNCTION__, "jpegWidth=%d offsetX=%d", jpegWidth, offsetX);
-
-		uint16_t jpegHeight = height;
-		uint16_t offsetY = 0;
-		if (height > imageHeight) {
-			jpegHeight = imageHeight;
-			offsetY = (height - imageHeight) / 2;
-		}
-		ESP_LOGD(__FUNCTION__, "jpegHeight=%d offsetY=%d", jpegHeight, offsetY);
-		uint16_t *colors = (uint16_t*)malloc(sizeof(uint16_t) * jpegWidth);
-
-#if 0
-		for(int y = 0; y < jpegHeight; y++){
-			for(int x = 0;x < jpegWidth; x++){
-				pixel_s pixel = pixels[y][x];
-				uint16_t color = rgb565_conv(pixel.red, pixel.green, pixel.blue);
-				lcdDrawPixel(dev, x+offsetX, y+offsetY, color);
-			}
-			vTaskDelay(1);
-		}
-#endif
-
-		for(int y = 0; y < jpegHeight; y++){
-			for(int x = 0;x < jpegWidth; x++){
-				pixel_s pixel = pixels[y][x];
-				colors[x] = rgb565_conv(pixel.red, pixel.green, pixel.blue);
-			}
-			lcdDrawMultiPixels(dev, offsetX, y+offsetY, jpegWidth, colors);
-			vTaskDelay(1);
-		}
-
-		free(colors);
-		release_image(&pixels, _width, _height);
-		ESP_LOGD(__FUNCTION__, "Finish");
-	} else {
-		ESP_LOGE(__FUNCTION__, "decode_image err=%d imageWidth=%d imageHeight=%d", err, imageWidth, imageHeight);
-	}
-
-	endTick = xTaskGetTickCount();
-	diffTick = endTick - startTick;
-	ESP_LOGI(__FUNCTION__, "elapsed time[ms]:%d",diffTick*portTICK_RATE_MS);
-	return diffTick;
-}
 
 void png_init(pngle_t *pngle, uint32_t w, uint32_t h)
 {
@@ -1130,138 +757,46 @@ void ILI9341(void *pvParameters)
 	uint16_t color;
 	char text[40];
 	uint8_t ascii[40];
-	uint16_t margin = 10;
 	color = WHITE;
 	lcdSetFontDirection(&dev, 0);
 	uint16_t xpos = 35;
 	uint16_t ypos = 25;
-	int xd = 0;
-	int yd = 1;
 	int Inhalt[3] = {987, 654, 321};
 
 	#define I2C_PORT 0
 	#define I2C_ADDR 0x20
 	#define SDA_GPIO 21
 	#define SCL_GPIO 19
-	#define reg_out_port_1 			0x03
-	#define reg_in_port_0   		0x00
-	#define reg_conf_port_0			0x06
-	#define reg_conf_port_1			0x07
-	#define reg_polinv_port_0       0x04
 
 	uint8_t in_value = 0xFF;
 	uint8_t out_value = 0x00;
-	uint8_t error_code = 0;
+	int error_code = 0;
+	int return_value = 0;
 
 	expander_t dev_port_expander;
+	conf_t config = Default_Config;
 	memset(&dev_port_expander, 0, sizeof(expander_t));
+	config.conf_port_0 = 0xFF;
+	config.conf_port_1 = 0x00;
+	config.pol_inv_0 = 0xFF;
+	config.pol_inv_1 = 0x00;
+	ESP_LOGE(__FUNCTION__, "%x", config.conf_port_1);
 	expander_init_desc(&dev_port_expander, I2C_ADDR, I2C_PORT, SDA_GPIO, SCL_GPIO);
-	ina219_configure(expander_t *dev, 
-	0xFF, 0x00, 
-	0xFF, -1, 
-	-1, -1,
-	-1, -1,
-	-1, -1,
-	-1, -1,
-	-1, -1,
-	-1)
-	//write_reg_8(&dev_port_expander, reg_conf_port_0, 0xFF);
-	//write_reg_8(&dev_port_expander, reg_conf_port_1, 0x00);
-	//write_reg_8(&dev_port_expander, reg_polinv_port_0, 0xFF);
+	expander_configure(&dev_port_expander, &config);
 	
 
 	while(1) {
-
-		/*
-		FillTest(&dev, CONFIG_WIDTH, CONFIG_HEIGHT);
-		WAIT;
-
-		ColorBarTest(&dev, CONFIG_WIDTH, CONFIG_HEIGHT);
-		WAIT;
-
-		ArrowTest(&dev, fx16G, model, CONFIG_WIDTH, CONFIG_HEIGHT);
-		WAIT;
-
-		LineTest(&dev, CONFIG_WIDTH, CONFIG_HEIGHT);
-		WAIT;
-
-		CircleTest(&dev, CONFIG_WIDTH, CONFIG_HEIGHT);
-		WAIT;
-
-		RoundRectTest(&dev, CONFIG_WIDTH, CONFIG_HEIGHT);
-		WAIT;
-
-		RectAngleTest(&dev, CONFIG_WIDTH, CONFIG_HEIGHT);
-		WAIT;
-
-		TriangleTest(&dev, CONFIG_WIDTH, CONFIG_HEIGHT);
-		WAIT;
 		
-		if (CONFIG_WIDTH >= 240) {
-			DirectionTest(&dev, fx24G, CONFIG_WIDTH, CONFIG_HEIGHT);
-		} else {
-			DirectionTest(&dev, fx16G, CONFIG_WIDTH, CONFIG_HEIGHT);
+		read_reg_8(&dev_port_expander, reg_in_port_0, &out_value);
+		
+		for(int i = 0; i < 5; i++)
+		{
+			write_reg_8(&dev_port_expander, reg_out_port_1, 0x01);	
+			vTaskDelay(20);
+			write_reg_8(&dev_port_expander, reg_out_port_1, 0x02);
+			vTaskDelay(20);
 		}
-		WAIT;
-
-		if (CONFIG_WIDTH >= 240) {
-			HorizontalTest(&dev, fx24G, CONFIG_WIDTH, CONFIG_HEIGHT);
-		} else {
-			HorizontalTest(&dev, fx16G, CONFIG_WIDTH, CONFIG_HEIGHT);
-		}
-		WAIT;
-
-		if (CONFIG_WIDTH >= 240) {
-			VerticalTest(&dev, fx24G, CONFIG_WIDTH, CONFIG_HEIGHT);
-		} else {
-			VerticalTest(&dev, fx16G, CONFIG_WIDTH, CONFIG_HEIGHT);
-		}
-		WAIT;
-
-		FillRectTest(&dev, CONFIG_WIDTH, CONFIG_HEIGHT);
-		WAIT;
-
-		ColorTest(&dev, CONFIG_WIDTH, CONFIG_HEIGHT);
-		WAIT;
-
-		
-		strcpy(file, "/spiffs/image.bmp");
-		BMPTest(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
-		WAIT;
-
-		
-		strcpy(file, "/spiffs/background.jpeg");
-		JPEGTest(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
-		WAIT;
-*/		
-		
-		write_reg_8(&dev_port_expander, reg_out_port_1, 0x01);
-		vTaskDelay(100);
-		write_reg_8(&dev_port_expander, reg_out_port_1, 0x03);
-		vTaskDelay(1);
-		error_code = read_reg_8(&dev_port_expander, reg_in_port_0, &out_value);
-		vTaskDelay(1);
-		uint16_t test = 0x55AA;
-		uint8_t test_out_low = (uint8_t)(test & 0x00FF);
-		ESP_LOGI(__FUNCTION__, "test out = 0x%x", test_out_low);
-		uint8_t test_out_high = (uint8_t)(test >> 8);
-		ESP_LOGI(__FUNCTION__, "test out = 0x%x", test_out_high);
-		ESP_LOGI(__FUNCTION__, "Output Value = 0x%x", out_value);
-		
-		write_reg_8(&dev_port_expander, reg_out_port_1, 0x02);
-		vTaskDelay(1);
-		write_reg_8(&dev_port_expander, reg_out_port_1, 0x01);
-		vTaskDelay(1);
-		write_reg_8(&dev_port_expander, reg_out_port_1, 0x02);
-		vTaskDelay(10);
-		write_reg_8(&dev_port_expander, reg_out_port_1, 0x01);
-		vTaskDelay(10);
 		write_reg_8(&dev_port_expander, reg_out_port_1, 0x00);
-		vTaskDelay(10);
-
-		
-		
-
 		strcpy(file, "/spiffs/background.png");
 		print_png(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
 
@@ -1269,97 +804,51 @@ void ILI9341(void *pvParameters)
 		xpos = 35;
 		ypos = 25;
 		strcpy((char *)ascii, "Titel");
-		print_string(&dev, fx24G, xpos, ypos, ascii, color);
-
-		xpos = 20;
+		return_value = print_string(&dev, fx24G, xpos, ypos, ascii, color);
+		if(return_value < error_code) error_code = return_value;
+		xpos = 5;
 		ypos = 50;
 		strcpy((char *)ascii, "Tasten:");
-		print_string(&dev, fx16G, xpos, ypos, ascii, color);
-		xpos = 20;
+		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
+		if(return_value < error_code) error_code = return_value;
+		xpos = 5;
 		ypos = 70;
 		strcpy((char *)ascii, "Inhalt:");
-		print_string(&dev, fx16G, xpos, ypos, ascii, color);
-		xpos = 20;
+		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
+		if(return_value < error_code) error_code = return_value;
+		xpos = 5;
 		ypos = 90;
 		strcpy((char *)ascii, "Inhalt:");
-		print_string(&dev, fx16G, xpos, ypos, ascii, color);
-		
-		color = RED;
-		xpos = 80;
+		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
+		if(return_value < error_code) error_code = return_value;
+		xpos = 65;
 		ypos = 50;
-		sprintf(text, "Buttons = " BYTE_TO_BINARY_PATTERN"\n", BYTE_TO_BINARY(out_value));
+		sprintf(text, BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(out_value));
 		strcpy((char *)ascii, text);
-		print("%s*")
-		//print_string(&dev, fx16G, xpos, ypos, ascii, color);
-		//print_value(dev, color, fx16G, xpos, ypos, out_value, -1);
-		xpos = 80;
+		for(int i = 0; i < 10; i++)
+		{
+			ascii[i] = ascii[i+2];
+		}
+		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
+		if(return_value < error_code) error_code = return_value;
+		xpos = 65;
 		ypos = 70;
-		print_value(dev, color, fx16G, xpos, ypos, Inhalt[1], -1);
-		xpos = 80;
+		return_value = print_value(&dev, color, fx16G, xpos, ypos, Inhalt[1], -1);
+		if(return_value < error_code) error_code = return_value;
+		xpos = 65;
 		ypos = 90;
-		print_value(dev, color, fx16G, xpos, ypos, Inhalt[2], -1);
+		return_value = print_value(&dev, color, fx16G, xpos, ypos, Inhalt[2], -1);
+		if(return_value < error_code) error_code = return_value;
+		if(error_code == -1) 
+		{
+			ESP_LOGE(__FUNCTION__, "Error accured in print_string function");
+		}
+		error_code = 0;
+		return_value = 0;
 		VlcdUpdate(&dev);
-		vTaskDelay(50);
-
-/*
-		ScrollTest(&dev, fx16G, CONFIG_WIDTH, CONFIG_HEIGHT);
-		WAIT;
-		ScrollReset(&dev, CONFIG_WIDTH, CONFIG_HEIGHT);
-
-		// Multi Font Test
-		uint16_t color;
-		uint8_t ascii[40];
-		uint16_t margin = 10;
-		lcdFillScreen(&dev, BLACK);
-		color = WHITE;
-		lcdSetFontDirection(&dev, 0);
-		uint16_t xpos = 0;
-		uint16_t ypos = 15;
-		int xd = 0;
-		int yd = 1;
-		if(CONFIG_WIDTH < CONFIG_HEIGHT) {
-			lcdSetFontDirection(&dev, 1);
-			xpos = (CONFIG_WIDTH-1)-16;
-			ypos = 0;
-			xd = 1;
-			yd = 0;
-		}
-		strcpy((char *)ascii, "16Dot Gothic Font");
-		lcdDrawString(&dev, fx16G, xpos, ypos, ascii, color);
-
-		xpos = xpos - (24 * xd) - (margin * xd);
-		ypos = ypos + (16 * yd) + (margin * yd);
-		strcpy((char *)ascii, "24Dot Gothic Font");
-		lcdDrawString(&dev, fx24G, xpos, ypos, ascii, color);
-
-		xpos = xpos - (32 * xd) - (margin * xd);
-		ypos = ypos + (24 * yd) + (margin * yd);
-		if (CONFIG_WIDTH >= 240) {
-			strcpy((char *)ascii, "32Dot Gothic Font");
-			lcdDrawString(&dev, fx32G, xpos, ypos, ascii, color);
-			xpos = xpos - (32 * xd) - (margin * xd);;
-			ypos = ypos + (32 * yd) + (margin * yd);
-		}
-
-		xpos = xpos - (10 * xd) - (margin * xd);
-		ypos = ypos + (10 * yd) + (margin * yd);
-		strcpy((char *)ascii, "16Dot Mincyo Font");
-		lcdDrawString(&dev, fx16M, xpos, ypos, ascii, color);
-
-		xpos = xpos - (24 * xd) - (margin * xd);;
-		ypos = ypos + (16 * yd) + (margin * yd);
-		strcpy((char *)ascii, "24Dot Mincyo Font");
-		lcdDrawString(&dev, fx24M, xpos, ypos, ascii, color);
-
-		if (CONFIG_WIDTH >= 240) {
-			xpos = xpos - (32 * xd) - (margin * xd);;
-			ypos = ypos + (24 * yd) + (margin * yd);
-			strcpy((char *)ascii, "32Dot Mincyo Font");
-			lcdDrawString(&dev, fx32M, xpos, ypos, ascii, color);
-		}
-		lcdSetFontDirection(&dev, 0);
-		WAIT;
-*/
+		ESP_LOGI(__FUNCTION__, "%d\n", xPortGetFreeHeapSize());
+		vTaskDelay(100);
+	
 	} // end while
 
 	// never reach
@@ -1406,5 +895,5 @@ void app_main(void)
 	}
 
 	SPIFFS_Directory("/spiffs/");
-	xTaskCreate(ILI9341, "ILI9341", 1024*6, NULL, 2, NULL);
+	xTaskCreate(ILI9341, "ILI9341", 1024*8, NULL, 2, NULL);
 }
