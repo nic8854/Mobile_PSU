@@ -12,7 +12,7 @@
 #include "esp_heap_caps.h"
 #include "dfuncs.h"
 #include "expander_driver.h"
-
+#include "driver/gpio.h"
 #include "ili9340.h"
 #include "fontx.h"
 #include "bmpfile.h"
@@ -34,6 +34,10 @@ static const char *TAG = "ILI9340";
   (byte & 0x04 ? '1' : '0'), \
   (byte & 0x02 ? '1' : '0'), \
   (byte & 0x01 ? '1' : '0') 
+
+#define GPIO_OUTPUT_IO_0    2
+#define GPIO_OUTPUT_IO_1    26
+#define GPIO_OUTPUT_PIN_SEL  ((1ULL<<GPIO_OUTPUT_IO_0) | (1ULL<<GPIO_OUTPUT_IO_1))
 
 
 static void SPIFFS_Directory(char * path) {
@@ -217,67 +221,108 @@ void ILI9341(void *pvParameters)
 	int return_value = 0;
 
 	expander_t dev_port_expander;
+	gpio_config_t io_conf;
+	uint8_t button_last_1 = 0;
+	uint8_t button_last_2 = 0;
+	uint8_t button_last_3 = 0;
+
 	conf_t config = Default_Config;
+
+	io_conf.intr_type = GPIO_INTR_DISABLE;
+	io_conf.mode = GPIO_MODE_OUTPUT;
+	io_conf.pin_bit_mask = GPIO_OUTPUT_PIN_SEL;
+	io_conf.pull_down_en = 0;
+	io_conf.pull_up_en = 0;
+	gpio_config(&io_conf);
+
 	memset(&dev_port_expander, 0, sizeof(expander_t));
 	config.conf_port_0 = 0xFF;
 	config.conf_port_1 = 0x00;
 	config.pol_inv_0 = 0xFF;
 	config.pol_inv_1 = 0x00;
+
+	vTaskDelay(100 / portTICK_PERIOD_MS);
 	expander_init_desc(&dev_port_expander, I2C_ADDR, I2C_PORT, SDA_GPIO, SCL_GPIO);
+	vTaskDelay(500 / portTICK_PERIOD_MS);
 	expander_configure(&dev_port_expander, &config);
 	
 
 	while(1) {
-		
-		for(int i = 0; i < 5; i++)
-		{
-			write_reg_8(&dev_port_expander, reg_out_port_1, 0x01);	
-			vTaskDelay(15);
-			write_reg_8(&dev_port_expander, reg_out_port_1, 0x02);
-			vTaskDelay(15);
-		}
-		write_reg_8(&dev_port_expander, reg_out_port_1, 0x00);
+			read_reg_8(&dev_port_expander, reg_in_port_0, &in_value);
+
+			if(in_value & 0x08 && !button_last_1)
+			{
+				gpio_set_level(GPIO_OUTPUT_IO_0, 1);
+				out_value = out_value ^ 0x01; //0x02 on PSU Board (TC_EN)
+				vTaskDelay(50 / portTICK_PERIOD_MS);
+				gpio_set_level(GPIO_OUTPUT_IO_0, 0);
+				button_last_1 = 1;
+			} 
+			else if(!(in_value & 0x08) && button_last_1)
+			{
+				button_last_1 = 0;
+			}
+			if(in_value & 0x10 && !button_last_2)
+			{
+				gpio_set_level(GPIO_OUTPUT_IO_0, 1);
+				out_value = out_value ^ 0x02; //0x04 on PSU Board (TC_NFON)
+				vTaskDelay(50 / portTICK_PERIOD_MS);
+				gpio_set_level(GPIO_OUTPUT_IO_0, 0);
+				button_last_2 = 1;
+			} 
+			else if(!(in_value & 0x10) && button_last_2)
+			{
+				button_last_2 = 0;
+			}
+			if(in_value & 0x20 && !button_last_3) 
+			{
+				gpio_set_level(GPIO_OUTPUT_IO_0, 1);
+				out_value = out_value ^ 0x10; //does not set EN_IN directly
+				vTaskDelay(50 / portTICK_PERIOD_MS);
+				gpio_set_level(GPIO_OUTPUT_IO_0, 0);
+				button_last_3 = 1;
+			}
+			else if(!(in_value & 0x20) && button_last_3)
+			{
+				button_last_3 = 0;
+			}
+			write_reg_8(&dev_port_expander, reg_out_port_1, out_value);
+			if(out_value & 0x10) gpio_set_level(GPIO_OUTPUT_IO_1, 1);
+			else gpio_set_level(GPIO_OUTPUT_IO_1, 0);
+			ESP_LOGW(__FUNCTION__, "Expander Read Reg 0 = 0b"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(in_value));
+			ESP_LOGW(__FUNCTION__, "Expander Write Reg 1 = 0b"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(out_value));
+
 		strcpy(file, "/spiffs/background.png");
 		print_png(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
 
 		color = WHITE;
-		xpos = 35;
+		xpos = 40;
 		ypos = 25;
-		strcpy((char *)ascii, "Titel");
+		strcpy((char *)ascii, "TEST");
 		return_value = print_string(&dev, fx24G, xpos, ypos, ascii, color);
 		if(return_value < error_code) error_code = return_value;
 		xpos = 5;
 		ypos = 50;
-		strcpy((char *)ascii, "Tasten:");
+		strcpy((char *)ascii, "Reg 0:");
 		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
 		if(return_value < error_code) error_code = return_value;
 		xpos = 5;
 		ypos = 70;
-		strcpy((char *)ascii, "Inhalt:");
+		strcpy((char *)ascii, "Reg 1:");
 		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
 		if(return_value < error_code) error_code = return_value;
-		xpos = 5;
-		ypos = 90;
-		strcpy((char *)ascii, "Inhalt:");
-		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
-		if(return_value < error_code) error_code = return_value;
-		xpos = 65;
+
+		xpos = 55;
 		ypos = 50;
+		sprintf(text, BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(in_value));
+		strcpy((char *)ascii, text);
+		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
+		if(return_value < error_code) error_code = return_value;
+		xpos = 55;
+		ypos = 70;
 		sprintf(text, BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(out_value));
 		strcpy((char *)ascii, text);
-		for(int i = 0; i < 10; i++)
-		{
-			ascii[i] = ascii[i+2];
-		}
 		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
-		if(return_value < error_code) error_code = return_value;
-		xpos = 65;
-		ypos = 70;
-		return_value = print_value(&dev, color, fx16G, xpos, ypos, Inhalt[1], -1);
-		if(return_value < error_code) error_code = return_value;
-		xpos = 65;
-		ypos = 90;
-		return_value = print_value(&dev, color, fx16G, xpos, ypos, Inhalt[2], -1);
 		if(return_value < error_code) error_code = return_value;
 		VlcdUpdate(&dev);
 		if(error_code < 0) 
@@ -286,9 +331,9 @@ void ILI9341(void *pvParameters)
 		}
 		error_code = 0;
 		return_value = 0;
-		read_reg_8(&dev_port_expander, reg_in_port_0, &out_value);
+
 		ESP_LOGI(__FUNCTION__, "%d\n", xPortGetFreeHeapSize());
-		vTaskDelay(10);
+		vTaskDelay(10 / portTICK_PERIOD_MS);
 	
 	} // end while
 

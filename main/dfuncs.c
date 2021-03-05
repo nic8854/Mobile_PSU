@@ -37,7 +37,7 @@ int print_value(TFT_t * dev, uint16_t color, FontxFile font[2], uint16_t xpos, u
 int print_string(TFT_t * dev, FontxFile *fx, uint16_t x, uint16_t y, uint8_t * ascii, uint16_t color) {
 	int length = strlen((char *)ascii);
 	bool error = 0;
-	ESP_LOGW(__FUNCTION__,"lcdDrawString length=%d",length);
+	//ESP_LOGW(__FUNCTION__,"lcdDrawString length=%d",length);
 	for(int i=0;i<length;i++) {
 		if(x > 128 || y > 160) 
 		{
@@ -206,7 +206,6 @@ TickType_t print_png(TFT_t * dev, char * file, int width, int height) {
 	startTick = xTaskGetTickCount();
 
 	lcdSetFontDirection(dev, 0);
-	lcdFillScreen(dev, BLACK);
 
 	int _width = width;
 	if (width > 240) _width = 240;
@@ -300,7 +299,7 @@ TickType_t print_png(TFT_t * dev, char * file, int width, int height) {
 	pngle_destroy(pngle, _width, _height);
 	endTick = xTaskGetTickCount();
 	diffTick = endTick - startTick;
-	ESP_LOGW(__FUNCTION__, "Drawing Image");
+	//ESP_LOGW(__FUNCTION__, "Drawing Image");
 	return diffTick;
 }
 
