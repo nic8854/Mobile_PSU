@@ -1,8 +1,8 @@
-main.o: /home/michael/esp/PSU_display/main/main.c \
+main.o: /home/michael/esp/PSU_main/main/main.c \
  /home/michael/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/FreeRTOSConfig.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/xtensa_config.h \
  /home/michael/esp/esp-idf/components/xtensa/include/xtensa/hal.h \
  /home/michael/esp/esp-idf/components/xtensa/esp32/include/xtensa/config/core.h \
@@ -62,7 +62,7 @@ main.o: /home/michael/esp/PSU_display/main/main.c \
  /home/michael/esp/esp-idf/components/newlib/platform_include/sys/termios.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/sys/poll.h \
  /home/michael/esp/esp-idf/components/spiffs/include/esp_spiffs.h \
- /home/michael/esp/PSU_display/main/dfuncs.h \
+ /home/michael/esp/PSU_main/main/dfuncs.h \
  /home/michael/esp/esp-idf/components/driver/include/driver/spi_master.h \
  /home/michael/esp/esp-idf/components/driver/include/driver/spi_common.h \
  /home/michael/esp/esp-idf/components/soc/include/soc/lldesc.h \
@@ -79,12 +79,12 @@ main.o: /home/michael/esp/PSU_display/main/main.c \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/spi_struct.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/gpio_sig_map.h \
  /home/michael/esp/esp-idf/components/hal/include/hal/spi_types.h \
- /home/michael/esp/PSU_display/main/fontx.h \
- /home/michael/esp/PSU_display/main/ili9340.h \
- /home/michael/esp/PSU_display/main/pngle.h \
+ /home/michael/esp/PSU_main/main/fontx.h \
+ /home/michael/esp/PSU_main/main/ili9340.h \
+ /home/michael/esp/PSU_main/main/pngle.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/miniz.h \
- /home/michael/esp/PSU_display/main/expander_driver.h \
- /home/michael/esp/PSU_display/components/i2cdev/i2cdev.h \
+ /home/michael/esp/PSU_main/main/expander_driver.h \
+ /home/michael/esp/PSU_main/components/i2cdev/i2cdev.h \
  /home/michael/esp/esp-idf/components/driver/include/driver/i2c.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_types.h \
  /home/michael/esp/esp-idf/components/esp_system/include/esp_intr_alloc.h \
@@ -98,10 +98,10 @@ main.o: /home/michael/esp/PSU_display/main/main.c \
  /home/michael/esp/esp-idf/components/hal/include/hal/gpio_types.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/gpio.h \
  /home/michael/esp/esp-idf/components/hal/include/hal/i2c_types.h \
- /home/michael/esp/PSU_display/components/esp_idf_lib_helpers/esp_idf_lib_helpers.h \
+ /home/michael/esp/PSU_main/components/esp_idf_lib_helpers/esp_idf_lib_helpers.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/i2c_reg.h \
- /home/michael/esp/PSU_display/main/bmpfile.h \
- /home/michael/esp/PSU_display/main/decode_image.h
+ /home/michael/esp/PSU_main/main/bmpfile.h \
+ /home/michael/esp/PSU_main/main/decode_image.h
 
 /home/michael/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h:
 
@@ -109,7 +109,7 @@ main.o: /home/michael/esp/PSU_display/main/main.c \
 
 /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/FreeRTOSConfig.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/xtensa_config.h:
 
@@ -229,7 +229,7 @@ main.o: /home/michael/esp/PSU_display/main/main.c \
 
 /home/michael/esp/esp-idf/components/spiffs/include/esp_spiffs.h:
 
-/home/michael/esp/PSU_display/main/dfuncs.h:
+/home/michael/esp/PSU_main/main/dfuncs.h:
 
 /home/michael/esp/esp-idf/components/driver/include/driver/spi_master.h:
 
@@ -263,17 +263,17 @@ main.o: /home/michael/esp/PSU_display/main/main.c \
 
 /home/michael/esp/esp-idf/components/hal/include/hal/spi_types.h:
 
-/home/michael/esp/PSU_display/main/fontx.h:
+/home/michael/esp/PSU_main/main/fontx.h:
 
-/home/michael/esp/PSU_display/main/ili9340.h:
+/home/michael/esp/PSU_main/main/ili9340.h:
 
-/home/michael/esp/PSU_display/main/pngle.h:
+/home/michael/esp/PSU_main/main/pngle.h:
 
 /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/miniz.h:
 
-/home/michael/esp/PSU_display/main/expander_driver.h:
+/home/michael/esp/PSU_main/main/expander_driver.h:
 
-/home/michael/esp/PSU_display/components/i2cdev/i2cdev.h:
+/home/michael/esp/PSU_main/components/i2cdev/i2cdev.h:
 
 /home/michael/esp/esp-idf/components/driver/include/driver/i2c.h:
 
@@ -301,11 +301,11 @@ main.o: /home/michael/esp/PSU_display/main/main.c \
 
 /home/michael/esp/esp-idf/components/hal/include/hal/i2c_types.h:
 
-/home/michael/esp/PSU_display/components/esp_idf_lib_helpers/esp_idf_lib_helpers.h:
+/home/michael/esp/PSU_main/components/esp_idf_lib_helpers/esp_idf_lib_helpers.h:
 
 /home/michael/esp/esp-idf/components/soc/esp32/include/soc/i2c_reg.h:
 
-/home/michael/esp/PSU_display/main/bmpfile.h:
+/home/michael/esp/PSU_main/main/bmpfile.h:
 
-/home/michael/esp/PSU_display/main/decode_image.h:
-/home/michael/esp/PSU_display/main/./main.c:
+/home/michael/esp/PSU_main/main/decode_image.h:
+/home/michael/esp/PSU_main/main/./main.c:

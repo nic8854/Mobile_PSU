@@ -1,7 +1,7 @@
 esp_app_desc.o: \
  /home/michael/esp/esp-idf/components/app_update/esp_app_desc.c \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/app_update/include/esp_ota_ops.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
@@ -19,7 +19,7 @@ esp_app_desc.o: \
 
 /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 
