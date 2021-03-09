@@ -241,9 +241,9 @@ void ILI9341(void *pvParameters)
 	config.pol_inv_0 = 0xFF;
 	config.pol_inv_1 = 0x00;
 
-	vTaskDelay(100 / portTICK_PERIOD_MS);
+	vTaskDelay(1000 / portTICK_PERIOD_MS);
 	expander_init_desc(&dev_port_expander, I2C_ADDR, I2C_PORT, SDA_GPIO, SCL_GPIO);
-	vTaskDelay(500 / portTICK_PERIOD_MS);
+	vTaskDelay(1000 / portTICK_PERIOD_MS);
 	expander_configure(&dev_port_expander, &config);
 	
 
