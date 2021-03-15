@@ -13,7 +13,6 @@
 #include "freertos/event_groups.h"
 #include "esp_log.h"
 #include "esp_err.h"
-#include "aqcoolLiveData.h"
 
 #define INA220_I2C_ADDR     0x40
 

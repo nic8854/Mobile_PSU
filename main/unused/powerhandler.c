@@ -21,9 +21,9 @@ void vPowerHandler(void* pvParameter) {
     xSemaphoreTake(powerdataLock, portMAX_DELAY);
 #ifndef AQCOOL_DEBUG
     ina220_params_t params;
+    ina220_init_default_params(&params);
     params.shunt_resolution = RESOLUTION_32Samples;
     params.bus_resolution = RESOLUTION_32Samples;
-    ina220_init_default_params(&params);
     ina220_t dev;
     memset(&dev, 0, sizeof(ina220_t));
 

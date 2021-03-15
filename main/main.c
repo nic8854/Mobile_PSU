@@ -18,6 +18,7 @@
 #include "bmpfile.h"
 #include "decode_image.h"
 #include "pngle.h"
+#include "INA220.h"
 
 #define	INTERVAL		400
 #define WAIT			vTaskDelay(INTERVAL)
@@ -104,24 +105,31 @@ void ILI9341(void *pvParameters)
 	uint16_t ypos = 25;
 
 	#define I2C_PORT 0
-	#define I2C_ADDR 0x20
+	#define I2C_EXP_ADDR 0x20
+	#define I2C_INA_ADDR 0x40
 	#define SDA_GPIO 21
 	#define SCL_GPIO 22
 
-	uint8_t in_value = 0xFF;
-	uint8_t out_value = 0x00;
-	int error_code = 0;
-	int return_value = 0;
-	uint8_t read_reg_val = 0x00;
+	
+	//init ina object
+	ina220_t dev_ina_1;
+	ina220_params_t ina_params;
+	ina220_init_default_params(&ina_params);
+	memset(&dev_ina_1, 0, sizeof(ina220_t));
 
+	//init expander object
 	expander_t dev_port_expander;
-	gpio_config_t io_conf;
-	uint8_t button_last_1 = 0;
-	uint8_t button_last_2 = 0;
-	uint8_t button_last_3 = 0;
+	memset(&dev_port_expander, 0, sizeof(expander_t));
 
+	//init expander config object
 	conf_t config = Default_Config;
+	config.conf_port_0 = 0xFF;
+	config.conf_port_1 = 0x00;
+	config.pol_inv_0 = 0xFF;
+	config.pol_inv_1 = 0x00;
 
+	//init GPIO config object
+	gpio_config_t io_conf;
 	io_conf.intr_type = GPIO_INTR_DISABLE;
 	io_conf.mode = GPIO_MODE_OUTPUT;
 	io_conf.pin_bit_mask = GPIO_OUTPUT_PIN_SEL;
@@ -129,21 +137,32 @@ void ILI9341(void *pvParameters)
 	io_conf.pull_up_en = 0;
 	gpio_config(&io_conf);
 
-	memset(&dev_port_expander, 0, sizeof(expander_t));
-	config.conf_port_0 = 0xFF;
-	config.conf_port_1 = 0x00;
-	config.pol_inv_0 = 0xFF;
-	config.pol_inv_1 = 0x00;
+	//init variables
+	uint8_t in_value = 0xFF;
+	uint8_t out_value = 0x00;
+	int error_code = 0;
+	int return_value = 0;
+	uint8_t button_last_1 = 0;
+	uint8_t button_last_2 = 0;
+	uint8_t button_last_3 = 0;
+	double current_val = 0;
+	double shunt_val = 0;
 
-	//write_reg_8(&dev, reg_conf_port_0, 0xFF);
-	vTaskDelay(1000 / portTICK_PERIOD_MS);
-	expander_init_desc(&dev_port_expander, I2C_ADDR, I2C_PORT, SDA_GPIO, SCL_GPIO);
+	//init and configure expander
+	expander_init_desc(&dev_port_expander, I2C_EXP_ADDR, I2C_PORT, SDA_GPIO, SCL_GPIO);
 	vTaskDelay(1000 / portTICK_PERIOD_MS);
 	expander_configure(&dev_port_expander, &config);
+
+	//init and configure INA220
+	ina220_init_desc(&dev_ina_1, I2C_INA_ADDR, I2C_PORT, SDA_GPIO, SCL_GPIO);
+	ina220_init(&dev_ina_1, &ina_params);
+	ina220_setCalibrationData(&dev_ina_1, &ina_params, 0.1, 0.008);
 	
 
 	while(1) {
 			read_reg_8(&dev_port_expander, reg_in_port_0, &in_value);
+			current_val = ina220_getCurrent_mA(&dev_ina_1, &ina_params);
+			shunt_val = ina220_getVShunt_mv(&dev_ina_1, &ina_params);
 
 			if(in_value & 0x08 && !button_last_1)
 			{
@@ -206,6 +225,16 @@ void ILI9341(void *pvParameters)
 		strcpy((char *)ascii, "Reg 1:");
 		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
 		if(return_value < error_code) error_code = return_value;
+		xpos = 5;
+		ypos = 90;
+		strcpy((char *)ascii, "INA I:");
+		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
+		if(return_value < error_code) error_code = return_value;
+		xpos = 5;
+		ypos = 110;
+		strcpy((char *)ascii, "SHUNT:");
+		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
+		if(return_value < error_code) error_code = return_value;
 
 		xpos = 55;
 		ypos = 50;
@@ -217,6 +246,24 @@ void ILI9341(void *pvParameters)
 		ypos = 70;
 		sprintf(text, BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(out_value));
 		strcpy((char *)ascii, text);
+		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
+		xpos = 55;
+		ypos = 90;
+		return_value = print_value(&dev, color, fx16G, xpos, ypos, -1, current_val);
+		if(return_value < error_code) error_code = return_value;
+		if(return_value < error_code) error_code = return_value;
+		xpos = 100;
+		ypos = 90;
+		strcpy((char *)ascii, "mA");
+		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
+		if(return_value < error_code) error_code = return_value;
+		xpos = 55;
+		ypos = 110;
+		return_value = print_value(&dev, color, fx16G, xpos, ypos, -1, shunt_val);
+		if(return_value < error_code) error_code = return_value;
+		xpos = 100;
+		ypos = 110;
+		strcpy((char *)ascii, "mV");
 		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
 		if(return_value < error_code) error_code = return_value;
 		VlcdUpdate(&dev);
