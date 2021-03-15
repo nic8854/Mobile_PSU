@@ -82,5 +82,6 @@ esp_err_t read_reg_16(expander_t *dev, uint8_t reg, uint16_t *val);
 esp_err_t write_reg_16(expander_t *dev, uint8_t reg, uint16_t val);
 esp_err_t expander_init_desc(expander_t *dev, uint8_t addr, i2c_port_t port, gpio_num_t sda_gpio, gpio_num_t scl_gpio);
 esp_err_t expander_configure(expander_t *dev, conf_t *config);
+esp_err_t config_value(expander_t *dev, uint8_t port, uint8_t value);
 
 #endif
