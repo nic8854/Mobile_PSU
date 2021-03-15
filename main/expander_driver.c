@@ -8,7 +8,7 @@
 #include "esp_log.h"
 #include "expander_driver.h"
 
-#define I2C_FREQ_HZ 1000000
+#define I2C_FREQ_HZ 400000
 
 static const char *TAG = "EXPANDER";
 
@@ -84,32 +84,68 @@ esp_err_t expander_init_desc(expander_t *dev, uint8_t addr, i2c_port_t port, gpi
 
 esp_err_t expander_configure(expander_t *dev, conf_t *config)
 {
-    if(config->conf_port_0 != 0xFF) write_reg_8(dev, reg_conf_port_0, config->conf_port_0);
-    if(config->conf_port_1 != 0xFF)write_reg_8(dev, reg_conf_port_1, config->conf_port_1); 
-    if(config->pol_inv_0   != 0x00) write_reg_8(dev, reg_polinv_port_0, config->pol_inv_0);
-    if(config->pol_inv_1   != 0x00) write_reg_8(dev, reg_polinv_port_1, config->pol_inv_1);
+    esp_err_t error_check = 0;
+    if(config->conf_port_0 != 0xFF) error_check = config_value(dev, reg_conf_port_0, config->conf_port_0);
+    if(error_check != 0) ESP_LOGE(__FUNCTION__, "AN ERROR OCCURED: 0x%x", error_check);
+    if(config->conf_port_1 != 0xFF) error_check = config_value(dev, reg_conf_port_1, config->conf_port_1);
+    if(error_check != 0) ESP_LOGE(__FUNCTION__, "AN ERROR OCCURED: 0x%x", error_check);
+    if(config->pol_inv_0   != 0x00) error_check = config_value(dev, reg_polinv_port_0, config->pol_inv_0);
+    if(error_check != 0) ESP_LOGE(__FUNCTION__, "AN ERROR OCCURED: 0x%x", error_check);
+    if(config->pol_inv_1   != 0x00) error_check = config_value(dev, reg_polinv_port_1, config->pol_inv_1);
+    if(error_check != 0) ESP_LOGE(__FUNCTION__, "AN ERROR OCCURED: 0x%x", error_check);
+
     if(config->drive_port_0 != 0xFF) 
     {
         uint8_t drive_0_low = (uint8_t)(config->drive_port_0 & 0x00FF);
-        write_reg_8(dev, reg_outdr_port_0_low, drive_0_low);
+        error_check = config_value(dev, reg_outdr_port_0_low, drive_0_low);
+        if(error_check != 0) ESP_LOGE(__FUNCTION__, "AN ERROR OCCURED: 0x%x", error_check);
         uint8_t drive_0_high = (uint8_t)(config->drive_port_0 >> 8);
-        write_reg_8(dev, reg_outdr_port_0_high, drive_0_high);
+        error_check = config_value(dev, reg_outdr_port_0_high, drive_0_high);
+        if(error_check != 0) ESP_LOGE(__FUNCTION__, "AN ERROR OCCURED: 0x%x", error_check);
     }
     if(config->drive_port_1 != 0xFF) 
     {
         uint8_t drive_1_low = (uint8_t)(config->drive_port_1 & 0x00FF);
-        write_reg_8(dev, reg_outdr_port_1_low, drive_1_low);
+        error_check = config_value(dev, reg_outdr_port_1_low, drive_1_low);
+        if(error_check != 0) ESP_LOGE(__FUNCTION__, "AN ERROR OCCURED: 0x%x", error_check);
         uint8_t drive_1_high = (uint8_t)(config->drive_port_1 >> 8);
-        write_reg_8(dev, reg_outdr_port_1_high, drive_1_high);
+        error_check = config_value(dev, reg_outdr_port_1_high, drive_1_high);
+        if(error_check != 0) ESP_LOGE(__FUNCTION__, "AN ERROR OCCURED: 0x%x", error_check);
     }
-    if(config->latch_port_0 != 0x00) write_reg_8(dev, reg_latch_port_0, config->latch_port_0);
-    if(config->latch_port_1 != 0x00) write_reg_8(dev, reg_latch_port_1 , config->latch_port_1);
-    if(config->pull_en_port_0 != 0x00) write_reg_8(dev, reg_pull_en_port_0, config->pull_en_port_0);
-    if(config->pull_en_port_1 != 0x00) write_reg_8(dev, reg_pull_en_port_1, config->pull_en_port_1);
-    if(config->pull_sel_port_0 != 0xFF) write_reg_8(dev, reg_pull_select_port_0, config->pull_sel_port_0);
-    if(config->pull_sel_port_1 != 0xFF) write_reg_8(dev, reg_pull_select_port_1, config->pull_sel_port_1);
-    if(config->interr_mask_port_0 != 0xFF) write_reg_8(dev, reg_interr_mask_port_0, config->interr_mask_port_0);
-    if(config->interr_mask_port_1 != 0xFF) write_reg_8(dev, reg_interr_mask_port_1, config->interr_mask_port_1);
-    if(config->out_port_conf != 0x00) write_reg_8(dev, reg_out_port_conf, config->out_port_conf);
-   return ESP_OK;
+    if(config->latch_port_0 != 0x00) error_check = config_value(dev, reg_latch_port_0, config->latch_port_0);
+    if(error_check != 0) ESP_LOGE(__FUNCTION__, "AN ERROR OCCURED: 0x%x", error_check);
+    if(config->latch_port_1 != 0x00) error_check = config_value(dev, reg_latch_port_1 , config->latch_port_1);
+    if(error_check != 0) ESP_LOGE(__FUNCTION__, "AN ERROR OCCURED: 0x%x", error_check);
+    if(config->pull_en_port_0 != 0x00) error_check = config_value(dev, reg_pull_en_port_0, config->pull_en_port_0);
+    if(error_check != 0) ESP_LOGE(__FUNCTION__, "AN ERROR OCCURED: 0x%x", error_check);
+    if(config->pull_en_port_1 != 0x00) error_check = config_value(dev, reg_pull_en_port_1, config->pull_en_port_1);
+    if(error_check != 0) ESP_LOGE(__FUNCTION__, "AN ERROR OCCURED: 0x%x", error_check);
+    if(config->pull_sel_port_0 != 0xFF) error_check = config_value(dev, reg_pull_select_port_0, config->pull_sel_port_0);
+    if(error_check != 0) ESP_LOGE(__FUNCTION__, "AN ERROR OCCURED: 0x%x", error_check);
+    if(config->pull_sel_port_1 != 0xFF) error_check = config_value(dev, reg_pull_select_port_1, config->pull_sel_port_1);
+    if(error_check != 0) ESP_LOGE(__FUNCTION__, "AN ERROR OCCURED: 0x%x", error_check);
+    if(config->interr_mask_port_0 != 0xFF) error_check = config_value(dev, reg_interr_mask_port_0, config->interr_mask_port_0);
+    if(error_check != 0) ESP_LOGE(__FUNCTION__, "AN ERROR OCCURED: 0x%x", error_check);
+    if(config->interr_mask_port_1 != 0xFF) error_check = config_value(dev, reg_interr_mask_port_1, config->interr_mask_port_1);
+    if(error_check != 0) ESP_LOGE(__FUNCTION__, "AN ERROR OCCURED: 0x%x", error_check);
+    if(config->out_port_conf != 0x00) error_check = config_value(dev, reg_out_port_conf, config->out_port_conf);
+    if(error_check != 0) ESP_LOGE(__FUNCTION__, "AN ERROR OCCURED: 0x%x", error_check);
+    return ESP_OK;
+}
+
+esp_err_t config_value(expander_t *dev, uint8_t reg, uint8_t value)
+{
+    uint8_t ref_value = 0;
+    int counter = 5;
+    while(counter > 0)
+    {
+        write_reg_8(dev, reg, value);
+        vTaskDelay(2 / portTICK_PERIOD_MS);
+        read_reg_8(dev, reg, &ref_value); 
+        if(ref_value == value) counter = -1;
+        vTaskDelay(10 / portTICK_PERIOD_MS);
+        counter--;
+    }
+    if(ref_value == value) return ESP_OK;
+    else return ESP_ERR_TIMEOUT;
 }
