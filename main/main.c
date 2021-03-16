@@ -156,7 +156,7 @@ void ILI9341(void *pvParameters)
 	//init and configure INA220
 	ina220_init_desc(&dev_ina_1, I2C_INA_ADDR, I2C_PORT, SDA_GPIO, SCL_GPIO);
 	ina220_init(&dev_ina_1, &ina_params);
-	ina220_setCalibrationData(&dev_ina_1, &ina_params, 0.1, 0.008);
+	ina220_setCalibrationData(&dev_ina_1, &ina_params, 0.1, 1.4);
 	
 
 	while(1) {
