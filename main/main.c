@@ -72,26 +72,8 @@ void ILI9341(void *pvParameters)
 	TFT_t dev;
 	spi_master_init(&dev, CONFIG_CS_GPIO, CONFIG_DC_GPIO, CONFIG_RESET_GPIO, CONFIG_BL_GPIO);
 
-
-
-#if CONFIG_ILI9225
-	uint16_t model = 0x9225;
-#endif
-#if CONFIG_ILI9225G
-	uint16_t model = 0x9226;
-#endif
-#if CONFIG_ILI9340
-	uint16_t model = 0x9340;
-#endif
-#if CONFIG_ILI9341
-	uint16_t model = 0x9341;
-#endif
-#if CONFIG_ST7735
 	uint16_t model = 0x7735;
-#endif
-#if CONFIG_ST7796
-	uint16_t model = 0x7796;
-#endif
+
 	lcdInit(&dev, model, CONFIG_WIDTH, CONFIG_HEIGHT, CONFIG_OFFSETX, CONFIG_OFFSETY);
 
 	char file[32];
