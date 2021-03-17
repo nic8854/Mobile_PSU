@@ -23,7 +23,7 @@
 #define	INTERVAL		400
 #define WAIT			vTaskDelay(INTERVAL)
 
-static const char *TAG = "ILI9340";
+static const char *TAG = "PSU_main";
 
 #define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
 #define BYTE_TO_BINARY(byte)  \

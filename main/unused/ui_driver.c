@@ -77,22 +77,6 @@ int value_select_max = 0;
 int page_select_max = 5;
 int digit_select = 0;
 
-int up_state = 0;
-int down_state = 0;
-int left_state = 0;
-int right_state = 0;
-int middle_state = 0;
-int clkwise_state = 0;
-int cclkwise_state = 0;
-
-int up_state_last = 0;
-int down_state_last = 0;
-int left_state_last = 0;
-int right_state_last = 0;
-int middle_state_last = 0;
-int clkwise_state_last = 0;
-int cclkwise_state_last = 0;
-
 void enter_page()
 {
     switch(page_select)

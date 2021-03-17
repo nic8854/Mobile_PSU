@@ -13,8 +13,8 @@
 #define TAG "ILI9340"
 #define	_DEBUG_ 0
 
-static const int GPIO_MOSI = 23;
-static const int GPIO_SCLK = 18;
+static const int GPIO_MOSI = 25; //23
+static const int GPIO_SCLK = 23; //18
 
 static const int SPI_Command_Mode = 0;
 static const int SPI_Data_Mode = 1;
