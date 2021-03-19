@@ -3,7 +3,7 @@ esp-tls-crypto/esp_tls_crypto.o: \
  /home/michael/esp/esp-idf/components/esp-tls/esp-tls-crypto/esp_tls_crypto.h \
  /home/michael/esp/esp-idf/components/log/include/esp_log.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp_rom_sys.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/ets_sys.h \
  /home/michael/esp/esp-idf/components/log/include/esp_log_internal.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
@@ -27,7 +27,7 @@ esp-tls-crypto/esp_tls_crypto.o: \
 
 /home/michael/esp/esp-idf/components/esp_rom/include/esp_rom_sys.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/ets_sys.h:
 

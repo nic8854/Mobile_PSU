@@ -2,7 +2,7 @@ tcp_slave/port/port_tcp_slave.o: \
  /home/michael/esp/esp-idf/components/freemodbus/tcp_slave/port/port_tcp_slave.c \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/sys/time.h \
  /home/michael/esp/esp-idf/components/esp_netif/include/esp_netif.h \
@@ -148,7 +148,7 @@ tcp_slave/port/port_tcp_slave.o: \
 
 /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 

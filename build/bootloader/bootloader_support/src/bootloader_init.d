@@ -1,6 +1,6 @@
 src/bootloader_init.o: \
  /home/michael/esp/esp-idf/components/bootloader_support/src/bootloader_init.c \
- /home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h \
  /home/michael/esp/esp-idf/components/log/include/esp_log.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp_rom_sys.h \
@@ -60,7 +60,7 @@ src/bootloader_init.o: \
  /home/michael/esp/esp-idf/components/hal/esp32/include/hal/rwdt_ll.h \
  /home/michael/esp/esp-idf/components/soc/include/soc/rtc_cntl_periph.h
 
-/home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h:
 

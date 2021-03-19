@@ -1,6 +1,6 @@
 src/esp_efuse_fields.o: \
  /home/michael/esp/esp-idf/components/efuse/src/esp_efuse_fields.c \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/efuse/include/esp_efuse.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
@@ -23,7 +23,7 @@ src/esp_efuse_fields.o: \
  /home/michael/esp/esp-idf/components/bootloader_support/include/bootloader_random.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/apb_ctrl_reg.h
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/efuse/include/esp_efuse.h:
 

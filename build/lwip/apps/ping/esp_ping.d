@@ -3,7 +3,7 @@ apps/ping/esp_ping.o: \
  /home/michael/esp/esp-idf/components/lwip/include/apps/esp_ping.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/lwip/lwip/src/include/lwip/ip_addr.h \
  /home/michael/esp/esp-idf/components/lwip/lwip/src/include/lwip/opt.h \
@@ -86,7 +86,7 @@ apps/ping/esp_ping.o: \
 
 /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 

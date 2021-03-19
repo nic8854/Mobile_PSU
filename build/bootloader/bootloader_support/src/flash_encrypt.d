@@ -1,6 +1,6 @@
 src/flash_encrypt.o: \
  /home/michael/esp/esp-idf/components/bootloader_support/src/flash_encrypt.c \
- /home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/log/include/esp_log.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp_rom_sys.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/ets_sys.h \
@@ -25,7 +25,7 @@ src/flash_encrypt.o: \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp_rom_efuse.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/secure_boot.h
 
-/home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/log/include/esp_log.h:
 

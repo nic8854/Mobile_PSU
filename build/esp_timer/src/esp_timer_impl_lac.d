@@ -3,7 +3,7 @@ src/esp_timer_impl_lac.o: \
  /home/michael/esp/esp-idf/components/esp_timer/private_include/esp_timer_impl.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/esp_system/include/esp_intr_alloc.h \
  /home/michael/esp/esp-idf/components/esp_timer/include/esp_timer.h \
@@ -78,7 +78,7 @@ src/esp_timer_impl_lac.o: \
 
 /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 

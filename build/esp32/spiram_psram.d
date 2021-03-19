@@ -1,5 +1,5 @@
 spiram_psram.o: /home/michael/esp/esp-idf/components/esp32/spiram_psram.c \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
@@ -112,7 +112,7 @@ spiram_psram.o: /home/michael/esp/esp-idf/components/esp32/spiram_psram.c \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp_rom_gpio.h \
  /home/michael/esp/esp-idf/components/bootloader_support/include/bootloader_flash_config.h
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h:
 

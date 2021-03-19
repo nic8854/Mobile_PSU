@@ -8,7 +8,7 @@ gpio_hal.o: /home/michael/esp/esp-idf/components/hal/gpio_hal.c \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/gpio_struct.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/gpio_reg.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc_caps.h \
- /home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/gpio_sig_map.h \
  /home/michael/esp/esp-idf/components/hal/include/hal/gpio_hal.h \
  /home/michael/esp/esp-idf/components/hal/esp32/include/hal/gpio_ll.h \
@@ -34,7 +34,7 @@ gpio_hal.o: /home/michael/esp/esp-idf/components/hal/gpio_hal.c \
 
 /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc_caps.h:
 
-/home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/soc/esp32/include/soc/gpio_sig_map.h:
 

@@ -1,7 +1,7 @@
 src/core_dump_elf.o: \
  /home/michael/esp/esp-idf/components/espcoredump/src/core_dump_elf.c \
  /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/spi_flash/include/esp_partition.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
@@ -73,7 +73,7 @@ src/core_dump_elf.o: \
 
 /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/spi_flash/include/esp_partition.h:
 

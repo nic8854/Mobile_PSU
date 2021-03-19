@@ -12,7 +12,7 @@ esp32/adc_periph.o: \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/rtc_cntl_struct.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/adc_channel.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc_caps.h \
- /home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h
+ /home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h
 
 /home/michael/esp/esp-idf/components/soc/include/soc/adc_periph.h:
 
@@ -38,5 +38,5 @@ esp32/adc_periph.o: \
 
 /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc_caps.h:
 
-/home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h:
 /home/michael/esp/esp-idf/components/soc/esp32/adc_periph.c:

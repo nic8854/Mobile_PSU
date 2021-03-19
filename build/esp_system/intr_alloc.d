@@ -1,6 +1,6 @@
 intr_alloc.o: \
  /home/michael/esp/esp-idf/components/esp_system/intr_alloc.c \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_types.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
@@ -63,7 +63,7 @@ intr_alloc.o: \
  /home/michael/esp/esp-idf/components/hal/esp32/include/hal/interrupt_controller_ll.h \
  /home/michael/esp/esp-idf/components/esp_ipc/include/esp_ipc.h
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_types.h:
 

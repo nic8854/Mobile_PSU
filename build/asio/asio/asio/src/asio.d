@@ -3,7 +3,7 @@ asio/asio/src/asio.o: \
  /home/michael/esp/esp-idf/components/asio/asio/asio/include/asio/impl/src.hpp \
  /home/michael/esp/esp-idf/components/asio/asio/asio/include/asio/detail/config.hpp \
  /home/michael/esp/esp-idf/components/asio/port/include/esp_asio_config.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/asio/asio/asio/include/asio/impl/error.ipp \
  /home/michael/esp/esp-idf/components/asio/asio/asio/include/asio/error.hpp \
  /home/michael/esp/esp-idf/components/asio/asio/asio/include/asio/error_code.hpp \
@@ -322,7 +322,7 @@ asio/asio/src/asio.o: \
 
 /home/michael/esp/esp-idf/components/asio/port/include/esp_asio_config.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/asio/asio/asio/include/asio/impl/error.ipp:
 

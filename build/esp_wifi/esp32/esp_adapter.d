@@ -1,7 +1,7 @@
 esp32/esp_adapter.o: \
  /home/michael/esp/esp-idf/components/esp_wifi/esp32/esp_adapter.c \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/pthread.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/sys/time.h \
@@ -144,7 +144,7 @@ esp32/esp_adapter.o: \
 
 /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 

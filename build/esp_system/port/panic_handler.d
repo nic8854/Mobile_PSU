@@ -13,7 +13,7 @@ port/panic_handler.o: \
  /home/michael/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/FreeRTOSConfig.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/xtensa_config.h \
  /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/xtensa_context.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp_rom_sys.h \
@@ -109,7 +109,7 @@ port/panic_handler.o: \
 
 /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/FreeRTOSConfig.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/xtensa_config.h:
 

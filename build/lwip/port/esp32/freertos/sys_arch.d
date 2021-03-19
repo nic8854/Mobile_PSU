@@ -7,7 +7,7 @@ port/esp32/freertos/sys_arch.o: \
  /home/michael/esp/esp-idf/components/lwip/port/esp32/include/arch/cc.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/errno.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/lwip/port/esp32/include/arch/sys_arch.h \
  /home/michael/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h \
@@ -98,7 +98,7 @@ port/esp32/freertos/sys_arch.o: \
 
 /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 

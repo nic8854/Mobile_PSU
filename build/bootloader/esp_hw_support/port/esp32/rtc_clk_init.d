@@ -2,7 +2,7 @@ port/esp32/rtc_clk_init.o: \
  /home/michael/esp/esp-idf/components/esp_hw_support/port/esp32/rtc_clk_init.c \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/rtc.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/ets_sys.h \
- /home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_assert.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_bit_defs.h \
@@ -43,7 +43,7 @@ port/esp32/rtc_clk_init.o: \
 
 /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/ets_sys.h:
 
-/home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc.h:
 

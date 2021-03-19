@@ -102,7 +102,9 @@ main.o: /home/michael/esp/PSU_main/main/main.c \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/i2c_reg.h \
  /home/michael/esp/PSU_main/main/bmpfile.h \
  /home/michael/esp/PSU_main/main/decode_image.h \
- /home/michael/esp/PSU_main/main/INA220.h
+ /home/michael/esp/PSU_main/main/INA220.h \
+ /home/michael/esp/PSU_main/main/ui_driver.h \
+ /home/michael/esp/PSU_main/main/Button_driver.h
 
 /home/michael/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h:
 
@@ -311,4 +313,8 @@ main.o: /home/michael/esp/PSU_main/main/main.c \
 /home/michael/esp/PSU_main/main/decode_image.h:
 
 /home/michael/esp/PSU_main/main/INA220.h:
+
+/home/michael/esp/PSU_main/main/ui_driver.h:
+
+/home/michael/esp/PSU_main/main/Button_driver.h:
 /home/michael/esp/PSU_main/main/./main.c:

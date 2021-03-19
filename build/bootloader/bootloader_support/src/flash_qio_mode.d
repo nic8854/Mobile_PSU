@@ -1,7 +1,7 @@
 src/flash_qio_mode.o: \
  /home/michael/esp/esp-idf/components/bootloader_support/src/flash_qio_mode.c \
  /home/michael/esp/esp-idf/components/bootloader_support/include/bootloader_flash_config.h \
- /home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/bootloader_support/include/esp_image_format.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/bootloader_support/include/esp_flash_partitions.h \
@@ -28,7 +28,7 @@ src/flash_qio_mode.o: \
 
 /home/michael/esp/esp-idf/components/bootloader_support/include/bootloader_flash_config.h:
 
-/home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/bootloader_support/include/esp_image_format.h:
 

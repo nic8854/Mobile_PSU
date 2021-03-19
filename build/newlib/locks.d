@@ -1,6 +1,6 @@
 locks.o: /home/michael/esp/esp-idf/components/newlib/locks.c \
  /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_hw_support/include/soc/cpu.h \
  /home/michael/esp/esp-idf/components/xtensa/include/xtensa/corebits.h \
  /home/michael/esp/esp-idf/components/xtensa/esp32/include/xtensa/config/core.h \
@@ -60,7 +60,7 @@ locks.o: /home/michael/esp/esp-idf/components/newlib/locks.c \
 
 /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_hw_support/include/soc/cpu.h:
 

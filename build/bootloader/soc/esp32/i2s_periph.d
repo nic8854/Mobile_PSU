@@ -9,7 +9,7 @@ esp32/i2s_periph.o: \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/i2s_reg.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc_caps.h \
- /home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/gpio_sig_map.h
 
 /home/michael/esp/esp-idf/components/soc/include/soc/i2s_periph.h:
@@ -30,7 +30,7 @@ esp32/i2s_periph.o: \
 
 /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc_caps.h:
 
-/home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/soc/esp32/include/soc/gpio_sig_map.h:
 /home/michael/esp/esp-idf/components/soc/esp32/i2s_periph.c:

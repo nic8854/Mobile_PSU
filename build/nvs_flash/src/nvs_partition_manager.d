@@ -3,7 +3,7 @@ src/nvs_partition_manager.o: \
  /home/michael/esp/esp-idf/components/spi_flash/include/esp_partition.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/spi_flash/include/esp_flash.h \
  /home/michael/esp/esp-idf/components/hal/include/hal/spi_flash_types.h \
@@ -88,7 +88,7 @@ src/nvs_partition_manager.o: \
 
 /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 

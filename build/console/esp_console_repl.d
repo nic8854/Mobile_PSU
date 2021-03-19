@@ -1,6 +1,6 @@
 esp_console_repl.o: \
  /home/michael/esp/esp-idf/components/console/esp_console_repl.c \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
@@ -72,7 +72,7 @@ esp_console_repl.o: \
  /home/michael/esp/esp-idf/components/hal/include/hal/uart_types.h \
  /home/michael/esp/esp-idf/components/console/linenoise/linenoise.h
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h:
 

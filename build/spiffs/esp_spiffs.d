@@ -2,7 +2,7 @@ esp_spiffs.o: /home/michael/esp/esp-idf/components/spiffs/esp_spiffs.c \
  /home/michael/esp/esp-idf/components/spiffs/include/esp_spiffs.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/spiffs/spiffs/src/spiffs.h \
  /home/michael/esp/esp-idf/components/spiffs/include/spiffs_config.h \
@@ -84,7 +84,7 @@ esp_spiffs.o: /home/michael/esp/esp-idf/components/spiffs/esp_spiffs.c \
 
 /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 

@@ -1,7 +1,7 @@
 port/esp32/vfs_lwip.o: \
  /home/michael/esp/esp-idf/components/lwip/port/esp32/vfs_lwip.c \
  /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/vfs/include/esp_vfs.h \
  /home/michael/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
@@ -95,7 +95,7 @@ port/esp32/vfs_lwip.o: \
 
 /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/vfs/include/esp_vfs.h:
 

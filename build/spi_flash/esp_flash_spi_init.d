@@ -1,6 +1,6 @@
 esp_flash_spi_init.o: \
  /home/michael/esp/esp-idf/components/spi_flash/esp_flash_spi_init.c \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/spi_flash/include/esp_flash.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
@@ -102,7 +102,7 @@ esp_flash_spi_init.o: \
  /home/michael/esp/esp-idf/components/spi_flash/include/esp_flash_internal.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/spi_flash.h
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/spi_flash/include/esp_flash.h:
 

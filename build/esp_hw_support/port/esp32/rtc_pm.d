@@ -1,7 +1,7 @@
 port/esp32/rtc_pm.o: \
  /home/michael/esp/esp-idf/components/esp_hw_support/port/esp32/rtc_pm.c \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/rtc.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
@@ -20,7 +20,7 @@ port/esp32/rtc_pm.o: \
 
 /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 

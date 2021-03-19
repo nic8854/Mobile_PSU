@@ -4,7 +4,7 @@ spi_flash_chip_gd.o: \
  /home/michael/esp/esp-idf/components/spi_flash/include/esp_flash.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/hal/include/hal/spi_flash_types.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_types.h \
@@ -21,7 +21,7 @@ spi_flash_chip_gd.o: \
 
 /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 

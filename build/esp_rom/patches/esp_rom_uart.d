@@ -1,7 +1,7 @@
 patches/esp_rom_uart.o: \
  /home/michael/esp/esp-idf/components/esp_rom/patches/esp_rom_uart.c \
  /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/hal/esp32/include/hal/uart_ll.h \
  /home/michael/esp/esp-idf/components/soc/include/soc/uart_periph.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc_caps.h \
@@ -18,7 +18,7 @@ patches/esp_rom_uart.o: \
 
 /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/hal/esp32/include/hal/uart_ll.h:
 

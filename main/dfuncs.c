@@ -13,7 +13,7 @@
 
 uint16_t vscreen[128][160]; // [x][y]
 
-int print_value(TFT_t * dev, uint16_t color, FontxFile font[2], uint16_t xpos, uint16_t ypos, int int_value, float float_value)
+int DF_print_value(TFT_t * dev, uint16_t color, FontxFile font[2], uint16_t xpos, uint16_t ypos, int int_value, float float_value)
 {
 	lcdSetFontDirection(&dev, 0);
 	char text[40];
@@ -29,12 +29,12 @@ int print_value(TFT_t * dev, uint16_t color, FontxFile font[2], uint16_t xpos, u
 		sprintf(text, "%.2f", float_value);
 	}
 	strcpy((char *)ascii, text);
-	return print_string(dev, font, xpos, ypos, ascii, color);
+	return DF_print_string(dev, font, xpos, ypos, ascii, color);
 
 	
 }
 
-int print_string(TFT_t * dev, FontxFile *fx, uint16_t x, uint16_t y, uint8_t * ascii, uint16_t color) {
+int DF_print_string(TFT_t * dev, FontxFile *fx, uint16_t x, uint16_t y, uint8_t * ascii, uint16_t color) {
 	int length = strlen((char *)ascii);
 	bool error = 0;
 	//ESP_LOGW(__FUNCTION__,"lcdDrawString length=%d",length);
@@ -46,13 +46,13 @@ int print_string(TFT_t * dev, FontxFile *fx, uint16_t x, uint16_t y, uint8_t * a
 		}
 		//printf("ascii[%d]=%x x=%d y=%d\n",i,ascii[i],x,y);
 		if (dev->_font_direction == 0)
-			x = print_char(dev, fx, x, y, ascii[i], color);
+			x = DF_print_char(dev, fx, x, y, ascii[i], color);
 		if (dev->_font_direction == 1)
-			y = print_char(dev, fx, x, y, ascii[i], color);
+			y = DF_print_char(dev, fx, x, y, ascii[i], color);
 		if (dev->_font_direction == 2)
-			x = print_char(dev, fx, x, y, ascii[i], color);
+			x = DF_print_char(dev, fx, x, y, ascii[i], color);
 		if (dev->_font_direction == 3)
-			y = print_char(dev, fx, x, y, ascii[i], color);
+			y = DF_print_char(dev, fx, x, y, ascii[i], color);
 	}
 	if(error == 1) return -1;
 	if (dev->_font_direction == 0) return x;
@@ -62,7 +62,7 @@ int print_string(TFT_t * dev, FontxFile *fx, uint16_t x, uint16_t y, uint8_t * a
 	return 0;
 }
 
-int print_char(TFT_t * dev, FontxFile *fxs, uint16_t x, uint16_t y, uint8_t ascii, uint16_t color) {
+int DF_print_char(TFT_t * dev, FontxFile *fxs, uint16_t x, uint16_t y, uint8_t ascii, uint16_t color) {
 	uint16_t xx,yy,bit,ofs;
 	unsigned char fonts[128]; // font pattern
 	unsigned char pw, ph;
@@ -150,7 +150,7 @@ int print_char(TFT_t * dev, FontxFile *fxs, uint16_t x, uint16_t y, uint8_t asci
                 y1  = y;
 	}
 
-        if (dev->_font_fill) print_rect(x0, y0, x1, y1, dev->_font_fill_color);
+        if (dev->_font_fill) DF_print_rect(x0, y0, x1, y1, dev->_font_fill_color);
 
 	int bits;
 	//printf("xss=%d yss=%d\n",xss,yss);
@@ -171,7 +171,7 @@ int print_char(TFT_t * dev, FontxFile *fxs, uint16_t x, uint16_t y, uint8_t asci
 				if (fonts[ofs] & mask) 
 				{
 					//lcdDrawPixel(dev, xx, yy, color);
-					print_Vpixel(xx, yy, color);
+					DF_print_Vpixel(xx, yy, color);
 				} 
 				else 
 				{
@@ -180,12 +180,12 @@ int print_char(TFT_t * dev, FontxFile *fxs, uint16_t x, uint16_t y, uint8_t asci
 				if (h == (ph-2) && dev->_font_underline)
 				{
 					//lcdDrawPixel(dev, xx, yy, dev->_font_underline_color);
-					print_Vpixel(xx, yy, color);
+					DF_print_Vpixel(xx, yy, color);
 				}
 				if (h == (ph-1) && dev->_font_underline)
 				{
 					//lcdDrawPixel(dev, xx, yy, dev->_font_underline_color);
-					print_Vpixel(xx, yy, color);
+					DF_print_Vpixel(xx, yy, color);
 				}
 				xx = xx + xd1;
 				yy = yy + yd2;
@@ -201,7 +201,7 @@ int print_char(TFT_t * dev, FontxFile *fxs, uint16_t x, uint16_t y, uint8_t asci
 	return next;
 }
 
-TickType_t print_png(TFT_t * dev, char * file, int width, int height) {
+TickType_t DF_print_png(TFT_t * dev, char * file, int width, int height) {
 	TickType_t startTick, endTick, diffTick;
 	startTick = xTaskGetTickCount();
 
@@ -225,9 +225,9 @@ TickType_t print_png(TFT_t * dev, char * file, int width, int height) {
 
 	pngle_t *pngle = pngle_new(_width, _height);
 
-	pngle_set_init_callback(pngle, print_png_init);
-	pngle_set_draw_callback(pngle, print_png_draw);
-	pngle_set_done_callback(pngle, print_png_finish);
+	pngle_set_init_callback(pngle, DF_print_png_init);
+	pngle_set_draw_callback(pngle, DF_print_png_draw);
+	pngle_set_done_callback(pngle, DF_print_png_finish);
 
 	double display_gamma = 3;
 	pngle_set_display_gamma(pngle, display_gamma);
@@ -291,7 +291,7 @@ TickType_t print_png(TFT_t * dev, char * file, int width, int height) {
 			//uint16_t color = rgb565_conv(pixel.red, pixel.green, pixel.blue);
 			//colors[x] = ~color;
 			//vscreen[x][y] = colors[x];
-			print_Vpixel(x, y, colors[x]);
+			DF_print_Vpixel(x, y, colors[x]);
 		}
 		//lcdDrawMultiPixels(dev, offsetX, y+offsetY, pngWidth, colors);
 	}
@@ -303,7 +303,7 @@ TickType_t print_png(TFT_t * dev, char * file, int width, int height) {
 	return diffTick;
 }
 
-void print_png_init(pngle_t *pngle, uint32_t w, uint32_t h)
+void DF_print_png_init(pngle_t *pngle, uint32_t w, uint32_t h)
 {
 	ESP_LOGD(__FUNCTION__, "print_png_init w=%d h=%d", w, h);
 	ESP_LOGD(__FUNCTION__, "screenWidth=%d screenHeight=%d", pngle->screenWidth, pngle->screenHeight);
@@ -327,7 +327,7 @@ void print_png_init(pngle_t *pngle, uint32_t w, uint32_t h)
 		
 }
 
-void print_png_draw(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t rgba[4])
+void DF_print_png_draw(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t rgba[4])
 {
 	ESP_LOGD(__FUNCTION__, "print_png_draw x=%d y=%d w=%d h=%d", x,y,w,h);
 #if 0
@@ -351,12 +351,12 @@ void print_png_draw(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t
 
 }
 
-void print_png_finish(pngle_t *pngle) 
+void DF_print_png_finish(pngle_t *pngle) 
 {
 	ESP_LOGD(__FUNCTION__, "print_png_finish");
 }
 
-void VlcdUpdate(TFT_t * dev)
+void DF_VlcdUpdate(TFT_t * dev)
 {
 	uint16_t pngHeight = 160;
 	uint16_t pngWidth = 128;
@@ -373,19 +373,32 @@ void VlcdUpdate(TFT_t * dev)
 	free(colors);
 }
 
-void print_Vpixel(uint16_t x, uint16_t y, uint16_t color)
+void DF_print_Vpixel(uint16_t x, uint16_t y, uint16_t color)
 {
 	vscreen[x][y] = color;
 }
 
-void print_rect(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color) {
-	print_line(x1, y1, x2, y1, color);
-	print_line(x2, y1, x2, y2, color);
-	print_line(x2, y2, x1, y2, color);
-	print_line(x1, y2, x1, y1, color);
+void DF_print_rect(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color) {
+	DF_print_line(x1, y1, x2, y1, color);
+	DF_print_line(x2, y1, x2, y2, color);
+	DF_print_line(x2, y2, x1, y2, color);
+	DF_print_line(x1, y2, x1, y1, color);
 }
 
-void print_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color) {
+void DF_print_fill_screen(uint16_t color) {
+	uint16_t Height = 160;
+	uint16_t Width = 128;
+	for(int x = 0; x < Width; x++)
+	{
+		for(int y = 0; y < Height; y++)
+		{
+			vscreen[x][y] = color;
+		}
+	}
+}
+
+
+void DF_print_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color) {
 	int i;
 	int dx,dy;
 	int sx,sy;
@@ -403,7 +416,7 @@ void print_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t col
 	if ( dx > dy ) {
 		E = -dx;
 		for ( i = 0 ; i <= dx ; i++ ) {
-			print_Vpixel(x1, y1, color);
+			DF_print_Vpixel(x1, y1, color);
 			x1 += sx;
 			E += 2 * dy;
 			if ( E >= 0 ) {
@@ -416,7 +429,7 @@ void print_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t col
 	} else {
 		E = -dy;
 		for ( i = 0 ; i <= dy ; i++ ) {
-			print_Vpixel(x1, y1, color);
+			DF_print_Vpixel(x1, y1, color);
 			y1 += sy;
 			E += 2 * dx;
 			if ( E >= 0 ) {
@@ -426,3 +439,4 @@ void print_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t col
 		}
 	}
 }
+

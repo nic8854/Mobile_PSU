@@ -10,7 +10,7 @@ nghttp2/lib/nghttp2_hd.o: \
  /home/michael/esp/esp-idf/components/nghttp/nghttp2/lib/nghttp2_mem.h \
  /home/michael/esp/esp-idf/components/nghttp/nghttp2/lib/nghttp2_rcbuf.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/nghttp/nghttp2/lib/nghttp2_helper.h \
  /home/michael/esp/esp-idf/components/nghttp/nghttp2/lib/nghttp2_debug.h
@@ -35,7 +35,7 @@ nghttp2/lib/nghttp2_hd.o: \
 
 /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 

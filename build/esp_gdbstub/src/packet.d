@@ -15,7 +15,7 @@ src/packet.o: \
  /home/michael/esp/esp-idf/components/xtensa/esp32/include/xtensa/config/core-isa.h \
  /home/michael/esp/esp-idf/components/xtensa/esp32/include/xtensa/config/core-matmap.h \
  /home/michael/esp/esp-idf/components/esp_gdbstub/esp32/gdbstub_target_config.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h
 
 /home/michael/esp/esp-idf/components/esp_gdbstub/private_include/esp_gdbstub_common.h:
 
@@ -47,5 +47,5 @@ src/packet.o: \
 
 /home/michael/esp/esp-idf/components/esp_gdbstub/esp32/gdbstub_target_config.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 /home/michael/esp/esp-idf/components/esp_gdbstub/src/packet.c:

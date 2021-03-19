@@ -5,7 +5,7 @@ esp_adc_cal_esp32.o: \
  /home/michael/esp/esp-idf/components/driver/include/driver/adc_common.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/driver/include/driver/gpio.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_bit_defs.h \
@@ -36,7 +36,7 @@ esp_adc_cal_esp32.o: \
 
 /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 

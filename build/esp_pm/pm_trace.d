@@ -1,6 +1,6 @@
 pm_trace.o: /home/michael/esp/esp-idf/components/esp_pm/pm_trace.c \
  /home/michael/esp/esp-idf/components/esp_pm/include/esp_private/pm_trace.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/driver/include/driver/gpio.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
@@ -22,7 +22,7 @@ pm_trace.o: /home/michael/esp/esp-idf/components/esp_pm/pm_trace.c \
 
 /home/michael/esp/esp-idf/components/esp_pm/include/esp_private/pm_trace.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/driver/include/driver/gpio.h:
 

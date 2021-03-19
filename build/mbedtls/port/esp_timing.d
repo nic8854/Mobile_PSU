@@ -1,7 +1,7 @@
 port/esp_timing.o: \
  /home/michael/esp/esp-idf/components/mbedtls/port/esp_timing.c \
  /home/michael/esp/esp-idf/components/mbedtls/port/include/mbedtls/esp_config.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/config.h \
  /home/michael/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/check_config.h \
  /home/michael/esp/esp-idf/components/mbedtls/port/include/esp_mem.h \
@@ -11,7 +11,7 @@ port/esp_timing.o: \
 
 /home/michael/esp/esp-idf/components/mbedtls/port/include/mbedtls/esp_config.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/config.h:
 

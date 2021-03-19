@@ -1,5 +1,5 @@
 dedic_gpio.o: /home/michael/esp/esp-idf/components/driver/dedic_gpio.c \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/heap/include/esp_heap_caps.h \
  /home/michael/esp/esp-idf/components/heap/include/multi_heap.h \
@@ -65,7 +65,7 @@ dedic_gpio.o: /home/michael/esp/esp-idf/components/driver/dedic_gpio.c \
  /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/portbenchmark.h \
  /home/michael/esp/esp-idf/components/freertos/include/freertos/mpu_wrappers.h
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 

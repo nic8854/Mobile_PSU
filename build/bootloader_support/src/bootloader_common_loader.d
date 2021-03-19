@@ -1,6 +1,6 @@
 src/bootloader_common_loader.o: \
  /home/michael/esp/esp-idf/components/bootloader_support/src/bootloader_common_loader.c \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
@@ -47,7 +47,7 @@ src/bootloader_common_loader.o: \
  /home/michael/esp/esp-idf/components/bootloader_support/include_bootloader/bootloader_sha.h \
  /home/michael/esp/esp-idf/components/bootloader_support/include_bootloader/bootloader_flash_priv.h
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h:
 

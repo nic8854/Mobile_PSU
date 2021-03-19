@@ -1,6 +1,6 @@
 src/bootloader_random_esp32.o: \
  /home/michael/esp/esp-idf/components/bootloader_support/src/bootloader_random_esp32.c \
- /home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/bootloader_support/include/bootloader_random.h \
  /home/michael/esp/esp-idf/components/soc/include/soc/rtc_periph.h \
  /home/michael/esp/esp-idf/components/soc/include/soc/rtc_io_periph.h \
@@ -44,7 +44,7 @@ src/bootloader_random_esp32.o: \
  /home/michael/esp/esp-idf/components/log/include/esp_log_internal.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/io_mux_reg.h
 
-/home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/bootloader_support/include/bootloader_random.h:
 

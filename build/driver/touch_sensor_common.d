@@ -1,6 +1,6 @@
 touch_sensor_common.o: \
  /home/michael/esp/esp-idf/components/driver/touch_sensor_common.c \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_types.h \
  /home/michael/esp/esp-idf/components/log/include/esp_log.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp_rom_sys.h \
@@ -96,7 +96,7 @@ touch_sensor_common.o: \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/sens_reg.h \
  /home/michael/esp/esp-idf/components/hal/include/hal/touch_sensor_hal.h
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_types.h:
 

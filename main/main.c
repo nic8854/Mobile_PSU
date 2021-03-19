@@ -19,27 +19,23 @@
 #include "decode_image.h"
 #include "pngle.h"
 #include "INA220.h"
+#include "ui_driver.h"
+#include "Button_driver.h"
 
 #define	INTERVAL		400
 #define WAIT			vTaskDelay(INTERVAL)
 
 static const char *TAG = "PSU_main";
 
-#define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
-#define BYTE_TO_BINARY(byte)  \
-  (byte & 0x80 ? '1' : '0'), \
-  (byte & 0x40 ? '1' : '0'), \
-  (byte & 0x20 ? '1' : '0'), \
-  (byte & 0x10 ? '1' : '0'), \
-  (byte & 0x08 ? '1' : '0'), \
-  (byte & 0x04 ? '1' : '0'), \
-  (byte & 0x02 ? '1' : '0'), \
-  (byte & 0x01 ? '1' : '0') 
-
 #define GPIO_OUTPUT_IO_0    2
 #define GPIO_OUTPUT_IO_1    26
 #define GPIO_OUTPUT_PIN_SEL  ((1ULL<<GPIO_OUTPUT_IO_0) | (1ULL<<GPIO_OUTPUT_IO_1))
 
+#define I2C_PORT 0
+#define I2C_EXP_ADDR 0x20
+#define I2C_INA_ADDR 0x40
+#define SDA_GPIO 21
+#define SCL_GPIO 22
 
 static void SPIFFS_Directory(char * path) {
 	DIR* dir = opendir(path);
@@ -52,45 +48,9 @@ static void SPIFFS_Directory(char * path) {
 	closedir(dir);
 }
 
-void ILI9341(void *pvParameters)
+void PSU_main(void *pvParameters)
 {
-	// set font file
-	FontxFile fx16G[2];
-	FontxFile fx24G[2];
-	FontxFile fx32G[2];
-	InitFontx(fx16G,"/spiffs/ILGH16XB.FNT",""); // 8x16Dot Gothic
-	InitFontx(fx24G,"/spiffs/ILGH24XB.FNT",""); // 12x24Dot Gothic
-	InitFontx(fx32G,"/spiffs/ILGH32XB.FNT",""); // 16x32Dot Gothic
-
-	FontxFile fx16M[2];
-	FontxFile fx24M[2];
-	FontxFile fx32M[2];
-	InitFontx(fx16M,"/spiffs/ILMH16XB.FNT",""); // 8x16Dot Mincyo
-	InitFontx(fx24M,"/spiffs/ILMH24XB.FNT",""); // 12x24Dot Mincyo
-	InitFontx(fx32M,"/spiffs/ILMH32XB.FNT",""); // 16x32Dot Mincyo
-	
-	TFT_t dev;
-	spi_master_init(&dev, CONFIG_CS_GPIO, CONFIG_DC_GPIO, CONFIG_RESET_GPIO, CONFIG_BL_GPIO);
-
-	uint16_t model = 0x7735;
-
-	lcdInit(&dev, model, CONFIG_WIDTH, CONFIG_HEIGHT, CONFIG_OFFSETX, CONFIG_OFFSETY);
-
-	char file[32];
-
-	uint16_t color;
-	char text[40];
-	uint8_t ascii[40];
-	color = WHITE;
-	lcdSetFontDirection(&dev, 0);
-	uint16_t xpos = 35;
-	uint16_t ypos = 25;
-
-	#define I2C_PORT 0
-	#define I2C_EXP_ADDR 0x20
-	#define I2C_INA_ADDR 0x40
-	#define SDA_GPIO 21
-	#define SCL_GPIO 22
+	UI_ST7735_init();
 
 	
 	//init ina object
@@ -122,8 +82,6 @@ void ILI9341(void *pvParameters)
 	//init variables
 	uint8_t in_value = 0xFF;
 	uint8_t out_value = 0x00;
-	int error_code = 0;
-	int return_value = 0;
 	uint8_t button_last_1 = 0;
 	uint8_t button_last_2 = 0;
 	uint8_t button_last_3 = 0;
@@ -132,14 +90,14 @@ void ILI9341(void *pvParameters)
 
 	//init and configure expander
 	expander_init_desc(&dev_port_expander, I2C_EXP_ADDR, I2C_PORT, SDA_GPIO, SCL_GPIO);
-	vTaskDelay(1000 / portTICK_PERIOD_MS);
+	
 	expander_configure(&dev_port_expander, &config);
 
 	//init and configure INA220
 	ina220_init_desc(&dev_ina_1, I2C_INA_ADDR, I2C_PORT, SDA_GPIO, SCL_GPIO);
 	ina220_init(&dev_ina_1, &ina_params);
 	ina220_setCalibrationData(&dev_ina_1, &ina_params, 0.1, 1.4);
-	
+	vTaskDelay(500 / portTICK_PERIOD_MS);
 
 	while(1) {
 			read_reg_8(&dev_port_expander, reg_in_port_0, &in_value);
@@ -188,73 +146,11 @@ void ILI9341(void *pvParameters)
 			ESP_LOGW(__FUNCTION__, "Expander Read Reg 0 = 0b"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(in_value));
 			ESP_LOGW(__FUNCTION__, "Expander Write Reg 1 = 0b"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(out_value));
 
-		strcpy(file, "/spiffs/background.png");
-		print_png(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
+		UI_draw_test_screen(in_value, out_value, current_val, shunt_val);
 
-		color = WHITE;
-		xpos = 40;
-		ypos = 25;
-		strcpy((char *)ascii, "TEST");
-		return_value = print_string(&dev, fx24G, xpos, ypos, ascii, color);
-		if(return_value < error_code) error_code = return_value;
-		xpos = 5;
-		ypos = 50;
-		strcpy((char *)ascii, "Reg 0:");
-		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
-		if(return_value < error_code) error_code = return_value;
-		xpos = 5;
-		ypos = 70;
-		strcpy((char *)ascii, "Reg 1:");
-		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
-		if(return_value < error_code) error_code = return_value;
-		xpos = 5;
-		ypos = 90;
-		strcpy((char *)ascii, "INA I:");
-		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
-		if(return_value < error_code) error_code = return_value;
-		xpos = 5;
-		ypos = 110;
-		strcpy((char *)ascii, "SHUNT:");
-		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
-		if(return_value < error_code) error_code = return_value;
+		UI_Update();
 
-		xpos = 55;
-		ypos = 50;
-		sprintf(text, BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(in_value));
-		strcpy((char *)ascii, text);
-		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
-		if(return_value < error_code) error_code = return_value;
-		xpos = 55;
-		ypos = 70;
-		sprintf(text, BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(out_value));
-		strcpy((char *)ascii, text);
-		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
-		xpos = 55;
-		ypos = 90;
-		return_value = print_value(&dev, color, fx16G, xpos, ypos, -1, current_val);
-		if(return_value < error_code) error_code = return_value;
-		if(return_value < error_code) error_code = return_value;
-		xpos = 100;
-		ypos = 90;
-		strcpy((char *)ascii, "mA");
-		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
-		if(return_value < error_code) error_code = return_value;
-		xpos = 55;
-		ypos = 110;
-		return_value = print_value(&dev, color, fx16G, xpos, ypos, -1, shunt_val);
-		if(return_value < error_code) error_code = return_value;
-		xpos = 100;
-		ypos = 110;
-		strcpy((char *)ascii, "mV");
-		return_value = print_string(&dev, fx16G, xpos, ypos, ascii, color);
-		if(return_value < error_code) error_code = return_value;
-		VlcdUpdate(&dev);
-		if(error_code < 0) 
-		{
-			ESP_LOGE(__FUNCTION__, "Error accured in print_string function");
-		}
-		error_code = 0;
-		return_value = 0;
+	
 		ESP_LOGI(__FUNCTION__, "Free Heap size: %d\n", xPortGetFreeHeapSize());
 		vTaskDelay(10 / portTICK_PERIOD_MS);
 	
@@ -303,5 +199,5 @@ void app_main(void)
 	}
 
 	SPIFFS_Directory("/spiffs/");
-	xTaskCreate(ILI9341, "ILI9341", 1024*8, NULL, 2, NULL);
+	xTaskCreate(PSU_main, "PSU_MAIN", 1024*8, NULL, 2, NULL);
 }

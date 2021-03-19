@@ -1,5 +1,5 @@
 rtc_module.o: /home/michael/esp/esp-idf/components/driver/rtc_module.c \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_types.h \
  /home/michael/esp/esp-idf/components/log/include/esp_log.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp_rom_sys.h \
@@ -78,7 +78,7 @@ rtc_module.o: /home/michael/esp/esp-idf/components/driver/rtc_module.c \
  /home/michael/esp/esp-idf/components/esp_system/include/esp_intr_alloc.h \
  /home/michael/esp/esp-idf/components/driver/include/driver/rtc_cntl.h
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_types.h:
 

@@ -2,7 +2,7 @@ spiffs_api.o: /home/michael/esp/esp-idf/components/spiffs/spiffs_api.c \
  /home/michael/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/FreeRTOSConfig.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/xtensa_config.h \
  /home/michael/esp/esp-idf/components/xtensa/include/xtensa/hal.h \
  /home/michael/esp/esp-idf/components/xtensa/esp32/include/xtensa/config/core.h \
@@ -79,7 +79,7 @@ spiffs_api.o: /home/michael/esp/esp-idf/components/spiffs/spiffs_api.c \
 
 /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/FreeRTOSConfig.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/xtensa_config.h:
 

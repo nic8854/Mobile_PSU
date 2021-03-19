@@ -1,6 +1,6 @@
 ledc_hal_iram.o: /home/michael/esp/esp-idf/components/hal/ledc_hal_iram.c \
  /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/hal/include/hal/ledc_hal.h \
  /home/michael/esp/esp-idf/components/hal/esp32/include/hal/ledc_ll.h \
  /home/michael/esp/esp-idf/components/hal/include/hal/ledc_types.h \
@@ -16,7 +16,7 @@ ledc_hal_iram.o: /home/michael/esp/esp-idf/components/hal/ledc_hal_iram.c \
 
 /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/hal/include/hal/ledc_hal.h:
 

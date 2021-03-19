@@ -1,6 +1,6 @@
 src/bootloader_random.o: \
  /home/michael/esp/esp-idf/components/bootloader_support/src/bootloader_random.c \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/bootloader_support/include/bootloader_random.h \
  /home/michael/esp/esp-idf/components/esp_hw_support/include/soc/cpu.h \
  /home/michael/esp/esp-idf/components/xtensa/include/xtensa/corebits.h \
@@ -30,7 +30,7 @@ src/bootloader_random.o: \
  /home/michael/esp/esp-idf/components/driver/include/driver/periph_ctrl.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/periph_defs.h
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/bootloader_support/include/bootloader_random.h:
 
