@@ -90,7 +90,6 @@ void PSU_main(void *pvParameters)
 
 	//init and configure expander
 	expander_init_desc(&dev_port_expander, I2C_EXP_ADDR, I2C_PORT, SDA_GPIO, SCL_GPIO);
-	
 	expander_configure(&dev_port_expander, &config);
 
 	//init and configure INA220
