@@ -40,7 +40,6 @@ void IO_handler(void *pvParameters)
 		}
 		vTaskDelay(10 / portTICK_PERIOD_MS);	
 	}
-	
 }
 
 void IO_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
