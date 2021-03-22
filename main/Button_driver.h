@@ -3,8 +3,8 @@
 
 #include "expander_driver.h"
 
+void Button_handler(void *pvParameters);
 void Button_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO);
-void Button_handler();
 void Button_write_reg_1(uint8_t write_value);
 uint8_t Button_read_reg_0();
 
