@@ -27,10 +27,6 @@ void Button_init()
 	io_conf.pull_down_en = 0;
 	io_conf.pull_up_en = 0;
     gpio_config(&io_conf);
-    
-	
-
-
 }
 
 void button_handler()
