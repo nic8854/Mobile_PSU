@@ -29,7 +29,6 @@ void IO_handler(void *pvParameters)
 		{
 			if( xSemaphoreTake( xIO_Semaphore, ( TickType_t ) 10 ) == pdTRUE )
 		    {
-				//temporary
     			read_reg_8(&dev_port_expander, reg_in_port_0, &reg_0_val);
 				write_reg_8(&dev_port_expander, reg_out_port_1, reg_1_val);
 				xSemaphoreGive( xIO_Semaphore );
