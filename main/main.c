@@ -36,6 +36,7 @@ static const char *TAG = "PSU_main";
 #define I2C_INA_ADDR 0x40
 #define SDA_GPIO 21
 #define SCL_GPIO 22
+#define I2C_port 0
 
 static void SPIFFS_Directory(char * path) {
 	DIR* dir = opendir(path);
@@ -58,7 +59,7 @@ void PSU_main(void *pvParameters)
 	ina220_params_t ina_params;
 	ina220_init_default_params(&ina_params);
 	memset(&dev_ina_1, 0, sizeof(ina220_t));
-
+/*
 	//init expander object
 	expander_t dev_port_expander;
 	memset(&dev_port_expander, 0, sizeof(expander_t));
@@ -69,7 +70,7 @@ void PSU_main(void *pvParameters)
 	config.conf_port_1 = 0x00;
 	config.pol_inv_0 = 0xFF;
 	config.pol_inv_1 = 0x00;
-
+*/
 	//init GPIO config object
 	gpio_config_t io_conf;
 	io_conf.intr_type = GPIO_INTR_DISABLE;
@@ -87,10 +88,13 @@ void PSU_main(void *pvParameters)
 	uint8_t button_last_3 = 0;
 	double current_val = 0;
 	double shunt_val = 0;
-
+/*
 	//init and configure expander
 	expander_init_desc(&dev_port_expander, I2C_EXP_ADDR, I2C_PORT, SDA_GPIO, SCL_GPIO);
 	expander_configure(&dev_port_expander, &config);
+*/
+
+	Button_init(I2C_PORT, SDA_GPIO, SCL_GPIO);
 
 	//init and configure INA220
 	ina220_init_desc(&dev_ina_1, I2C_INA_ADDR, I2C_PORT, SDA_GPIO, SCL_GPIO);
@@ -99,7 +103,7 @@ void PSU_main(void *pvParameters)
 	vTaskDelay(500 / portTICK_PERIOD_MS);
 
 	while(1) {
-			read_reg_8(&dev_port_expander, reg_in_port_0, &in_value);
+			in_value = Button_read_reg_0();
 			current_val = ina220_getCurrent_mA(&dev_ina_1, &ina_params);
 			shunt_val = ina220_getVShunt_mv(&dev_ina_1, &ina_params);
 
@@ -139,7 +143,7 @@ void PSU_main(void *pvParameters)
 			{
 				button_last_3 = 0;
 			}
-			write_reg_8(&dev_port_expander, reg_out_port_1, out_value);
+			Button_write_reg_1(out_value);
 			if(out_value & 0x10) gpio_set_level(GPIO_OUTPUT_IO_1, 1);
 			else gpio_set_level(GPIO_OUTPUT_IO_1, 0);
 			ESP_LOGW(__FUNCTION__, "Expander Read Reg 0 = 0b"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(in_value));
