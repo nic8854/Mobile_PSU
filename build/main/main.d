@@ -104,7 +104,8 @@ main.o: /home/michael/esp/PSU_main/main/main.c \
  /home/michael/esp/PSU_main/main/decode_image.h \
  /home/michael/esp/PSU_main/main/INA220.h \
  /home/michael/esp/PSU_main/main/ui_driver.h \
- /home/michael/esp/PSU_main/main/Button_driver.h
+ /home/michael/esp/PSU_main/main/Button_driver.h \
+ /home/michael/esp/PSU_main/main/IO_driver.h
 
 /home/michael/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h:
 
@@ -317,4 +318,6 @@ main.o: /home/michael/esp/PSU_main/main/main.c \
 /home/michael/esp/PSU_main/main/ui_driver.h:
 
 /home/michael/esp/PSU_main/main/Button_driver.h:
+
+/home/michael/esp/PSU_main/main/IO_driver.h:
 /home/michael/esp/PSU_main/main/./main.c:
