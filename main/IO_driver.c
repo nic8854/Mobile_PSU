@@ -66,7 +66,7 @@ void IO_exp_write_reg_1(uint8_t write_value)
 	    {
 			reg_1_val = write_value;
 			xSemaphoreGive( xIO_Semaphore );
-			ESP_LOGI(TAG, "reg_1 set to 0x%x", reg_1_val);
+			//ESP_LOGI(TAG, "reg_1 set to 0x%x", reg_1_val);
 		}
 		else
 		{
@@ -83,7 +83,7 @@ uint8_t IO_exp_read_reg_0()
         {
 			return_val = reg_0_val;
 			xSemaphoreGive( xIO_Semaphore );
-			ESP_LOGI(TAG, "reg_0 read as 0x%x", return_val);
+			//ESP_LOGI(TAG, "reg_0 read as 0x%x", return_val);
 			return return_val;
 		}
 		else

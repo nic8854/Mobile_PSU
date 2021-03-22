@@ -53,7 +53,7 @@ void Button_write_reg_1(uint8_t write_value)
 	    {
 			reg_write = write_value;
 			xSemaphoreGive( xBTSemaphore );
-			ESP_LOGI(TAG, "reg_1 set to 0x%x", reg_write);
+			//ESP_LOGI(TAG, "reg_1 set to 0x%x", reg_write);
 		}
 		else
 		{
@@ -70,7 +70,7 @@ uint8_t Button_read_reg_0()
         {
 			return_value = reg_read;
 			xSemaphoreGive( xBTSemaphore );
-			ESP_LOGI(TAG, "reg_0 read as 0x%x", return_value);
+			//ESP_LOGI(TAG, "reg_0 read as 0x%x", return_value);
 			return return_value;
 		}
 		else
