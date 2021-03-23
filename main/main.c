@@ -36,8 +36,6 @@ static const char *TAG = "PSU_main";
 #define INA2 2
 
 #define I2C_PORT 0
-#define I2C_EXP_ADDR 0x20
-#define I2C_INA1_ADDR 0x40
 #define SDA_GPIO 21
 #define SCL_GPIO 22
 #define I2C_port 0
