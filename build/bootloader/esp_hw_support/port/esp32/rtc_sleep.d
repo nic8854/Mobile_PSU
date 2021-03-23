@@ -7,7 +7,7 @@ port/esp32/rtc_sleep.o: \
  /home/michael/esp/esp-idf/components/soc/include/soc/rtc_periph.h \
  /home/michael/esp/esp-idf/components/soc/include/soc/rtc_io_periph.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc_caps.h \
- /home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/rtc_io_channel.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/rtc_io_reg.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
@@ -59,7 +59,7 @@ port/esp32/rtc_sleep.o: \
 
 /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc_caps.h:
 
-/home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/soc/esp32/include/soc/rtc_io_channel.h:
 

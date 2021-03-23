@@ -1,6 +1,6 @@
 hw_random.o: /home/michael/esp/esp-idf/components/esp32/hw_random.c \
  /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp32/include/esp32/clk.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/wdev_reg.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
@@ -17,7 +17,7 @@ hw_random.o: /home/michael/esp/esp-idf/components/esp32/hw_random.c \
 
 /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp32/include/esp32/clk.h:
 

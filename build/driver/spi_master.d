@@ -3,7 +3,7 @@ spi_master.o: /home/michael/esp/esp-idf/components/driver/spi_master.c \
  /home/michael/esp/esp-idf/components/esp_system/include/esp_intr_alloc.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/driver/include/driver/spi_common.h \
  /home/michael/esp/esp-idf/components/soc/include/soc/lldesc.h \
@@ -106,7 +106,7 @@ spi_master.o: /home/michael/esp/esp-idf/components/driver/spi_master.c \
 
 /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 

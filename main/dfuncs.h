@@ -22,17 +22,18 @@
 #define DIRECTION180		2
 #define DIRECTION270		3
 
-int print_value(TFT_t * dev, uint16_t color, FontxFile font[2], uint16_t xpos, uint16_t ypos, int int_value, float float_value);
-int print_string(TFT_t * dev, FontxFile *fx, uint16_t x, uint16_t y, uint8_t * ascii, uint16_t color);
-int print_char(TFT_t * dev, FontxFile *fxs, uint16_t x, uint16_t y, uint8_t ascii, uint16_t color);
-TickType_t print_png(TFT_t * dev, char * file, int width, int height);
-void print_png_init(pngle_t *pngle, uint32_t w, uint32_t h);
-void print_png_draw(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t rgba[4]);
-void print_png_finish(pngle_t *pngle);
-void print_Vpixel(uint16_t x, uint16_t y, uint16_t color);
-void VlcdUpdate(TFT_t * dev);
-void print_rect(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
-void print_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
+int DF_print_value(TFT_t * dev, uint16_t color, FontxFile font[2], uint16_t xpos, uint16_t ypos, int int_value, float float_value);
+int DF_print_string(TFT_t * dev, FontxFile *fx, uint16_t x, uint16_t y, uint8_t * ascii, uint16_t color);
+int DF_print_char(TFT_t * dev, FontxFile *fxs, uint16_t x, uint16_t y, uint8_t ascii, uint16_t color);
+TickType_t DF_print_png(TFT_t * dev, char * file, int width, int height);
+void DF_print_png_init(pngle_t *pngle, uint32_t w, uint32_t h);
+void DF_print_png_draw(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t rgba[4]);
+void DF_print_png_finish(pngle_t *pngle);
+void DF_print_Vpixel(uint16_t x, uint16_t y, uint16_t color);
+void DF_VlcdUpdate(TFT_t * dev);
+void DF_print_rect(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
+void DF_print_fill_screen(uint16_t color);
+void DF_print_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
 
 
 #endif

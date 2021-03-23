@@ -4,7 +4,7 @@ WL_Ext_Perf.o: \
  /home/michael/esp/esp-idf/components/wear_levelling/private_include/WL_Flash.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/wear_levelling/private_include/Flash_Access.h \
  /home/michael/esp/esp-idf/components/wear_levelling/private_include/WL_Config.h \
@@ -23,7 +23,7 @@ WL_Ext_Perf.o: \
 
 /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 

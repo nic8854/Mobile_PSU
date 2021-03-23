@@ -14,7 +14,7 @@ xtensa_intr_asm.o: \
  /home/michael/esp/esp-idf/components/xtensa/esp32/include/xtensa/config/system.h \
  /home/michael/esp/esp-idf/components/xtensa/include/xtensa/xtruntime-frames.h \
  /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/FreeRTOSConfig.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/xtensa_config.h \
  /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/xtensa_context.h
 
@@ -46,7 +46,7 @@ xtensa_intr_asm.o: \
 
 /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/FreeRTOSConfig.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/xtensa_config.h:
 

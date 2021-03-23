@@ -4,7 +4,7 @@ spi_flash_hal_iram.o: \
  /home/michael/esp/esp-idf/components/hal/include/hal/spi_flash_hal.h \
  /home/michael/esp/esp-idf/components/hal/esp32/include/hal/spi_flash_ll.h \
  /home/michael/esp/esp-idf/components/soc/include/soc/spi_periph.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_assert.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
@@ -42,7 +42,7 @@ spi_flash_hal_iram.o: \
 
 /home/michael/esp/esp-idf/components/soc/include/soc/spi_periph.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc.h:
 

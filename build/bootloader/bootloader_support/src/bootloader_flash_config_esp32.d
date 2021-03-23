@@ -1,6 +1,6 @@
 src/bootloader_flash_config_esp32.o: \
  /home/michael/esp/esp-idf/components/bootloader_support/src/bootloader_flash_config_esp32.c \
- /home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/log/include/esp_log.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp_rom_sys.h \
@@ -38,7 +38,7 @@ src/bootloader_flash_config_esp32.o: \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/rtc_cntl_reg.h \
  /home/michael/esp/esp-idf/components/bootloader_support/include/bootloader_flash_config.h
 
-/home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h:
 

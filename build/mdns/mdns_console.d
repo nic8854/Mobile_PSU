@@ -1,6 +1,6 @@
 mdns_console.o: /home/michael/esp/esp-idf/components/mdns/mdns_console.c \
  /home/michael/esp/esp-idf/components/console/esp_console.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
@@ -119,7 +119,7 @@ mdns_console.o: /home/michael/esp/esp-idf/components/mdns/mdns_console.c \
 
 /home/michael/esp/esp-idf/components/console/esp_console.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h:
 

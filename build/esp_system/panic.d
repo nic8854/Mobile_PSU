@@ -1,7 +1,7 @@
 panic.o: /home/michael/esp/esp-idf/components/esp_system/panic.c \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_private/system_internal.h \
@@ -80,7 +80,7 @@ panic.o: /home/michael/esp/esp-idf/components/esp_system/panic.c \
 
 /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 

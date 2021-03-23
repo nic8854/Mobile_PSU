@@ -10,7 +10,7 @@ sdio_slave_hal.o: \
  /home/michael/esp/esp-idf/components/hal/include/hal/sdio_slave_hal.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/soc/include/soc/lldesc.h \
- /home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/lldesc.h \
  /home/michael/esp/esp-idf/components/hal/include/hal/sdio_slave_ll.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/slc_reg.h \
@@ -43,7 +43,7 @@ sdio_slave_hal.o: \
 
 /home/michael/esp/esp-idf/components/soc/include/soc/lldesc.h:
 
-/home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/lldesc.h:
 

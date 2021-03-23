@@ -1,6 +1,6 @@
 src/bootloader_common.o: \
  /home/michael/esp/esp-idf/components/bootloader_support/src/bootloader_common.c \
- /home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/log/include/esp_log.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp_rom_sys.h \
@@ -47,7 +47,7 @@ src/bootloader_common.o: \
  /home/michael/esp/esp-idf/components/hal/include/hal/gpio_types.h \
  /home/michael/esp/esp-idf/components/bootloader_support/include_bootloader/bootloader_sha.h
 
-/home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h:
 

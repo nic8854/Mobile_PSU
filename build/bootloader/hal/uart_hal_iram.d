@@ -3,7 +3,7 @@ uart_hal_iram.o: /home/michael/esp/esp-idf/components/hal/uart_hal_iram.c \
  /home/michael/esp/esp-idf/components/hal/esp32/include/hal/uart_ll.h \
  /home/michael/esp/esp-idf/components/soc/include/soc/uart_periph.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc_caps.h \
- /home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/uart_reg.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_assert.h \
@@ -21,7 +21,7 @@ uart_hal_iram.o: /home/michael/esp/esp-idf/components/hal/uart_hal_iram.c \
 
 /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc_caps.h:
 
-/home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/soc/esp32/include/soc/uart_reg.h:
 

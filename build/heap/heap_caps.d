@@ -1,6 +1,6 @@
 heap_caps.o: /home/michael/esp/esp-idf/components/heap/heap_caps.c \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h \
  /home/michael/esp/esp-idf/components/heap/include/esp_heap_caps.h \
@@ -58,7 +58,7 @@ heap_caps.o: /home/michael/esp/esp-idf/components/heap/heap_caps.c \
 
 /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 

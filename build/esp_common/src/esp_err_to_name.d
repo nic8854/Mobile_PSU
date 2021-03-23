@@ -2,7 +2,7 @@ src/esp_err_to_name.o: \
  /home/michael/esp/esp-idf/components/esp_common/src/esp_err_to_name.c \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_assert.h \
@@ -221,7 +221,7 @@ src/esp_err_to_name.o: \
 
 /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 

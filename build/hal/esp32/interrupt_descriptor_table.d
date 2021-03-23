@@ -1,6 +1,6 @@
 esp32/interrupt_descriptor_table.o: \
  /home/michael/esp/esp-idf/components/hal/esp32/interrupt_descriptor_table.c \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/hal/include/hal/interrupt_controller_hal.h \
  /home/michael/esp/esp-idf/components/hal/include/hal/interrupt_controller_types.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc_caps.h \
@@ -21,7 +21,7 @@ esp32/interrupt_descriptor_table.o: \
  /home/michael/esp/esp-idf/components/xtensa/include/xtensa/xtensa-versions.h \
  /home/michael/esp/esp-idf/components/xtensa/esp32/include/xtensa/config/core-matmap.h
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/hal/include/hal/interrupt_controller_hal.h:
 

@@ -1,5 +1,5 @@
 spiram.o: /home/michael/esp/esp-idf/components/esp32/spiram.c \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
@@ -74,7 +74,7 @@ spiram.o: /home/michael/esp/esp-idf/components/esp32/spiram.c \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/cache.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/dport_access.h
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h:
 

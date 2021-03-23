@@ -1,6 +1,6 @@
 src/esp32/bootloader_esp32.o: \
  /home/michael/esp/esp-idf/components/bootloader_support/src/esp32/bootloader_esp32.c \
- /home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h \
  /home/michael/esp/esp-idf/components/log/include/esp_log.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp_rom_sys.h \
@@ -77,7 +77,7 @@ src/esp32/bootloader_esp32.o: \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp_rom_efuse.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/spi_flash.h
 
-/home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h:
 

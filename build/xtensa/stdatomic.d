@@ -1,5 +1,5 @@
 stdatomic.o: /home/michael/esp/esp-idf/components/xtensa/stdatomic.c \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/xtensa/esp32/include/xtensa/config/core-isa.h \
  /home/michael/esp/esp-idf/components/xtensa/include/xtensa/xtruntime.h \
  /home/michael/esp/esp-idf/components/xtensa/esp32/include/xtensa/config/core.h \
@@ -12,7 +12,7 @@ stdatomic.o: /home/michael/esp/esp-idf/components/xtensa/stdatomic.c \
  /home/michael/esp/esp-idf/components/xtensa/include/xtensa/xtruntime-core-state.h \
  /home/michael/esp/esp-idf/components/xtensa/include/xtensa/xtruntime-frames.h
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/xtensa/esp32/include/xtensa/config/core-isa.h:
 

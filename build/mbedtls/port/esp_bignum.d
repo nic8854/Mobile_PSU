@@ -1,7 +1,7 @@
 port/esp_bignum.o: \
  /home/michael/esp/esp-idf/components/mbedtls/port/esp_bignum.c \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/soc/include/soc/hwcrypto_periph.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/dport_reg.h \
@@ -41,7 +41,7 @@ port/esp_bignum.o: \
 
 /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 

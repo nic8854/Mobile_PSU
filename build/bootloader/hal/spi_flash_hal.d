@@ -2,7 +2,7 @@ spi_flash_hal.o: /home/michael/esp/esp-idf/components/hal/spi_flash_hal.c \
  /home/michael/esp/esp-idf/components/hal/include/hal/spi_flash_hal.h \
  /home/michael/esp/esp-idf/components/hal/esp32/include/hal/spi_flash_ll.h \
  /home/michael/esp/esp-idf/components/soc/include/soc/spi_periph.h \
- /home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_assert.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_bit_defs.h \
@@ -36,7 +36,7 @@ spi_flash_hal.o: /home/michael/esp/esp-idf/components/hal/spi_flash_hal.c \
 
 /home/michael/esp/esp-idf/components/soc/include/soc/spi_periph.h:
 
-/home/michael/esp/PSU_display/build/bootloader/../include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/bootloader/../include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc.h:
 

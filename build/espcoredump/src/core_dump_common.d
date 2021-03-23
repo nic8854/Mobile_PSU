@@ -1,6 +1,6 @@
 src/core_dump_common.o: \
  /home/michael/esp/esp-idf/components/espcoredump/src/core_dump_common.c \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/espcoredump/include_core_dump/core_dump_elf.h \
  /home/michael/esp/esp-idf/components/espcoredump/include_core_dump/esp_core_dump_priv.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
@@ -61,7 +61,7 @@ src/core_dump_common.o: \
  /home/michael/esp/esp-idf/components/xtensa/include/esp_debug_helpers.h \
  /home/michael/esp/esp-idf/components/bootloader_support/include/esp_app_format.h
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/espcoredump/include_core_dump/core_dump_elf.h:
 

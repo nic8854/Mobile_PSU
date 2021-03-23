@@ -2,7 +2,7 @@ mcpwm_hal.o: /home/michael/esp/esp-idf/components/hal/mcpwm_hal.c \
  /home/michael/esp/esp-idf/components/hal/include/hal/mcpwm_hal.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/hal/esp32/include/hal/mcpwm_ll.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/soc_caps.h \
@@ -26,7 +26,7 @@ mcpwm_hal.o: /home/michael/esp/esp-idf/components/hal/mcpwm_hal.c \
 
 /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 

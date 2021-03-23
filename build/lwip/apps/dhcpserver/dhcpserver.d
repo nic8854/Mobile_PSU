@@ -7,7 +7,7 @@ apps/dhcpserver/dhcpserver.o: \
  /home/michael/esp/esp-idf/components/newlib/platform_include/sys/time.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/sys/ioctl.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_task.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/FreeRTOSConfig.h \
  /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/xtensa_config.h \
  /home/michael/esp/esp-idf/components/xtensa/include/xtensa/hal.h \
@@ -145,7 +145,7 @@ apps/dhcpserver/dhcpserver.o: \
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_task.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/FreeRTOSConfig.h:
 

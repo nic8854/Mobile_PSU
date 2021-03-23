@@ -1,5 +1,5 @@
 ulp.o: /home/michael/esp/esp-idf/components/ulp/ulp.c \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
@@ -28,7 +28,7 @@ ulp.o: /home/michael/esp/esp-idf/components/ulp/ulp.c \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/sens_reg.h \
  /home/michael/esp/esp-idf/components/ulp/ulp_private.h
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/xtensa/include/esp_attr.h:
 

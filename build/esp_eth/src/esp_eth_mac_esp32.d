@@ -3,7 +3,7 @@ src/esp_eth_mac_esp32.o: \
  /home/michael/esp/esp-idf/components/driver/include/driver/periph_ctrl.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/periph_defs.h \
  /home/michael/esp/esp-idf/components/driver/include/driver/gpio.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
@@ -113,7 +113,7 @@ src/esp_eth_mac_esp32.o: \
 
 /home/michael/esp/esp-idf/components/driver/include/driver/gpio.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h:
 

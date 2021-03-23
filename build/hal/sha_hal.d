@@ -2,7 +2,7 @@ sha_hal.o: /home/michael/esp/esp-idf/components/hal/sha_hal.c \
  /home/michael/esp/esp-idf/components/hal/include/hal/sha_hal.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/sha_caps.h \
  /home/michael/esp/esp-idf/components/soc/include/soc/lldesc.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/lldesc.h \
  /home/michael/esp/esp-idf/components/hal/include/hal/sha_types.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/sha.h \
@@ -34,7 +34,7 @@ sha_hal.o: /home/michael/esp/esp-idf/components/hal/sha_hal.c \
 
 /home/michael/esp/esp-idf/components/soc/include/soc/lldesc.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/lldesc.h:
 

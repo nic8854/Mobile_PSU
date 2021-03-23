@@ -2,7 +2,7 @@ src/eap_peer/eap.o: \
  /home/michael/esp/esp-idf/components/wpa_supplicant/src/eap_peer/eap.c \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/wpa_supplicant/src/utils/includes.h \
  /home/michael/esp/esp-idf/components/wpa_supplicant/port/include/supplicant_opt.h \
@@ -162,7 +162,7 @@ src/eap_peer/eap.o: \
 
 /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 

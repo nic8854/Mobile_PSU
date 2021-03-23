@@ -1,6 +1,6 @@
 spi_flash_os_func_noos.o: \
  /home/michael/esp/esp-idf/components/spi_flash/spi_flash_os_func_noos.c \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/spi_flash/include/esp_flash.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
@@ -25,7 +25,7 @@ spi_flash_os_func_noos.o: \
  /home/michael/esp/esp-idf/components/xtensa/include/xtensa/xtruntime-core-state.h \
  /home/michael/esp/esp-idf/components/xtensa/include/xtensa/xtruntime-frames.h
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/spi_flash/include/esp_flash.h:
 

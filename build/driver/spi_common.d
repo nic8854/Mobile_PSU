@@ -1,5 +1,5 @@
 spi_common.o: /home/michael/esp/esp-idf/components/driver/spi_common.c \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/driver/include/driver/spi_master.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
@@ -99,7 +99,7 @@ spi_common.o: /home/michael/esp/esp-idf/components/driver/spi_common.c \
  /home/michael/esp/esp-idf/components/hal/include/hal/hal_defs.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp_rom_gpio.h
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/driver/include/driver/spi_master.h:
 

@@ -2,7 +2,7 @@ src/ffunicode.o: \
  /home/michael/esp/esp-idf/components/fatfs/src/ffunicode.c \
  /home/michael/esp/esp-idf/components/fatfs/src/ff.h \
  /home/michael/esp/esp-idf/components/fatfs/src/ffconf.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/freertos/xtensa/include/freertos/FreeRTOSConfig.h \
@@ -63,7 +63,7 @@ src/ffunicode.o: \
 
 /home/michael/esp/esp-idf/components/fatfs/src/ffconf.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h:
 

@@ -1,7 +1,7 @@
 lwip/esp_netif_lwip_ppp.o: \
  /home/michael/esp/esp-idf/components/esp_netif/lwip/esp_netif_lwip_ppp.c \
  /home/michael/esp/esp-idf/components/esp_netif/include/esp_netif.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_wifi/include/esp_wifi_types.h \
  /home/michael/esp/esp-idf/components/esp_wifi/include/esp_private/esp_wifi_types_private.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
@@ -137,7 +137,7 @@ lwip/esp_netif_lwip_ppp.o: \
 
 /home/michael/esp/esp-idf/components/esp_netif/include/esp_netif.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_wifi/include/esp_wifi_types.h:
 

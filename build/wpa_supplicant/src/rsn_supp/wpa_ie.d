@@ -2,7 +2,7 @@ src/rsn_supp/wpa_ie.o: \
  /home/michael/esp/esp-idf/components/wpa_supplicant/src/rsn_supp/wpa_ie.c \
  /home/michael/esp/esp-idf/components/wpa_supplicant/src/utils/includes.h \
  /home/michael/esp/esp-idf/components/wpa_supplicant/port/include/supplicant_opt.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/ets_sys.h \
  /home/michael/esp/esp-idf/components/wpa_supplicant/src/utils/common.h \
  /home/michael/esp/esp-idf/components/wpa_supplicant/port/include/os.h \
@@ -36,7 +36,7 @@ src/rsn_supp/wpa_ie.o: \
 
 /home/michael/esp/esp-idf/components/wpa_supplicant/port/include/supplicant_opt.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/ets_sys.h:
 

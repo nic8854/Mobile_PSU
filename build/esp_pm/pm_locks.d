@@ -2,7 +2,7 @@ pm_locks.o: /home/michael/esp/esp-idf/components/esp_pm/pm_locks.c \
  /home/michael/esp/esp-idf/components/esp_pm/include/esp_pm.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h \
  /home/michael/esp/esp-idf/components/esp_pm/include/esp32/pm.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/rtc.h \
@@ -71,7 +71,7 @@ pm_locks.o: /home/michael/esp/esp-idf/components/esp_pm/pm_locks.c \
 
 /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_compiler.h:
 

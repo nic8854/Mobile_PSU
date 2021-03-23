@@ -2,7 +2,7 @@ esp-mqtt/lib/mqtt_msg.o: \
  /home/michael/esp/esp-idf/components/mqtt/esp-mqtt/lib/mqtt_msg.c \
  /home/michael/esp/esp-idf/components/mqtt/esp-mqtt/lib/include/mqtt_msg.h \
  /home/michael/esp/esp-idf/components/mqtt/esp-mqtt/include/mqtt_config.h \
- /home/michael/esp/PSU_display/build/include/sdkconfig.h \
+ /home/michael/esp/PSU_main/build/include/sdkconfig.h \
  /home/michael/esp/esp-idf/components/mqtt/esp-mqtt/include/mqtt_client.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_err.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/assert.h \
@@ -145,7 +145,7 @@ esp-mqtt/lib/mqtt_msg.o: \
 
 /home/michael/esp/esp-idf/components/mqtt/esp-mqtt/include/mqtt_config.h:
 
-/home/michael/esp/PSU_display/build/include/sdkconfig.h:
+/home/michael/esp/PSU_main/build/include/sdkconfig.h:
 
 /home/michael/esp/esp-idf/components/mqtt/esp-mqtt/include/mqtt_client.h:
 
