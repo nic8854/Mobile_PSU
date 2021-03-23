@@ -21,6 +21,7 @@
 #include "INA220.h"
 #include "ui_driver.h"
 #include "Button_driver.h"
+#include "INA_data_driver.h"
 
 #define	INTERVAL		400
 #define WAIT			vTaskDelay(INTERVAL)
@@ -31,9 +32,12 @@ static const char *TAG = "PSU_main";
 #define GPIO_OUTPUT_IO_1    26
 #define GPIO_OUTPUT_PIN_SEL  ((1ULL<<GPIO_OUTPUT_IO_0) | (1ULL<<GPIO_OUTPUT_IO_1))
 
+#define INA1 1
+#define INA2 2
+
 #define I2C_PORT 0
 #define I2C_EXP_ADDR 0x20
-#define I2C_INA_ADDR 0x40
+#define I2C_INA1_ADDR 0x40
 #define SDA_GPIO 21
 #define SCL_GPIO 22
 #define I2C_port 0
@@ -51,26 +55,12 @@ static void SPIFFS_Directory(char * path) {
 
 void PSU_main(void *pvParameters)
 {
-	UI_ST7735_init();
+	UI_ST7735_init();	
 
-	
-	//init ina object
-	ina220_t dev_ina_1;
-	ina220_params_t ina_params;
-	ina220_init_default_params(&ina_params);
-	memset(&dev_ina_1, 0, sizeof(ina220_t));
-/*
-	//init expander object
-	expander_t dev_port_expander;
-	memset(&dev_port_expander, 0, sizeof(expander_t));
+	Button_init(I2C_PORT, SDA_GPIO, SCL_GPIO);
 
-	//init expander config object
-	conf_t config = Default_Config;
-	config.conf_port_0 = 0xFF;
-	config.conf_port_1 = 0x00;
-	config.pol_inv_0 = 0xFF;
-	config.pol_inv_1 = 0x00;
-*/
+	INAD_init(I2C_PORT, SDA_GPIO, SCL_GPIO);
+
 	//init GPIO config object
 	gpio_config_t io_conf;
 	io_conf.intr_type = GPIO_INTR_DISABLE;
@@ -88,24 +78,12 @@ void PSU_main(void *pvParameters)
 	uint8_t button_last_3 = 0;
 	double current_val = 0;
 	double shunt_val = 0;
-/*
-	//init and configure expander
-	expander_init_desc(&dev_port_expander, I2C_EXP_ADDR, I2C_PORT, SDA_GPIO, SCL_GPIO);
-	expander_configure(&dev_port_expander, &config);
-*/
 
-	Button_init(I2C_PORT, SDA_GPIO, SCL_GPIO);
-
-	//init and configure INA220
-	ina220_init_desc(&dev_ina_1, I2C_INA_ADDR, I2C_PORT, SDA_GPIO, SCL_GPIO);
-	ina220_init(&dev_ina_1, &ina_params);
-	ina220_setCalibrationData(&dev_ina_1, &ina_params, 0.1, 1.4);
-	vTaskDelay(500 / portTICK_PERIOD_MS);
-
+	
 	while(1) {
 			in_value = Button_read_reg_0();
-			current_val = ina220_getCurrent_mA(&dev_ina_1, &ina_params);
-			shunt_val = ina220_getVShunt_mv(&dev_ina_1, &ina_params);
+			current_val = INAD_getCurrent_mA(INA1);
+			shunt_val = INAD_getVShunt_mv(INA1);
 
 			if(in_value & 0x08 && !button_last_1)
 			{
