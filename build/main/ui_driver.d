@@ -85,7 +85,10 @@ ui_driver.o: /home/michael/esp/PSU_main/main/ui_driver.c \
  /home/michael/esp/PSU_main/main/dfuncs.h \
  /home/michael/esp/PSU_main/main/pngle.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/miniz.h \
- /home/michael/esp/PSU_main/main/ui_driver.h
+ /home/michael/esp/PSU_main/main/ui_driver.h \
+ /home/michael/esp/PSU_main/main/IO_driver.h \
+ /home/michael/esp/PSU_main/main/Button_driver.h \
+ /home/michael/esp/PSU_main/main/APA102.h
 
 /home/michael/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h:
 
@@ -260,4 +263,10 @@ ui_driver.o: /home/michael/esp/PSU_main/main/ui_driver.c \
 /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/miniz.h:
 
 /home/michael/esp/PSU_main/main/ui_driver.h:
+
+/home/michael/esp/PSU_main/main/IO_driver.h:
+
+/home/michael/esp/PSU_main/main/Button_driver.h:
+
+/home/michael/esp/PSU_main/main/APA102.h:
 /home/michael/esp/PSU_main/main/./ui_driver.c:
