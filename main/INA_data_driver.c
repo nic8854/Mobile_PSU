@@ -53,7 +53,6 @@ void INAD_handler(void *pvParameters)
                 INA1_b_val = ina220_getVBus_mv(&INA1_dev, &INA1_params);
                 INA1_p_val = ina220_getPower_mW(&INA1_dev, &INA1_params);
                 INA1_i_val = ina220_getCurrent_mA(&INA1_dev, &INA1_params);
-                ESP_LOGI(TAG, "read form INA220.");
 #endif
 
 #ifdef INA2
@@ -91,6 +90,7 @@ void INAD_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 #endif
 	xINAD_Semaphore = xSemaphoreCreateMutex();
 	xTaskCreate(INAD_handler, "INAD_handler", 1024*4, NULL, 2, NULL);
+	ESP_LOGE(TAG, "INA220 initialized successfully");
 }
 double INAD_getVShunt_mv(int INA)
 {

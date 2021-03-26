@@ -10,15 +10,6 @@
 #include "esp_vfs.h"
 #include "esp_spiffs.h"
 #include "esp_heap_caps.h"
-#include "dfuncs.h"
-#include "expander_driver.h"
-#include "driver/gpio.h"
-#include "ili9340.h"
-#include "fontx.h"
-#include "bmpfile.h"
-#include "decode_image.h"
-#include "pngle.h"
-#include "INA220.h"
 #include "ui_driver.h"
 #include "Button_driver.h"
 #include "INA_data_driver.h"
@@ -30,7 +21,7 @@ static const char *TAG = "PSU_main";
 
 #define GPIO_OUTPUT_IO_0    2
 #define GPIO_OUTPUT_IO_1    26
-#define GPIO_OUTPUT_PIN_SEL  ((1ULL<<GPIO_OUTPUT_IO_0) | (1ULL<<GPIO_OUTPUT_IO_1))
+#define GPIO_OUTPUT_IO_2    4
 
 #define INA1 1
 #define INA2 2
@@ -53,20 +44,9 @@ static void SPIFFS_Directory(char * path) {
 
 void PSU_main(void *pvParameters)
 {
-	UI_ST7735_init();	
-
-	Button_init(I2C_PORT, SDA_GPIO, SCL_GPIO);
+	UI_init(I2C_PORT, SDA_GPIO, SCL_GPIO);	
 
 	INAD_init(I2C_PORT, SDA_GPIO, SCL_GPIO);
-
-	//init GPIO config object
-	gpio_config_t io_conf;
-	io_conf.intr_type = GPIO_INTR_DISABLE;
-	io_conf.mode = GPIO_MODE_OUTPUT;
-	io_conf.pin_bit_mask = GPIO_OUTPUT_PIN_SEL;
-	io_conf.pull_down_en = 0;
-	io_conf.pull_up_en = 0;
-	gpio_config(&io_conf);
 
 	//init variables
 	uint8_t in_value = 0xFF;
@@ -74,6 +54,8 @@ void PSU_main(void *pvParameters)
 	uint8_t button_last_1 = 0;
 	uint8_t button_last_2 = 0;
 	uint8_t button_last_3 = 0;
+	uint8_t button_last_4 = 0;
+	uint8_t button_last_5 = 0;
 	double current_val = 0;
 	double shunt_val = 0;
 
@@ -85,10 +67,10 @@ void PSU_main(void *pvParameters)
 
 			if(in_value & 0x08 && !button_last_1)
 			{
-				gpio_set_level(GPIO_OUTPUT_IO_0, 1);
+				UI_GPIO_set(LED_0, 1);
 				out_value = out_value ^ 0x01; //0x02 on PSU Board (TC_EN)
 				vTaskDelay(50 / portTICK_PERIOD_MS);
-				gpio_set_level(GPIO_OUTPUT_IO_0, 0);
+				UI_GPIO_set(LED_0, 0);
 				button_last_1 = 1;
 			} 
 			else if(!(in_value & 0x08) && button_last_1)
@@ -97,10 +79,10 @@ void PSU_main(void *pvParameters)
 			}
 			if(in_value & 0x10 && !button_last_2)
 			{
-				gpio_set_level(GPIO_OUTPUT_IO_0, 1);
+				UI_GPIO_set(LED_0, 1);
 				out_value = out_value ^ 0x02; //0x04 on PSU Board (TC_NFON)
 				vTaskDelay(50 / portTICK_PERIOD_MS);
-				gpio_set_level(GPIO_OUTPUT_IO_0, 0);
+				UI_GPIO_set(LED_0, 0);
 				button_last_2 = 1;
 			} 
 			else if(!(in_value & 0x10) && button_last_2)
@@ -109,26 +91,58 @@ void PSU_main(void *pvParameters)
 			}
 			if(in_value & 0x20 && !button_last_3) 
 			{
-				gpio_set_level(GPIO_OUTPUT_IO_0, 1);
+				UI_GPIO_set(LED_0, 1);
 				out_value = out_value ^ 0x10; //does not set EN_IN directly
 				vTaskDelay(50 / portTICK_PERIOD_MS);
-				gpio_set_level(GPIO_OUTPUT_IO_0, 0);
+				UI_GPIO_set(LED_0, 0);
 				button_last_3 = 1;
 			}
 			else if(!(in_value & 0x20) && button_last_3)
 			{
 				button_last_3 = 0;
 			}
+			if(in_value & 0x01 && !button_last_4) 
+			{
+				UI_GPIO_set(BUZZER, 1);
+				UI_GPIO_set(LED_0, 1);
+				vTaskDelay(50 / portTICK_PERIOD_MS);
+				UI_GPIO_set(BUZZER, 0);
+				UI_GPIO_set(LED_0, 0);
+				vTaskDelay(50 / portTICK_PERIOD_MS);
+				UI_GPIO_set(BUZZER, 1);
+				UI_GPIO_set(LED_0, 1);
+				vTaskDelay(50 / portTICK_PERIOD_MS);
+				UI_GPIO_set(BUZZER, 0);
+				UI_GPIO_set(LED_0, 0);
+				button_last_4 = 1;
+			}
+			else if(!(in_value & 0x01) && button_last_4)
+			{
+				button_last_4 = 0;
+			}
+			if(in_value & 0x02 && !button_last_5) 
+			{
+				UI_GPIO_set(LED_0, 1);
+				out_value = out_value ^ 0x20; //does not set EN_IN directly
+				vTaskDelay(50 / portTICK_PERIOD_MS);
+				UI_GPIO_set(LED_0, 0);
+				button_last_5 = 1;
+			}
+			else if(!(in_value & 0x02) && button_last_5)
+			{
+				button_last_5 = 0;
+			}
 			Button_write_reg_1(out_value);
-			if(out_value & 0x10) gpio_set_level(GPIO_OUTPUT_IO_1, 1);
-			else gpio_set_level(GPIO_OUTPUT_IO_1, 0);
+			if(out_value & 0x10) UI_GPIO_set(LED_1, 1);
+			else UI_GPIO_set(LED_1, 0);
+			if(out_value & 0x20) led_test(1);
+			if(!(out_value & 0x20)) led_test(0);
 			ESP_LOGW(__FUNCTION__, "Expander Read Reg 0 = 0b"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(in_value));
 			ESP_LOGW(__FUNCTION__, "Expander Write Reg 1 = 0b"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(out_value));
 
 		UI_draw_test_screen(in_value, out_value, current_val, shunt_val);
 
 		UI_Update();
-
 	
 		ESP_LOGI(__FUNCTION__, "Free Heap size: %d\n", xPortGetFreeHeapSize());
 		vTaskDelay(10 / portTICK_PERIOD_MS);

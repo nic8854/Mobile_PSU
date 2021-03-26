@@ -9,6 +9,11 @@
 #include "ili9340.h"
 #include "dfuncs.h"
 #include "ui_driver.h"
+#include "IO_driver.h"
+#include "Button_driver.h"
+#include "APA102.h"
+
+#define TAG "UI_Driver"
 
 TFT_t dev;
 uint16_t model = 0x7735;
@@ -27,7 +32,19 @@ FontxFile fx16M[2];
 FontxFile fx24M[2];
 FontxFile fx32M[2];
 
-void UI_ST7735_init()
+int led_test_index = 0;
+
+int led_test_colors[5][3] ={
+							{200, 100, 90},
+							{100, 150, 50},
+							{20, 90, 200},
+							{80, 10, 250},
+							{50, 150, 20}
+}; 
+
+
+
+void UI_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 {
 	InitFontx(fx16G,"/spiffs/ILGH16XB.FNT",""); // 8x16Dot Gothic
 	InitFontx(fx24G,"/spiffs/ILGH24XB.FNT",""); // 12x24Dot Gothic
@@ -43,6 +60,10 @@ void UI_ST7735_init()
 
     DF_print_fill_screen(BLACK);
 	DF_VlcdUpdate(&dev);
+
+	Button_init(I2C_PORT, SDA_GPIO, SCL_GPIO);
+	APA102_Init(2, VSPI_HOST);
+
 	vTaskDelay(500 / portTICK_PERIOD_MS);
 	
     color = WHITE;
@@ -72,11 +93,8 @@ void UI_ST7735_init()
 		xpos = i*8;
 		DF_print_string(&dev, fx16M, xpos, ypos, ascii, color);
 		DF_VlcdUpdate(&dev);
-		vTaskDelay(150 / portTICK_PERIOD_MS);
+		vTaskDelay(100 / portTICK_PERIOD_MS);
 	}
-	
-	
-
     DF_VlcdUpdate(&dev);
 }
 
@@ -87,47 +105,47 @@ void UI_draw_test_screen(uint8_t in_value, uint8_t out_value, double current_val
 
 	color = WHITE;
 	xpos = 40;
-	ypos = 25;
+	ypos = 28;
 	strcpy((char *)ascii, "TEST");
 	DF_print_string(&dev, fx24G, xpos, ypos, ascii, color);
 	xpos = 5;
-	ypos = 50;
+	ypos = 55;
 	strcpy((char *)ascii, "Reg 0:");
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 	xpos = 5;
-	ypos = 70;
+	ypos = 75;
 	strcpy((char *)ascii, "Reg 1:");
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 	xpos = 5;
-	ypos = 90;
+	ypos = 95;
 	strcpy((char *)ascii, "INA I:");
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 	xpos = 5;
-	ypos = 110;
+	ypos = 115;
 	strcpy((char *)ascii, "SHUNT:");
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 	xpos = 55;
-	ypos = 50;
+	ypos = 55;
 	sprintf(text, BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(in_value));
 	strcpy((char *)ascii, text);
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 	xpos = 55;
-	ypos = 70;
+	ypos = 75;
 	sprintf(text, BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(out_value));
 	strcpy((char *)ascii, text);
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 	xpos = 55;
-	ypos = 90;
+	ypos = 95;
 	DF_print_value(&dev, color, fx16G, xpos, ypos, -1, current_val);
 	xpos = 100;
-	ypos = 90;
+	ypos = 95;
 	strcpy((char *)ascii, "mA");
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 	xpos = 55;
-	ypos = 110;
+	ypos = 115;
 	DF_print_value(&dev, color, fx16G, xpos, ypos, -1, shunt_val);
 	xpos = 100;
-	ypos = 110;
+	ypos = 115;
 	strcpy((char *)ascii, "mV");
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 }
@@ -135,4 +153,40 @@ void UI_draw_test_screen(uint8_t in_value, uint8_t out_value, double current_val
 void UI_Update()
 {
 	DF_VlcdUpdate(&dev);
+}
+
+void UI_GPIO_set(uint8_t GPIO_Num, bool GPIO_state)
+{
+	IO_GPIO_set(GPIO_Num, GPIO_state);
+}
+
+void UI_exp_write_reg_1(uint8_t write_value)
+{
+	IO_exp_write_reg_1(write_value);
+}
+
+uint8_t UI_exp_read_reg_0()
+{
+	return IO_exp_read_reg_0();
+}
+
+void led_test(bool mode)
+{
+	if(mode)
+	{
+		setPixel(0, 8, led_test_colors[led_test_index][0], led_test_colors[led_test_index][1], led_test_colors[led_test_index][2]);
+		setPixel(1, 8, led_test_colors[led_test_index][0], led_test_colors[led_test_index][1], led_test_colors[led_test_index][2]);
+		flush();
+		if(led_test_index < 4) led_test_index++;
+		else led_test_index = 0;
+	}
+	else
+	{
+		setPixel(0, 0, 0, 0, 0);
+		setPixel(1, 0, 0, 0, 0);
+		flush();
+	}
+	
+	
+	ESP_LOGI(TAG, "LED written");
 }

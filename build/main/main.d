@@ -62,7 +62,7 @@ main.o: /home/michael/esp/PSU_main/main/main.c \
  /home/michael/esp/esp-idf/components/newlib/platform_include/sys/termios.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/sys/poll.h \
  /home/michael/esp/esp-idf/components/spiffs/include/esp_spiffs.h \
- /home/michael/esp/PSU_main/main/dfuncs.h \
+ /home/michael/esp/PSU_main/main/ui_driver.h \
  /home/michael/esp/esp-idf/components/driver/include/driver/spi_master.h \
  /home/michael/esp/esp-idf/components/driver/include/driver/spi_common.h \
  /home/michael/esp/esp-idf/components/soc/include/soc/lldesc.h \
@@ -83,30 +83,26 @@ main.o: /home/michael/esp/PSU_main/main/main.c \
  /home/michael/esp/PSU_main/main/ili9340.h \
  /home/michael/esp/PSU_main/main/pngle.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/miniz.h \
- /home/michael/esp/PSU_main/main/expander_driver.h \
- /home/michael/esp/PSU_main/components/i2cdev/i2cdev.h \
- /home/michael/esp/esp-idf/components/driver/include/driver/i2c.h \
+ /home/michael/esp/PSU_main/main/Button_driver.h \
+ /home/michael/esp/PSU_main/main/IO_driver.h \
+ /home/michael/esp/esp-idf/components/driver/include/driver/gpio.h \
  /home/michael/esp/esp-idf/components/esp_common/include/esp_types.h \
  /home/michael/esp/esp-idf/components/esp_system/include/esp_intr_alloc.h \
- /home/michael/esp/esp-idf/components/freertos/include/freertos/queue.h \
- /home/michael/esp/esp-idf/components/esp_ringbuf/include/freertos/ringbuf.h \
- /home/michael/esp/esp-idf/components/driver/include/driver/gpio.h \
  /home/michael/esp/esp-idf/components/soc/include/soc/gpio_periph.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/io_mux_reg.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/gpio_struct.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/gpio_reg.h \
  /home/michael/esp/esp-idf/components/hal/include/hal/gpio_types.h \
  /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/gpio.h \
+ /home/michael/esp/PSU_main/main/INA_data_driver.h \
+ /home/michael/esp/PSU_main/main/INA220.h \
+ /home/michael/esp/PSU_main/components/i2cdev/i2cdev.h \
+ /home/michael/esp/esp-idf/components/driver/include/driver/i2c.h \
+ /home/michael/esp/esp-idf/components/freertos/include/freertos/queue.h \
+ /home/michael/esp/esp-idf/components/esp_ringbuf/include/freertos/ringbuf.h \
  /home/michael/esp/esp-idf/components/hal/include/hal/i2c_types.h \
  /home/michael/esp/PSU_main/components/esp_idf_lib_helpers/esp_idf_lib_helpers.h \
- /home/michael/esp/esp-idf/components/soc/esp32/include/soc/i2c_reg.h \
- /home/michael/esp/PSU_main/main/bmpfile.h \
- /home/michael/esp/PSU_main/main/decode_image.h \
- /home/michael/esp/PSU_main/main/INA220.h \
- /home/michael/esp/PSU_main/main/ui_driver.h \
- /home/michael/esp/PSU_main/main/Button_driver.h \
- /home/michael/esp/PSU_main/main/IO_driver.h \
- /home/michael/esp/PSU_main/main/INA_data_driver.h
+ /home/michael/esp/esp-idf/components/soc/esp32/include/soc/i2c_reg.h
 
 /home/michael/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h:
 
@@ -234,7 +230,7 @@ main.o: /home/michael/esp/PSU_main/main/main.c \
 
 /home/michael/esp/esp-idf/components/spiffs/include/esp_spiffs.h:
 
-/home/michael/esp/PSU_main/main/dfuncs.h:
+/home/michael/esp/PSU_main/main/ui_driver.h:
 
 /home/michael/esp/esp-idf/components/driver/include/driver/spi_master.h:
 
@@ -276,21 +272,15 @@ main.o: /home/michael/esp/PSU_main/main/main.c \
 
 /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/miniz.h:
 
-/home/michael/esp/PSU_main/main/expander_driver.h:
+/home/michael/esp/PSU_main/main/Button_driver.h:
 
-/home/michael/esp/PSU_main/components/i2cdev/i2cdev.h:
+/home/michael/esp/PSU_main/main/IO_driver.h:
 
-/home/michael/esp/esp-idf/components/driver/include/driver/i2c.h:
+/home/michael/esp/esp-idf/components/driver/include/driver/gpio.h:
 
 /home/michael/esp/esp-idf/components/esp_common/include/esp_types.h:
 
 /home/michael/esp/esp-idf/components/esp_system/include/esp_intr_alloc.h:
-
-/home/michael/esp/esp-idf/components/freertos/include/freertos/queue.h:
-
-/home/michael/esp/esp-idf/components/esp_ringbuf/include/freertos/ringbuf.h:
-
-/home/michael/esp/esp-idf/components/driver/include/driver/gpio.h:
 
 /home/michael/esp/esp-idf/components/soc/include/soc/gpio_periph.h:
 
@@ -304,23 +294,21 @@ main.o: /home/michael/esp/PSU_main/main/main.c \
 
 /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/gpio.h:
 
+/home/michael/esp/PSU_main/main/INA_data_driver.h:
+
+/home/michael/esp/PSU_main/main/INA220.h:
+
+/home/michael/esp/PSU_main/components/i2cdev/i2cdev.h:
+
+/home/michael/esp/esp-idf/components/driver/include/driver/i2c.h:
+
+/home/michael/esp/esp-idf/components/freertos/include/freertos/queue.h:
+
+/home/michael/esp/esp-idf/components/esp_ringbuf/include/freertos/ringbuf.h:
+
 /home/michael/esp/esp-idf/components/hal/include/hal/i2c_types.h:
 
 /home/michael/esp/PSU_main/components/esp_idf_lib_helpers/esp_idf_lib_helpers.h:
 
 /home/michael/esp/esp-idf/components/soc/esp32/include/soc/i2c_reg.h:
-
-/home/michael/esp/PSU_main/main/bmpfile.h:
-
-/home/michael/esp/PSU_main/main/decode_image.h:
-
-/home/michael/esp/PSU_main/main/INA220.h:
-
-/home/michael/esp/PSU_main/main/ui_driver.h:
-
-/home/michael/esp/PSU_main/main/Button_driver.h:
-
-/home/michael/esp/PSU_main/main/IO_driver.h:
-
-/home/michael/esp/PSU_main/main/INA_data_driver.h:
 /home/michael/esp/PSU_main/main/./main.c:
