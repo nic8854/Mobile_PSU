@@ -13,8 +13,9 @@
 #include "Button_driver.h"
 #include "APA102.h"
 
-#define TAG "UI_Driver"
+static const char *TAG = "UI_Driver"
 
+//Display Object
 TFT_t dev;
 uint16_t model = 0x7735;
 char file[32];
@@ -24,6 +25,7 @@ uint8_t ascii[40];
 uint16_t xpos;
 uint16_t ypos;
 
+//Font Files
 FontxFile fx16G[2];
 FontxFile fx24G[2];
 FontxFile fx32G[2];
@@ -32,6 +34,7 @@ FontxFile fx16M[2];
 FontxFile fx24M[2];
 FontxFile fx32M[2];
 
+//global variables
 int led_test_index = 0;
 
 int led_test_colors[5][3] ={
@@ -54,18 +57,22 @@ void UI_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 	InitFontx(fx24M,"/spiffs/ILMH24XB.FNT",""); // 12x24Dot Mincyo
 	InitFontx(fx32M,"/spiffs/ILMH32XB.FNT",""); // 16x32Dot Mincyo
 
+	//Initialize SPI for Display
     spi_master_init(&dev, CONFIG_CS_GPIO, CONFIG_DC_GPIO, CONFIG_RESET_GPIO, CONFIG_BL_GPIO);
+	//Iniialize Display
     lcdInit(&dev, model, CONFIG_WIDTH, CONFIG_HEIGHT, CONFIG_OFFSETX, CONFIG_OFFSETY);
     lcdSetFontDirection(&dev, 0);
 
     DF_print_fill_screen(BLACK);
 	DF_VlcdUpdate(&dev);
 
+	//Initialize Buttons and RGB LEDs
 	Button_init(I2C_PORT, SDA_GPIO, SCL_GPIO);
 	APA102_Init(2, VSPI_HOST);
 
 	vTaskDelay(500 / portTICK_PERIOD_MS);
 	
+	//Bootup screen ------------------------------------------------
     color = WHITE;
 	xpos = 10;
 	ypos = 25;
@@ -96,9 +103,11 @@ void UI_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 		vTaskDelay(100 / portTICK_PERIOD_MS);
 	}
     DF_VlcdUpdate(&dev);
+	//--------------------------------------------------------------
 	ESP_LOGI(TAG, "--> UI_driver initialized successfully");
 }
 
+//Funtion to draw Test Screen with Parameter Values
 void UI_draw_test_screen(uint8_t in_value, uint8_t out_value, double current_val, double shunt_val)
 {
 	strcpy(file, "/spiffs/background.png");
@@ -151,26 +160,31 @@ void UI_draw_test_screen(uint8_t in_value, uint8_t out_value, double current_val
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 }
 
+//Linking Function to Dfuncs
 void UI_Update()
 {
 	DF_VlcdUpdate(&dev);
 }
 
+//Linking Function to IO_driver
 void UI_GPIO_set(uint8_t GPIO_Num, bool GPIO_state)
 {
 	IO_GPIO_set(GPIO_Num, GPIO_state);
 }
 
+//Linking Function to Expander_driver
 void UI_exp_write_reg_1(uint8_t write_value)
 {
 	IO_exp_write_reg_1(write_value);
 }
 
+//Linking Function to Expander_driver
 uint8_t UI_exp_read_reg_0()
 {
 	return IO_exp_read_reg_0();
 }
 
+//Function to test RGB LEDs
 void led_test(bool mode)
 {
 	if(mode)
@@ -187,7 +201,5 @@ void led_test(bool mode)
 		setPixel(1, 0, 0, 0, 0);
 		flush();
 	}
-	
-	
 	ESP_LOGI(TAG, "LED written");
 }
