@@ -20,8 +20,10 @@ conf_t config = Default_Config;
 //init GPIO config object
 gpio_config_t io_conf;
 
+//create Mutex
 SemaphoreHandle_t xIO_Semaphore;
 
+//Init Variables
 uint8_t reg_0_val = 0;
 uint8_t return_val = 0;
 uint8_t reg_1_val = 0;
@@ -29,6 +31,7 @@ bool GPIO_0_state = 0;
 bool GPIO_1_state = 0;
 bool GPIO_2_state = 0;
 
+//Task
 void IO_handler(void *pvParameters)
 {
 	while(1)
@@ -55,20 +58,26 @@ void IO_handler(void *pvParameters)
 
 void IO_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 {	
+	//Set memory containing dev_port_expander to 0
     memset(&dev_port_expander, 0, sizeof(expander_t));
+	//change Expander config
 	config.conf_port_0 = 0xFF;
 	config.conf_port_1 = 0x00;
 	config.pol_inv_0 = 0xFF;
 	config.pol_inv_1 = 0x00;
+	//Init and configure Expander
     expander_init_desc(&dev_port_expander, expander_addr_low, I2C_PORT, SDA_GPIO, SCL_GPIO);
 	expander_configure(&dev_port_expander, &config);
+	//change GPIO Config
 	xIO_Semaphore = xSemaphoreCreateMutex();
 	io_conf.intr_type = GPIO_INTR_DISABLE;
 	io_conf.mode = GPIO_MODE_OUTPUT;
 	io_conf.pin_bit_mask = GPIO_OUTPUT_PIN_SEL;
 	io_conf.pull_down_en = 0;
 	io_conf.pull_up_en = 0;
+	//Init and configure GPIO
 	gpio_config(&io_conf);
+	//Create main Task
 	xTaskCreate(IO_handler, "IO_handler", 1024*4, NULL, 2, NULL);
 	ESP_LOGI(TAG, "--> IO_driver initialized successfully");
 }
@@ -115,6 +124,7 @@ void IO_GPIO_set(uint8_t GPIO_Num, bool GPIO_state)
 	{
 		if( xSemaphoreTake( xIO_Semaphore, ( TickType_t ) 10 ) == pdTRUE )
 	    {
+			//set GPIO with the specified Number
 			if(GPIO_Num == 0) GPIO_0_state = GPIO_state;
 			if(GPIO_Num == 1) GPIO_1_state = GPIO_state;
 			if(GPIO_Num == 2) GPIO_2_state = GPIO_state;

@@ -56,89 +56,96 @@ void PSU_main(void *pvParameters)
 	double shunt_val = 0;
 
 	
-	while(1) {
-			//get values for Display
-			in_value = Button_read_reg_0();
-			current_val = INAD_getCurrent_mA(INA1);
-			shunt_val = INAD_getVShunt_mv(INA1);
-
-			if(in_value & 0x08 && !button_last_1)
-			{
-				UI_GPIO_set(LED_0, 1);
-				out_value = out_value ^ 0x01; //0x02 on PSU Board (TC_EN)
-				vTaskDelay(50 / portTICK_PERIOD_MS);
-				UI_GPIO_set(LED_0, 0);
-				button_last_1 = 1;
-			} 
-			else if(!(in_value & 0x08) && button_last_1)
-			{
-				button_last_1 = 0;
-			}
-			if(in_value & 0x10 && !button_last_2)
-			{
-				UI_GPIO_set(LED_0, 1);
-				out_value = out_value ^ 0x02; //0x04 on PSU Board (TC_NFON)
-				vTaskDelay(50 / portTICK_PERIOD_MS);
-				UI_GPIO_set(LED_0, 0);
-				button_last_2 = 1;
-			} 
-			else if(!(in_value & 0x10) && button_last_2)
-			{
-				button_last_2 = 0;
-			}
-			if(in_value & 0x20 && !button_last_3) 
-			{
-				UI_GPIO_set(LED_0, 1);
-				out_value = out_value ^ 0x10; //does not set EN_IN directly
-				vTaskDelay(50 / portTICK_PERIOD_MS);
-				UI_GPIO_set(LED_0, 0);
-				button_last_3 = 1;
-			}
-			else if(!(in_value & 0x20) && button_last_3)
-			{
-				button_last_3 = 0;
-			}
-			if(in_value & 0x01 && !button_last_4) 
-			{
-				UI_GPIO_set(BUZZER, 1);
-				UI_GPIO_set(LED_0, 1);
-				vTaskDelay(50 / portTICK_PERIOD_MS);
-				UI_GPIO_set(BUZZER, 0);
-				UI_GPIO_set(LED_0, 0);
-				vTaskDelay(50 / portTICK_PERIOD_MS);
-				UI_GPIO_set(BUZZER, 1);
-				UI_GPIO_set(LED_0, 1);
-				vTaskDelay(50 / portTICK_PERIOD_MS);
-				UI_GPIO_set(BUZZER, 0);
-				UI_GPIO_set(LED_0, 0);
-				button_last_4 = 1;
-			}
-			else if(!(in_value & 0x01) && button_last_4)
-			{
-				button_last_4 = 0;
-			}
-			if(in_value & 0x02 && !button_last_5) 
-			{
-				UI_GPIO_set(LED_0, 1);
-				out_value = out_value ^ 0x20; //does not set EN_IN directly
-				vTaskDelay(50 / portTICK_PERIOD_MS);
-				UI_GPIO_set(LED_0, 0);
-				button_last_5 = 1;
-			}
-			else if(!(in_value & 0x02) && button_last_5)
-			{
-				button_last_5 = 0;
-			}
-			Button_write_reg_1(out_value);
-			if(out_value & 0x10) UI_GPIO_set(LED_1, 1);
-			else UI_GPIO_set(LED_1, 0);
-			if(out_value & 0x20) led_test(1);
-			if(!(out_value & 0x20)) led_test(0);
-			ESP_LOGW(__FUNCTION__, "Expander Read Reg 0 = 0b"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(in_value));
-			ESP_LOGW(__FUNCTION__, "Expander Write Reg 1 = 0b"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(out_value));
-
+	while(1) 
+	{
+		//get values for Display
+		in_value = Button_read_reg_0();
+		current_val = INAD_getCurrent_mA(INA1);
+		shunt_val = INAD_getVShunt_mv(INA1);
+		//---------------------------------------------------TC_EN
+		if(in_value & 0x08 && !button_last_1)
+		{
+			UI_GPIO_set(LED_0, 1);
+			out_value = out_value ^ 0x01; //0x02 on PSU Board (TC_EN)
+			vTaskDelay(50 / portTICK_PERIOD_MS);
+			UI_GPIO_set(LED_0, 0);
+			button_last_1 = 1;
+		} 
+		else if(!(in_value & 0x08) && button_last_1)
+		{
+			button_last_1 = 0;
+		}
+		//---------------------------------------------------TC_NFON
+		if(in_value & 0x10 && !button_last_2)
+		{
+			UI_GPIO_set(LED_0, 1);
+			out_value = out_value ^ 0x02; //0x04 on PSU Board (TC_NFON)
+			vTaskDelay(50 / portTICK_PERIOD_MS);
+			UI_GPIO_set(LED_0, 0);
+			button_last_2 = 1;
+		} 
+		else if(!(in_value & 0x10) && button_last_2)
+		{
+			button_last_2 = 0;
+		}
+		//---------------------------------------------------EN_IN
+		if(in_value & 0x20 && !button_last_3) 
+		{
+			UI_GPIO_set(LED_0, 1);
+			out_value = out_value ^ 0x10; //does not set EN_IN directly
+			vTaskDelay(50 / portTICK_PERIOD_MS);
+			UI_GPIO_set(LED_0, 0);
+			button_last_3 = 1;
+		}
+		else if(!(in_value & 0x20) && button_last_3)
+		{
+			button_last_3 = 0;
+		}
+		//---------------------------------------------------BUZZER
+		if(in_value & 0x01 && !button_last_4) 
+		{
+			UI_GPIO_set(BUZZER, 1);
+			UI_GPIO_set(LED_0, 1);
+			vTaskDelay(50 / portTICK_PERIOD_MS);
+			UI_GPIO_set(BUZZER, 0);
+			UI_GPIO_set(LED_0, 0);
+			vTaskDelay(50 / portTICK_PERIOD_MS);
+			UI_GPIO_set(BUZZER, 1);
+			UI_GPIO_set(LED_0, 1);
+			vTaskDelay(50 / portTICK_PERIOD_MS);
+			UI_GPIO_set(BUZZER, 0);
+			UI_GPIO_set(LED_0, 0);
+			button_last_4 = 1;
+		}
+		else if(!(in_value & 0x01) && button_last_4)
+		{
+			button_last_4 = 0;
+		}
+		//---------------------------------------------------RGB_LEDs
+		if(in_value & 0x02 && !button_last_5) 
+		{
+			UI_GPIO_set(LED_0, 1);
+			out_value = out_value ^ 0x20;
+			vTaskDelay(50 / portTICK_PERIOD_MS);
+			UI_GPIO_set(LED_0, 0);
+			button_last_5 = 1;
+		}
+		else if(!(in_value & 0x02) && button_last_5)
+		{
+			button_last_5 = 0;
+		}
+		//Write Expander
+		Button_write_reg_1(out_value);
+		//Set EN_IN
+		if(out_value & 0x10) UI_GPIO_set(LED_1, 1);
+		else UI_GPIO_set(LED_1, 0);
+		//Set RGB LEDs
+		if(out_value & 0x20) led_test(1);
+		if(!(out_value & 0x20)) led_test(0);
+		ESP_LOGW(__FUNCTION__, "Expander Read Reg 0 = 0b"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(in_value));
+		ESP_LOGW(__FUNCTION__, "Expander Write Reg 1 = 0b"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(out_value));
+		//Draw UI
 		UI_draw_test_screen(in_value, out_value, current_val, shunt_val);
-
 		//Update Display
 		UI_Update();
 
@@ -191,7 +198,7 @@ void app_main(void)
 	} else {
 		ESP_LOGI(TAG,"Partition size: total: %d, used: %d", total, used);
 	}
-
+	//Define SPiff Directories as /spiffs/...
 	SPIFFS_Directory("/spiffs/");
 
 	//Create Main Task
