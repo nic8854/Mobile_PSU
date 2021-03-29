@@ -13,7 +13,7 @@
 #include "Button_driver.h"
 #include "APA102.h"
 
-static const char *TAG = "UI_Driver"
+static const char *TAG = "UI_Driver";
 
 //Display Object
 TFT_t dev;
