@@ -189,17 +189,19 @@ void led_test(bool mode)
 {
 	if(mode)
 	{
+		//Set LEDs to the next Color in led_test_colors
 		setPixel(0, 8, led_test_colors[led_test_index][0], led_test_colors[led_test_index][1], led_test_colors[led_test_index][2]);
 		setPixel(1, 8, led_test_colors[led_test_index][0], led_test_colors[led_test_index][1], led_test_colors[led_test_index][2]);
 		flush();
-		if(led_test_index < 4) led_test_index++;
+		//Counter counts 0 - 4
+		if(led_test_index < 5) led_test_index++;
 		else led_test_index = 0;
 	}
 	else
 	{
+		//set LEDs to off
 		setPixel(0, 0, 0, 0, 0);
 		setPixel(1, 0, 0, 0, 0);
 		flush();
 	}
-	ESP_LOGI(TAG, "LED written");
 }
