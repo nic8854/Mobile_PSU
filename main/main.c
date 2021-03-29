@@ -19,13 +19,6 @@
 
 static const char *TAG = "PSU_main";
 
-#define GPIO_OUTPUT_IO_0    2
-#define GPIO_OUTPUT_IO_1    26
-#define GPIO_OUTPUT_IO_2    4
-
-#define INA1 1
-#define INA2 2
-
 #define I2C_PORT 0
 #define SDA_GPIO 21
 #define SCL_GPIO 22

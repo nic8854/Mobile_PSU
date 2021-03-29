@@ -3,6 +3,9 @@
 
 #include "INA220.h"
 
+#define INA1 1
+#define INA2 2
+
 void INAD_handler(void *pvParameters);
 void INAD_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO);
 double INAD_getVShunt_mv(int INA);
