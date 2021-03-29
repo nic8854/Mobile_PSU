@@ -4,9 +4,11 @@
 #include "i2cdev.h"
 #include <esp_err.h>
 
+//I2C Addresses
 #define expander_addr_low 0x20
 #define expander_addr_high 0x21
 
+//Register addresses
 #define reg_in_port_0          0x00
 #define reg_in_port_1          0x01
 #define reg_out_port_0         0x02
@@ -31,6 +33,7 @@
 #define reg_interr_stat_port_1 0x4D
 #define reg_out_port_conf      0x4F
 
+//Default configuration (should be set when initializing)
 #define Default_Config { \
     .conf_port_0 = 0xFF, \
     .conf_port_1 = 0xFF, \
@@ -49,6 +52,7 @@
     .out_port_conf = 0x00 \
 }
 
+//Expander Object
 typedef struct
 {
     uint8_t conf_port_0;
@@ -68,6 +72,7 @@ typedef struct
     uint8_t out_port_conf;
 } conf_t;
 
+//I2C Expander Object
 typedef struct
 {
     i2c_dev_t i2c_dev;

@@ -55,7 +55,6 @@ void IO_handler(void *pvParameters)
 
 void IO_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 {	
-	//temporary
     memset(&dev_port_expander, 0, sizeof(expander_t));
 	config.conf_port_0 = 0xFF;
 	config.conf_port_1 = 0x00;
@@ -71,6 +70,7 @@ void IO_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 	io_conf.pull_up_en = 0;
 	gpio_config(&io_conf);
 	xTaskCreate(IO_handler, "IO_handler", 1024*4, NULL, 2, NULL);
+	ESP_LOGI(TAG, "--> IO_driver initialized successfully");
 }
 
 void IO_exp_write_reg_1(uint8_t write_value)

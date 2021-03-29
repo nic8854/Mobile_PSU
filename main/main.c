@@ -10,20 +10,20 @@
 #include "esp_vfs.h"
 #include "esp_spiffs.h"
 #include "esp_heap_caps.h"
-#include "ui_driver.h"
+#include "UI_driver.h"
 #include "Button_driver.h"
 #include "INA_data_driver.h"
 
-#define	INTERVAL		400
-#define WAIT			vTaskDelay(INTERVAL)
-
+//Tag for ESP_LOG functions
 static const char *TAG = "PSU_main";
 
+//define I2C Pins
 #define I2C_PORT 0
 #define SDA_GPIO 21
 #define SCL_GPIO 22
 #define I2C_port 0
 
+//Define Spiffs
 static void SPIFFS_Directory(char * path) {
 	DIR* dir = opendir(path);
 	assert(dir != NULL);
@@ -35,10 +35,13 @@ static void SPIFFS_Directory(char * path) {
 	closedir(dir);
 }
 
+//main Task
 void PSU_main(void *pvParameters)
 {
+	//Init: Display, Buttons, IO and Buzzer
 	UI_init(I2C_PORT, SDA_GPIO, SCL_GPIO);	
 
+	//Init INAs
 	INAD_init(I2C_PORT, SDA_GPIO, SCL_GPIO);
 
 	//init variables
@@ -54,6 +57,7 @@ void PSU_main(void *pvParameters)
 
 	
 	while(1) {
+			//get values for Display
 			in_value = Button_read_reg_0();
 			current_val = INAD_getCurrent_mA(INA1);
 			shunt_val = INAD_getVShunt_mv(INA1);
@@ -135,8 +139,10 @@ void PSU_main(void *pvParameters)
 
 		UI_draw_test_screen(in_value, out_value, current_val, shunt_val);
 
+		//Update Display
 		UI_Update();
-	
+
+		//Display free Heap size
 		ESP_LOGI(__FUNCTION__, "Free Heap size: %d\n", xPortGetFreeHeapSize());
 		vTaskDelay(10 / portTICK_PERIOD_MS);
 	
@@ -151,7 +157,7 @@ void PSU_main(void *pvParameters)
 void app_main(void)
 {
 	ESP_LOGI(TAG, "Initializing SPIFFS");
-
+	//Initialize Spiffs
 	esp_vfs_spiffs_conf_t conf = {
 		.base_path = "/spiffs",
 		.partition_label = NULL,
@@ -163,8 +169,10 @@ void app_main(void)
 	// Note: esp_vfs_spiffs_register is anall-in-one convenience function.
 	esp_err_t ret =esp_vfs_spiffs_register(&conf);
 
+	//Init I2C Bus
 	i2cdev_init();
 
+	//Spiff Error Messages
 	if (ret != ESP_OK) {
 		if (ret == ESP_FAIL) {
 			ESP_LOGE(TAG, "Failed to mount or format filesystem");
@@ -175,7 +183,7 @@ void app_main(void)
 		}
 		return;
 	}
-
+	//Display Spiff Information
 	size_t total = 0, used = 0;
 	ret = esp_spiffs_info(NULL, &total,&used);
 	if (ret != ESP_OK) {
@@ -185,5 +193,7 @@ void app_main(void)
 	}
 
 	SPIFFS_Directory("/spiffs/");
+
+	//Create Main Task
 	xTaskCreate(PSU_main, "PSU_MAIN", 1024*8, NULL, 2, NULL);
 }

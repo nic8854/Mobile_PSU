@@ -86,6 +86,7 @@ void APA102_Init(size_t ledsCount, spi_host_device_t spiDevice_LED) {
     transaction_LED.tx_buffer = sendBuffer;
     transaction_LED.rx_buffer = NULL;
     ESP_LOGI(TAG, "LED Init Done...");
+    ESP_LOGI(TAG, "--> APA102 initialized successfully");
 }
 
 void setPixel(uint8_t index, int brightness, int red, int green, int blue) {

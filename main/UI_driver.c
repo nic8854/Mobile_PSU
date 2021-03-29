@@ -8,7 +8,7 @@
 #include "esp_log.h"
 #include "ili9340.h"
 #include "dfuncs.h"
-#include "ui_driver.h"
+#include "UI_driver.h"
 #include "IO_driver.h"
 #include "Button_driver.h"
 #include "APA102.h"
@@ -96,6 +96,7 @@ void UI_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 		vTaskDelay(100 / portTICK_PERIOD_MS);
 	}
     DF_VlcdUpdate(&dev);
+	ESP_LOGI(TAG, "--> UI_driver initialized successfully");
 }
 
 void UI_draw_test_screen(uint8_t in_value, uint8_t out_value, double current_val, double shunt_val)

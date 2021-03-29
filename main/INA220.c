@@ -103,7 +103,7 @@ esp_err_t ina220_init(ina220_t *dev, ina220_params_t *params)
     ESP_LOGW(TAG, "ConfigReg readback= 0x%X", data);
 
     I2C_DEV_GIVE_MUTEX(&dev->i2c_dev);
-
+    ESP_LOGI(TAG, "--> INA220 initialized successfully");
     return ESP_OK;
 }
 
