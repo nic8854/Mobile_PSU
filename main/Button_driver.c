@@ -115,9 +115,9 @@ int Button_ENC_get()
 	return ENC_counter;
 }
 
-void Button_ENC_reset()
+void Button_ENC_set(int value)
 {
-	ENC_counter = 0;
+	ENC_counter = value;
 }
 
 void Button_Buzzer_PWM(int freq)
