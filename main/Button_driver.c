@@ -119,3 +119,13 @@ void Button_ENC_reset()
 {
 	ENC_counter = 0;
 }
+
+void Button_Buzzer_PWM(int freq)
+{
+	IO_Buzzer_PWM(freq);
+}
+
+void Button_Buzzer_power(bool power)
+{
+	IO_Buzzer_power(power);
+}

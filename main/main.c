@@ -54,10 +54,12 @@ void PSU_main(void *pvParameters)
 	uint8_t button_last_5 = 0;
 	double current_val = 0;
 	double shunt_val = 0;
+	int ENC_value = 0;
 
 	
 	while(1) 
 	{
+		
 		//get values for Display
 		in_value = Button_read_reg_0();
 		current_val = INAD_getCurrent_mA(INA1);
@@ -111,17 +113,20 @@ void PSU_main(void *pvParameters)
 		//---------------------------------------------------BUZZER
 		if(in_value & 0x01 && !button_last_4) 
 		{
-			UI_GPIO_set(BUZZER, 1);
+			Button_Buzzer_power(1);
+			Button_Buzzer_PWM(1500);
 			UI_GPIO_set(LED_0, 1);
 			vTaskDelay(50 / portTICK_PERIOD_MS);
-			UI_GPIO_set(BUZZER, 0);
+			Button_Buzzer_PWM(1900);
 			UI_GPIO_set(LED_0, 0);
 			vTaskDelay(50 / portTICK_PERIOD_MS);
-			UI_GPIO_set(BUZZER, 1);
+			Button_Buzzer_PWM(2300);
 			UI_GPIO_set(LED_0, 1);
 			vTaskDelay(50 / portTICK_PERIOD_MS);
-			UI_GPIO_set(BUZZER, 0);
+			Button_Buzzer_PWM(2700);
 			UI_GPIO_set(LED_0, 0);
+			vTaskDelay(100 / portTICK_PERIOD_MS);
+			Button_Buzzer_power(0);
 			button_last_4 = 1;
 		}
 		else if(!(in_value & 0x01) && button_last_4)
@@ -156,7 +161,8 @@ void PSU_main(void *pvParameters)
 		//Update Display
 		UI_Update();
 
-		ESP_LOGW(TAG, "Encoder state = %d", Button_ENC_get());
+		ENC_value = Button_ENC_get();
+		ESP_LOGW(TAG, "Encoder state = %d", ENC_value);
 
 		//Display free Heap size
 		ESP_LOGI(__FUNCTION__, "Free Heap size: %d\n", xPortGetFreeHeapSize());

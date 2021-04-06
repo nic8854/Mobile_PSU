@@ -6,6 +6,7 @@
 #include "expander_driver.h"
 #include "driver/gpio.h"
 #include "esp_log.h"
+#include "driver/ledc.h"
 
 static const char *TAG = "IO_Driver";
 
@@ -17,10 +18,19 @@ conf_t config = Default_Config;
 #define GPIO_OUTPUT_IO_Buzzer   4
 #define GPIO_INPUT_IO_DT    16
 #define GPIO_INPUT_IO_CLK   15
-#define GPIO_OUTPUT_PIN_SEL  ((1ULL<<GPIO_OUTPUT_IO_0) | (1ULL<<GPIO_OUTPUT_IO_1) | (1ULL<<GPIO_OUTPUT_IO_Buzzer))
+#define GPIO_OUTPUT_PIN_SEL  ((1ULL<<GPIO_OUTPUT_IO_0) | (1ULL<<GPIO_OUTPUT_IO_1))
+
+#define LEDC_LS_TIMER          LEDC_TIMER_0
+#define LEDC_LS_MODE           LEDC_LOW_SPEED_MODE
+#define LEDC_LS_CH0_GPIO       GPIO_OUTPUT_IO_Buzzer
+#define LEDC_LS_CH0_CHANNEL    LEDC_CHANNEL_0
 
 //init GPIO config object
 gpio_config_t io_conf;
+
+//PWM timer and channel Objects
+ledc_timer_config_t ledc_timer;
+ledc_channel_config_t ledc_channel;
 
 //create Mutex
 SemaphoreHandle_t xIO_Semaphore;
@@ -83,6 +93,26 @@ void IO_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 	io_conf.pull_up_en = 0;
 	//Init and configure GPIO
 	gpio_config(&io_conf);
+
+	//Init and configure PWM
+
+    ledc_timer.duty_resolution = LEDC_TIMER_13_BIT; // resolution of PWM duty
+    ledc_timer.freq_hz = 500;                      // frequency of PWM signal
+    ledc_timer.speed_mode = LEDC_LS_MODE;           // timer mode
+    ledc_timer.timer_num = LEDC_LS_TIMER;            // timer index
+    ledc_timer.clk_cfg = LEDC_AUTO_CLK;              // Auto select the source clock
+
+    ledc_timer_config(&ledc_timer);
+
+    ledc_channel.channel    = LEDC_LS_CH0_CHANNEL;
+    ledc_channel.duty       = 0;
+    ledc_channel.gpio_num   = LEDC_LS_CH0_GPIO;
+    ledc_channel.speed_mode = LEDC_LS_MODE;
+    ledc_channel.hpoint     = 0;
+    ledc_channel.timer_sel  = LEDC_LS_TIMER;
+	
+	ledc_channel_config(&ledc_channel);
+
 	//Create main Task
 	xTaskCreate(IO_handler, "IO_handler", 1024*4, NULL, 2, NULL);
 	ESP_LOGI(TAG, "--> IO_driver initialized successfully");
@@ -164,4 +194,26 @@ int IO_GPIO_get(uint8_t GPIO_Num)
 		}
 	}
 	return GPIO_state;
+}
+
+void IO_Buzzer_PWM(int freq)
+{
+	if(freq > 200 && freq < 10000) {
+		ledc_set_freq(ledc_channel.speed_mode, ledc_timer.timer_num, freq);
+	}
+}
+void IO_Buzzer_power(bool power)
+{
+	if(power)
+	{
+		ledc_set_duty(ledc_channel.speed_mode, ledc_channel.channel, 180);
+		ledc_update_duty(ledc_channel.speed_mode, ledc_channel.channel);
+	}
+	else
+	{
+		ledc_set_duty(ledc_channel.speed_mode, ledc_channel.channel, 0);
+		ledc_update_duty(ledc_channel.speed_mode, ledc_channel.channel);
+	}
+	
+		
 }

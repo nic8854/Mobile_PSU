@@ -15,5 +15,7 @@ void IO_exp_write_reg_1(uint8_t write_value);
 uint8_t IO_exp_read_reg_0();
 void IO_GPIO_set(uint8_t GPIO_Num, bool GPIO_state);
 int IO_GPIO_get(uint8_t GPIO_Num);
+void IO_Buzzer_PWM(int freq);
+void IO_Buzzer_power(bool power);
 
 #endif

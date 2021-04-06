@@ -76,7 +76,11 @@ IO_driver.o: /home/michael/esp/PSU_main/main/IO_driver.c \
  /home/michael/esp/PSU_main/components/esp_idf_lib_helpers/esp_idf_lib_helpers.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/i2c_reg.h \
  /home/michael/esp/esp-idf/components/log/include/esp_log.h \
- /home/michael/esp/esp-idf/components/log/include/esp_log_internal.h
+ /home/michael/esp/esp-idf/components/log/include/esp_log_internal.h \
+ /home/michael/esp/esp-idf/components/driver/include/driver/ledc.h \
+ /home/michael/esp/esp-idf/components/hal/include/hal/ledc_types.h \
+ /home/michael/esp/esp-idf/components/driver/include/driver/periph_ctrl.h \
+ /home/michael/esp/esp-idf/components/soc/esp32/include/soc/periph_defs.h
 
 /home/michael/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h:
 
@@ -233,4 +237,12 @@ IO_driver.o: /home/michael/esp/PSU_main/main/IO_driver.c \
 /home/michael/esp/esp-idf/components/log/include/esp_log.h:
 
 /home/michael/esp/esp-idf/components/log/include/esp_log_internal.h:
+
+/home/michael/esp/esp-idf/components/driver/include/driver/ledc.h:
+
+/home/michael/esp/esp-idf/components/hal/include/hal/ledc_types.h:
+
+/home/michael/esp/esp-idf/components/driver/include/driver/periph_ctrl.h:
+
+/home/michael/esp/esp-idf/components/soc/esp32/include/soc/periph_defs.h:
 /home/michael/esp/PSU_main/main/./IO_driver.c:
