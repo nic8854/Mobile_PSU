@@ -172,6 +172,12 @@ void UI_GPIO_set(uint8_t GPIO_Num, bool GPIO_state)
 	IO_GPIO_set(GPIO_Num, GPIO_state);
 }
 
+//Linking Function to IO_driver
+int UI_GPIO_get(uint8_t GPIO_Num)
+{
+	return IO_GPIO_get(GPIO_Num);
+}
+
 //Linking Function to Expander_driver
 void UI_exp_write_reg_1(uint8_t write_value)
 {

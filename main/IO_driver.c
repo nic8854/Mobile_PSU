@@ -14,8 +14,10 @@ conf_t config = Default_Config;
 
 #define GPIO_OUTPUT_IO_0    2
 #define GPIO_OUTPUT_IO_1    26
-#define GPIO_OUTPUT_IO_2    4
-#define GPIO_OUTPUT_PIN_SEL  ((1ULL<<GPIO_OUTPUT_IO_0) | (1ULL<<GPIO_OUTPUT_IO_1) | (1ULL<<GPIO_OUTPUT_IO_2))
+#define GPIO_OUTPUT_IO_Buzzer   4
+#define GPIO_INPUT_IO_DT    16
+#define GPIO_INPUT_IO_CLK   15
+#define GPIO_OUTPUT_PIN_SEL  ((1ULL<<GPIO_OUTPUT_IO_0) | (1ULL<<GPIO_OUTPUT_IO_1) | (1ULL<<GPIO_OUTPUT_IO_Buzzer))
 
 //init GPIO config object
 gpio_config_t io_conf;
@@ -29,7 +31,9 @@ uint8_t return_val = 0;
 uint8_t reg_1_val = 0;
 bool GPIO_0_state = 0;
 bool GPIO_1_state = 0;
-bool GPIO_2_state = 0;
+bool GPIO_Buzzer_state = 0;
+int GPIO_DT_state = 0;
+int GPIO_CLK_state = 0;
 
 //Task
 void IO_handler(void *pvParameters)
@@ -44,7 +48,9 @@ void IO_handler(void *pvParameters)
 				write_reg_8(&dev_port_expander, reg_out_port_1, reg_1_val);
 				gpio_set_level(GPIO_OUTPUT_IO_0, GPIO_0_state);
 				gpio_set_level(GPIO_OUTPUT_IO_1, GPIO_1_state);
-				gpio_set_level(GPIO_OUTPUT_IO_2, GPIO_2_state);
+				gpio_set_level(GPIO_OUTPUT_IO_Buzzer, GPIO_Buzzer_state);
+				GPIO_DT_state = gpio_get_level(GPIO_INPUT_IO_DT);
+				GPIO_CLK_state = gpio_get_level(GPIO_INPUT_IO_CLK);
 				xSemaphoreGive( xIO_Semaphore );
 			}
 			else
@@ -127,8 +133,8 @@ void IO_GPIO_set(uint8_t GPIO_Num, bool GPIO_state)
 			//set GPIO with the specified Number
 			if(GPIO_Num == 0) GPIO_0_state = GPIO_state;
 			if(GPIO_Num == 1) GPIO_1_state = GPIO_state;
-			if(GPIO_Num == 2) GPIO_2_state = GPIO_state;
-				
+			if(GPIO_Num == 2) GPIO_Buzzer_state = GPIO_state;
+			else if(GPIO_Num > 2) ESP_LOGE(TAG, "GPIO_set: GPIO_Num ERROR");	
 			xSemaphoreGive( xIO_Semaphore );
 			//ESP_LOGI(TAG, "reg_1 set to 0x%x", reg_1_val);
 		}
@@ -137,4 +143,25 @@ void IO_GPIO_set(uint8_t GPIO_Num, bool GPIO_state)
 			ESP_LOGE(TAG, "Could not take Semaphore");
 		}
 	}
+}
+
+int IO_GPIO_get(uint8_t GPIO_Num)
+{
+	int GPIO_state = 0;
+	if( xIO_Semaphore != NULL )
+	{
+		if( xSemaphoreTake( xIO_Semaphore, ( TickType_t ) 10 ) == pdTRUE )
+	    {
+			//set GPIO with the specified Number
+			if(GPIO_Num == 3) GPIO_state = GPIO_DT_state;
+			if(GPIO_Num == 4) GPIO_state = GPIO_CLK_state;
+			else if(GPIO_Num > 4 || GPIO_Num < 3) ESP_LOGE(TAG, "GPIO_get: GPIO_Num ERROR");	
+			xSemaphoreGive( xIO_Semaphore );
+		}
+		else
+		{
+			ESP_LOGE(TAG, "Could not take Semaphore");
+		}
+	}
+	return GPIO_state;
 }

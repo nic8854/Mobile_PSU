@@ -13,6 +13,10 @@ SemaphoreHandle_t xBTSemaphore;
 uint8_t reg_read = 0;
 uint8_t return_value = 0;
 uint8_t reg_write = 0;
+int DT_state = 0;
+int CLK_state = 0;
+int CLK_state_last = 0;
+int ENC_counter = 0;
 
 //Task
 void Button_handler(void *pvParameters)
@@ -28,7 +32,21 @@ void Button_handler(void *pvParameters)
 				//Read Reg 0 and write Reg 1
 				IO_exp_write_reg_1(reg_write);
 				reg_read = IO_exp_read_reg_0();
+
+				//get states of Encoder Pins
+				DT_state = IO_GPIO_get(ENC_DT);
+				CLK_state = IO_GPIO_get(ENC_CLK);
+
 				xSemaphoreGive( xBTSemaphore );
+
+				if(CLK_state != CLK_state_last)
+				{
+					if(!CLK_state && !DT_state) ENC_counter--;
+					if(!CLK_state && DT_state) ENC_counter++;
+					if(CLK_state && !DT_state) ENC_counter++;
+					if(CLK_state && DT_state) ENC_counter--;
+				}
+				CLK_state_last = CLK_state;
 			}
 			else
 			{
@@ -90,4 +108,14 @@ uint8_t Button_read_reg_0()
 		}
 	}
 	return 0;
+}
+
+int Button_ENC_get()
+{
+	return ENC_counter;
+}
+
+void Button_ENC_reset()
+{
+	ENC_counter = 0;
 }

@@ -21,6 +21,7 @@ void UI_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO);
 void UI_draw_test_screen(uint8_t in_value, uint8_t out_value, double current_val, double shunt_val);
 void UI_Update();
 void UI_GPIO_set(uint8_t GPIO_Num, bool GPIO_state);
+int UI_GPIO_get(uint8_t GPIO_Num);
 void UI_exp_write_reg_1(uint8_t write_value);
 uint8_t UI_exp_read_reg_0();
 void led_test(bool mode);
