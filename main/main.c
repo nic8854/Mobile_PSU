@@ -23,6 +23,12 @@ static const char *TAG = "PSU_main";
 #define SCL_GPIO 22
 #define I2C_port 0
 
+#define up      0
+#define down    1
+#define left    2
+#define right   3
+#define sel     4
+
 //Define Spiffs
 static void SPIFFS_Directory(char * path) {
 	DIR* dir = opendir(path);
@@ -59,18 +65,12 @@ void PSU_main(void *pvParameters)
 	
 	while(1) 
 	{
-		
-		//get values for Display
+		//Button state test
+		ESP_LOGW(TAG, "Button Up = %d", UI_get_press(up));
+		//get values to Display
 		in_value = Button_read_reg_0();
 		current_val = INAD_getCurrent_mA(INA1);
 		shunt_val = INAD_getVShunt_mv(INA1);
-		//---------------------------------------------------Encoder_test
-		if(UI_GPIO_get(ENC_DT) || UI_GPIO_get(ENC_CLK)) 
-		{
-			UI_GPIO_set(LED_0, 1);
-			vTaskDelay(50 / portTICK_PERIOD_MS);
-			UI_GPIO_set(LED_0, 0);
-		}
 		//---------------------------------------------------TC_EN
 		if(in_value & 0x08 && !button_last_1)
 		{
@@ -113,20 +113,35 @@ void PSU_main(void *pvParameters)
 		//---------------------------------------------------BUZZER
 		if(in_value & 0x01 && !button_last_4) 
 		{
-			Button_Buzzer_power(1);
-			Button_Buzzer_PWM(1500);
+			UI_Buzzer_power(1);
+			UI_Buzzer_PWM(100);
 			UI_GPIO_set(LED_0, 1);
-			vTaskDelay(50 / portTICK_PERIOD_MS);
-			Button_Buzzer_PWM(1900);
-			UI_GPIO_set(LED_0, 0);
-			vTaskDelay(50 / portTICK_PERIOD_MS);
-			Button_Buzzer_PWM(2300);
-			UI_GPIO_set(LED_0, 1);
-			vTaskDelay(50 / portTICK_PERIOD_MS);
-			Button_Buzzer_PWM(2700);
+			vTaskDelay(100 / portTICK_PERIOD_MS);
+			UI_Buzzer_PWM(300);
 			UI_GPIO_set(LED_0, 0);
 			vTaskDelay(100 / portTICK_PERIOD_MS);
-			Button_Buzzer_power(0);
+			UI_Buzzer_PWM(500);
+			UI_GPIO_set(LED_0, 1);
+			vTaskDelay(100 / portTICK_PERIOD_MS);
+			UI_Buzzer_PWM(700);
+			UI_GPIO_set(LED_0, 0);
+			vTaskDelay(100 / portTICK_PERIOD_MS);
+			UI_Buzzer_PWM(900);
+			UI_GPIO_set(LED_0, 1);
+			vTaskDelay(200 / portTICK_PERIOD_MS);
+			UI_Buzzer_PWM(700);
+			UI_GPIO_set(LED_0, 0);
+			vTaskDelay(100 / portTICK_PERIOD_MS);
+			UI_Buzzer_PWM(500);
+			UI_GPIO_set(LED_0, 1);
+			vTaskDelay(100 / portTICK_PERIOD_MS);
+			UI_Buzzer_PWM(300);
+			UI_GPIO_set(LED_0, 0);
+			vTaskDelay(100 / portTICK_PERIOD_MS);
+			UI_Buzzer_PWM(100);
+			UI_GPIO_set(LED_0, 0);
+			vTaskDelay(200 / portTICK_PERIOD_MS);
+			UI_Buzzer_power(0);
 			button_last_4 = 1;
 		}
 		else if(!(in_value & 0x01) && button_last_4)
@@ -157,7 +172,7 @@ void PSU_main(void *pvParameters)
 		ESP_LOGW(__FUNCTION__, "Expander Read Reg 0 = 0b"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(in_value));
 		ESP_LOGW(__FUNCTION__, "Expander Write Reg 1 = 0b"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(out_value));
 		//Draw UI
-		UI_draw_test_screen(in_value, out_value, current_val, shunt_val);
+		UI_draw_test_screen(in_value, out_value, current_val, shunt_val, ENC_value);
 		//Update Display
 		UI_Update();
 

@@ -69,7 +69,8 @@ Button_driver.o: /home/michael/esp/PSU_main/main/Button_driver.c \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/gpio_reg.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/gpio_sig_map.h \
  /home/michael/esp/esp-idf/components/hal/include/hal/gpio_types.h \
- /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/gpio.h
+ /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/gpio.h \
+ /home/michael/esp/PSU_main/main/Button_driver.h
 
 /home/michael/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h:
 
@@ -212,4 +213,6 @@ Button_driver.o: /home/michael/esp/PSU_main/main/Button_driver.c \
 /home/michael/esp/esp-idf/components/hal/include/hal/gpio_types.h:
 
 /home/michael/esp/esp-idf/components/esp_rom/include/esp32/rom/gpio.h:
+
+/home/michael/esp/PSU_main/main/Button_driver.h:
 /home/michael/esp/PSU_main/main/./Button_driver.c:

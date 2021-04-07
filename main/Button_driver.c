@@ -5,14 +5,21 @@
 #include "freertos/semphr.h"
 #include "esp_log.h"
 #include "IO_driver.h"
+#include "Button_driver.h"
 
 static const char *TAG = "Button_driver";
 
 SemaphoreHandle_t xBTSemaphore;
 
+//expander vars
 uint8_t reg_read = 0;
 uint8_t return_value = 0;
 uint8_t reg_write = 0;
+//button vars
+
+button_states buttons;
+
+//encoder vars
 int DT_state = 0;
 int CLK_state = 0;
 int CLK_state_last = 0;
@@ -32,13 +39,21 @@ void Button_handler(void *pvParameters)
 				//Read Reg 0 and write Reg 1
 				IO_exp_write_reg_1(reg_write);
 				reg_read = IO_exp_read_reg_0();
-
+								
 				//get states of Encoder Pins
 				DT_state = IO_GPIO_get(ENC_DT);
 				CLK_state = IO_GPIO_get(ENC_CLK);
 
+				//set button states vars to button states from reg 0 var
+				Button_set_states();
+
 				xSemaphoreGive( xBTSemaphore );
 
+				
+				//set button press vars from count and states
+				Button_set_press();
+				
+				//Encoder Logic (counter)
 				if(CLK_state != CLK_state_last)
 				{
 					if(!CLK_state && !DT_state) ENC_counter--;
@@ -64,6 +79,8 @@ void Button_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 	xBTSemaphore = xSemaphoreCreateMutex();
 	//Initialize IO_Driver(Expander, GPIO, Buzzer etc.)
 	IO_init(I2C_PORT, SDA_GPIO, SCL_GPIO);
+	//set all values in buttons to 0
+	memset( &buttons, 0, sizeof( button_states ) );
 	//Create Main Task
 	xTaskCreate(Button_handler, "Button_handler", 1024*4, NULL, 2, NULL);
 	ESP_LOGI(TAG, "--> Button_driver initialized successfully");
@@ -120,12 +137,47 @@ void Button_ENC_set(int value)
 	ENC_counter = value;
 }
 
-void Button_Buzzer_PWM(int freq)
+void Button_set_states()
 {
-	IO_Buzzer_PWM(freq);
+	if(reg_read & 0x08) buttons.state[btn_up] = 1;
+	else buttons.state[btn_up] = 0;
+	if(reg_read & 0x10) buttons.state[btn_down] = 1;
+	else buttons.state[btn_down] = 0;
+	if(reg_read & 0x20) buttons.state[btn_left] = 1;
+	else buttons.state[btn_left] = 0;
+	if(reg_read & 0x40) buttons.state[btn_right] = 1;
+	else buttons.state[btn_right] = 0;
+	if(reg_read & 0x80) buttons.state[btn_sel] = 1;
+	else buttons.state[btn_sel] = 0;
 }
 
-void Button_Buzzer_power(bool power)
+void Button_set_press()
 {
-	IO_Buzzer_power(power);
+	for(int i = 0; i < 5; i++)
+	{
+		if(!buttons.state[i] && buttons.state_last[i])
+		{
+			if(buttons.count[i] > 100)
+			{
+				buttons.press[i] = 2;
+			}
+			else if(buttons.press[i] == 0)
+			{
+				buttons.press[i] = 1;
+			}
+			buttons.count[i] = 0;
+		}
+		if(buttons.state[i])
+		{
+			buttons.count[i]++;
+		}
+		buttons.state_last[i] = buttons.state[i];
+	}
+}
+
+int Button_get_press(int button_select)
+{
+	int press_temp = buttons.press[button_select];
+	buttons.press[button_select] = 0;
+	return press_temp;
 }

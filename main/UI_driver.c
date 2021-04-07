@@ -108,7 +108,7 @@ void UI_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 }
 
 //Funtion to draw Test Screen with Parameter Values
-void UI_draw_test_screen(uint8_t in_value, uint8_t out_value, double current_val, double shunt_val)
+void UI_draw_test_screen(uint8_t in_value, uint8_t out_value, double current_val, double shunt_val, int enc_val)
 {
 	strcpy(file, "/spiffs/background.png");
 	DF_print_png(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
@@ -134,6 +134,10 @@ void UI_draw_test_screen(uint8_t in_value, uint8_t out_value, double current_val
 	ypos = 115;
 	strcpy((char *)ascii, "SHUNT:");
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 5;
+	ypos = 135;
+	strcpy((char *)ascii, "ENC  :");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 	xpos = 55;
 	ypos = 55;
 	sprintf(text, BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(in_value));
@@ -154,10 +158,14 @@ void UI_draw_test_screen(uint8_t in_value, uint8_t out_value, double current_val
 	xpos = 55;
 	ypos = 115;
 	DF_print_value(&dev, color, fx16G, xpos, ypos, -1, shunt_val);
+	
 	xpos = 100;
 	ypos = 115;
 	strcpy((char *)ascii, "mV");
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 55;
+	ypos = 135;
+	DF_print_value(&dev, color, fx16G, xpos, ypos, enc_val, -1);
 }
 
 //Linking Function to Dfuncs
@@ -190,6 +198,22 @@ uint8_t UI_exp_read_reg_0()
 	return IO_exp_read_reg_0();
 }
 
+//Linking Function to Button_driver
+int UI_get_press(int button_select)
+{
+	return Button_get_press(button_select);
+}
+
+void UI_Buzzer_PWM(int freq)
+{
+	IO_Buzzer_PWM(freq);
+}
+
+void UI_Buzzer_power(bool power)
+{
+	IO_Buzzer_power(power);
+}
+
 //Function to test RGB LEDs
 void led_test(bool mode)
 {
@@ -211,3 +235,4 @@ void led_test(bool mode)
 		flush();
 	}
 }
+

@@ -54,11 +54,13 @@ void IO_handler(void *pvParameters)
 		{
 			if( xSemaphoreTake( xIO_Semaphore, ( TickType_t ) 10 ) == pdTRUE )
 		    {
+				//Read Register 0 and Write Register 1 (Expander)
     			read_reg_8(&dev_port_expander, reg_in_port_0, &reg_0_val);
 				write_reg_8(&dev_port_expander, reg_out_port_1, reg_1_val);
+				//Set Level of NFON and TC_EN
 				gpio_set_level(GPIO_OUTPUT_IO_0, GPIO_0_state);
 				gpio_set_level(GPIO_OUTPUT_IO_1, GPIO_1_state);
-				gpio_set_level(GPIO_OUTPUT_IO_Buzzer, GPIO_Buzzer_state);
+				//get State of Encoder Pins
 				GPIO_DT_state = gpio_get_level(GPIO_INPUT_IO_DT);
 				GPIO_CLK_state = gpio_get_level(GPIO_INPUT_IO_CLK);
 				xSemaphoreGive( xIO_Semaphore );
@@ -84,7 +86,7 @@ void IO_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 	//Init and configure Expander
     expander_init_desc(&dev_port_expander, expander_addr_low, I2C_PORT, SDA_GPIO, SCL_GPIO);
 	expander_configure(&dev_port_expander, &config);
-	//change GPIO Config
+	//change GPIO Config Object
 	xIO_Semaphore = xSemaphoreCreateMutex();
 	io_conf.intr_type = GPIO_INTR_DISABLE;
 	io_conf.mode = GPIO_MODE_OUTPUT;
@@ -94,8 +96,7 @@ void IO_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 	//Init and configure GPIO
 	gpio_config(&io_conf);
 
-	//Init and configure PWM
-
+	//Init Timer for PWM
     ledc_timer.duty_resolution = LEDC_TIMER_13_BIT; // resolution of PWM duty
     ledc_timer.freq_hz = 500;                      // frequency of PWM signal
     ledc_timer.speed_mode = LEDC_LS_MODE;           // timer mode
@@ -104,6 +105,7 @@ void IO_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 
     ledc_timer_config(&ledc_timer);
 
+	//Init PWM Channel for Buzzer
     ledc_channel.channel    = LEDC_LS_CH0_CHANNEL;
     ledc_channel.duty       = 0;
     ledc_channel.gpio_num   = LEDC_LS_CH0_GPIO;
@@ -198,7 +200,9 @@ int IO_GPIO_get(uint8_t GPIO_Num)
 
 void IO_Buzzer_PWM(int freq)
 {
-	if(freq > 200 && freq < 10000) {
+	//check if Frequency is within Range
+	if(freq > 90 && freq < 10000) {
+		//set Frequency
 		ledc_set_freq(ledc_channel.speed_mode, ledc_timer.timer_num, freq);
 	}
 }
@@ -206,11 +210,13 @@ void IO_Buzzer_power(bool power)
 {
 	if(power)
 	{
-		ledc_set_duty(ledc_channel.speed_mode, ledc_channel.channel, 180);
+		//set the Duty cycle of the PWM to 100 (ON state)
+		ledc_set_duty(ledc_channel.speed_mode, ledc_channel.channel, 100);
 		ledc_update_duty(ledc_channel.speed_mode, ledc_channel.channel);
 	}
 	else
 	{
+		//set the Duty cycle of the PWM to 0 (OFF state)
 		ledc_set_duty(ledc_channel.speed_mode, ledc_channel.channel, 0);
 		ledc_update_duty(ledc_channel.speed_mode, ledc_channel.channel);
 	}
