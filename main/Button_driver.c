@@ -166,6 +166,7 @@ void Button_ENC_set(int value)
 
 void Button_set_states()
 {
+	//get button states from Reg0 and write tobutton state vars
 	if(reg_read & 0x08) buttons.state[btn_up] = 1;
 	else buttons.state[btn_up] = 0;
 	if(reg_read & 0x10) buttons.state[btn_down] = 1;
@@ -180,24 +181,34 @@ void Button_set_states()
 
 void Button_set_press()
 {
+	//do for every Button
 	for(int i = 0; i < 5; i++)
 	{
+		//if button was just released
 		if(!buttons.state[i] && buttons.state_last[i])
 		{
+			//if counter has been counting up for set time
 			if(buttons.count[i] > LONG_PRESS_TIME)
 			{
+				//long press
 				buttons.press[i] = 2;
 			}
+			//else if no other press was detected
 			else if(buttons.press[i] == 0)
 			{
+				//short press
 				buttons.press[i] = 1;
 			}
+			//reset counter
 			buttons.count[i] = 0;
 		}
+		//if button is held down
 		if(buttons.state[i])
 		{
+			//count up
 			buttons.count[i]++;
 		}
+		//state_last = state for debouncing
 		buttons.state_last[i] = buttons.state[i];
 	}
 }
@@ -210,6 +221,7 @@ int Button_get_press(int button_select)
 		//If able, take semaphore, otherwise try again for 10 Ticks
 		if( xSemaphoreTake( xBTSemaphore, ( TickType_t ) 10 ) == pdTRUE )
 	    {
+			//return the value press of selected button using temporary var
 			int press_temp = buttons.press[button_select];
 			buttons.press[button_select] = 0;
 			xSemaphoreGive( xBTSemaphore );
@@ -227,6 +239,7 @@ void Button_reset_all_states()
 		//If able, take semaphore, otherwise try again for 10 Ticks
 		if( xSemaphoreTake( xBTSemaphore, ( TickType_t ) 10 ) == pdTRUE )
 	    {
+			//set everything to 0
 			for(int i = 0; i < 5; i++)
 			{
 				buttons.state[i] = 0;

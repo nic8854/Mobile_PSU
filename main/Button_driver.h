@@ -3,12 +3,14 @@
 
 #include "IO_driver.h"
 
+//defines for which array element is which button
 #define btn_up      0
 #define btn_down    1
 #define btn_left    2
 #define btn_right   3
 #define btn_sel     4
 
+//struct for all button vars
 typedef struct {
     bool state[5];
     bool state_last[5];
