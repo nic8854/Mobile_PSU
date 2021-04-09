@@ -25,5 +25,6 @@ void Button_ENC_set(int value);
 void Button_set_states();
 void Button_set_press();
 int Button_get_press(int button_select);
+void Button_reset_all_states();
 
 #endif

@@ -9,6 +9,8 @@
 
 static const char *TAG = "Button_driver";
 
+#define LONG_PRESS_TIME 50; //  1 = 10ms
+
 SemaphoreHandle_t xBTSemaphore;
 
 //expander vars
@@ -46,12 +48,14 @@ void Button_handler(void *pvParameters)
 
 				//set button states vars to button states from reg 0 var
 				Button_set_states();
-
-				xSemaphoreGive( xBTSemaphore );
-
-				
 				//set button press vars from count and states
 				Button_set_press();
+
+				xSemaphoreGive( xBTSemaphore );
+				
+				
+				
+				
 				
 				//Encoder Logic (counter)
 				if(CLK_state != CLK_state_last)
@@ -129,12 +133,35 @@ uint8_t Button_read_reg_0()
 
 int Button_ENC_get()
 {
-	return ENC_counter;
+	int ENC_temp = 0;
+	//If semaphore is initialized
+	if( xBTSemaphore != NULL )
+	{
+		//If able, take semaphore, otherwise try again for 10 Ticks
+		if( xSemaphoreTake( xBTSemaphore, ( TickType_t ) 10 ) == pdTRUE )
+	    {
+			ENC_temp = ENC_counter;
+			xSemaphoreGive( xBTSemaphore );
+			return ENC_temp;
+		}
+		ESP_LOGE(TAG, "Could not take Semaphore");
+	}
+	return 0;
 }
 
 void Button_ENC_set(int value)
 {
-	ENC_counter = value;
+	//If semaphore is initialized
+	if( xBTSemaphore != NULL )
+	{
+		//If able, take semaphore, otherwise try again for 10 Ticks
+		if( xSemaphoreTake( xBTSemaphore, ( TickType_t ) 10 ) == pdTRUE )
+	    {
+			ENC_counter = value;
+			xSemaphoreGive( xBTSemaphore );
+		}
+		ESP_LOGE(TAG, "Could not take Semaphore");
+	}
 }
 
 void Button_set_states()
@@ -157,7 +184,7 @@ void Button_set_press()
 	{
 		if(!buttons.state[i] && buttons.state_last[i])
 		{
-			if(buttons.count[i] > 100)
+			if(buttons.count[i] > LONG_PRESS_TIME)
 			{
 				buttons.press[i] = 2;
 			}
@@ -177,7 +204,37 @@ void Button_set_press()
 
 int Button_get_press(int button_select)
 {
-	int press_temp = buttons.press[button_select];
-	buttons.press[button_select] = 0;
-	return press_temp;
+	//If semaphore is initialized
+	if( xBTSemaphore != NULL )
+	{
+		//If able, take semaphore, otherwise try again for 10 Ticks
+		if( xSemaphoreTake( xBTSemaphore, ( TickType_t ) 10 ) == pdTRUE )
+	    {
+			int press_temp = buttons.press[button_select];
+			buttons.press[button_select] = 0;
+			xSemaphoreGive( xBTSemaphore );
+			return press_temp;
+		}
+	}
+	return 0;
+}
+
+void Button_reset_all_states()
+{
+	//If semaphore is initialized
+	if( xBTSemaphore != NULL )
+	{
+		//If able, take semaphore, otherwise try again for 10 Ticks
+		if( xSemaphoreTake( xBTSemaphore, ( TickType_t ) 10 ) == pdTRUE )
+	    {
+			for(int i = 0; i < 5; i++)
+			{
+				buttons.state[i] = 0;
+    			buttons.state_last[i] = 0;
+    			buttons.count[i] = 0;
+    			buttons.press[i] = 0;
+			}
+			xSemaphoreGive( xBTSemaphore );
+		}
+	}
 }
