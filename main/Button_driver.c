@@ -9,7 +9,7 @@
 
 static const char *TAG = "Button_driver";
 
-#define LONG_PRESS_TIME 50; //  1 = 10ms
+#define LONG_PRESS_TIME 50 //  1 = 10ms
 
 SemaphoreHandle_t xBTSemaphore;
 
@@ -69,7 +69,7 @@ void Button_handler(void *pvParameters)
 			}
 			else
 			{
-				ESP_LOGE(TAG, "Could not take Semaphore");
+				ESP_LOGE(TAG, "Could not take Semaphore(main");
 			}
 		}
 		vTaskDelay(10 / portTICK_PERIOD_MS);	
@@ -105,7 +105,7 @@ void Button_write_reg_1(uint8_t write_value)
 		}
 		else
 		{
-			ESP_LOGE(TAG, "Could not take Semaphore");
+			ESP_LOGE(TAG, "Could not take Semaphore (write reg1)");
 		}
 	}
 }
@@ -125,7 +125,7 @@ uint8_t Button_read_reg_0()
 		}
 		else
 		{
-			ESP_LOGE(TAG, "Could not take Semaphore");
+			ESP_LOGE(TAG, "Could not take Semaphore (read reg0)");
 		}
 	}
 	return 0;
@@ -144,7 +144,7 @@ int Button_ENC_get()
 			xSemaphoreGive( xBTSemaphore );
 			return ENC_temp;
 		}
-		ESP_LOGE(TAG, "Could not take Semaphore");
+		ESP_LOGE(TAG, "Could not take Semaphore (ENC get)");
 	}
 	return 0;
 }
@@ -160,7 +160,7 @@ void Button_ENC_set(int value)
 			ENC_counter = value;
 			xSemaphoreGive( xBTSemaphore );
 		}
-		ESP_LOGE(TAG, "Could not take Semaphore");
+		ESP_LOGE(TAG, "Could not take Semaphore(ENC set)");
 	}
 }
 

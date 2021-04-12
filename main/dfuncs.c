@@ -440,3 +440,28 @@ void DF_print_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t 
 	}
 }
 
+void DF_print_triangle(uint16_t xc, uint16_t yc, uint16_t w, uint16_t h, uint16_t angle, uint16_t color) 
+{
+        double xd,yd,rd;
+        int x1,y1;
+        int x2,y2;
+        int x3,y3;
+        rd = -angle * M_PI / 180.0;
+        xd = 0.0;
+        yd = h/2;
+        x1 = (int)(xd * cos(rd) - yd * sin(rd) + xc);
+        y1 = (int)(xd * sin(rd) + yd * cos(rd) + yc);
+
+        xd = w/2;
+        yd = 0.0 - yd;
+        x2 = (int)(xd * cos(rd) - yd * sin(rd) + xc);
+        y2 = (int)(xd * sin(rd) + yd * cos(rd) + yc);
+
+        xd = 0.0 - w/2;
+        x3 = (int)(xd * cos(rd) - yd * sin(rd) + xc);
+        y3 = (int)(xd * sin(rd) + yd * cos(rd) + yc);
+
+        DF_print_line(x1, y1, x2, y2, color);
+        DF_print_line(x1, y1, x3, y3, color);
+        DF_print_line(x2, y2, x3, y3, color);
+}

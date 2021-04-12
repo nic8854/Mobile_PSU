@@ -17,6 +17,10 @@
 //Tag for ESP_LOG functions
 static const char *TAG = "PSU_main";
 
+#define Max_P_mW 25
+#define Max_U_mV 7
+#define Max_I_mA 5
+
 //define I2C Pins
 #define I2C_PORT 0
 #define SDA_GPIO 21
@@ -58,10 +62,28 @@ void PSU_main(void *pvParameters)
 	uint8_t button_last_3 = 0;
 	uint8_t button_last_4 = 0;
 	uint8_t button_last_5 = 0;
+	double power_val = 0;
+	double voltage_val = 0;
 	double current_val = 0;
-	double shunt_val = 0;
+	bool output_val = 0;
 	int ENC_value = 0;
+	uint16_t p_val[100];
+	uint16_t u_val[100];
+	uint16_t i_val[100];
+	int select = 0;
 
+	for(int i = 0; i < 100; i++)
+	{
+		p_val[i] = 0; 
+	}
+	for(int i = 0; i < 100; i++)
+	{
+		u_val[i] = 0; 
+	}
+	for(int i = 0; i < 100; i++)
+	{
+		i_val[i] = 0; 
+	}
 	
 	while(1) 
 	{
@@ -69,8 +91,32 @@ void PSU_main(void *pvParameters)
 		ESP_LOGW(TAG, "Button Up = %d", UI_get_press(up));
 		//get values to Display
 		in_value = Button_read_reg_0();
+		power_val = INAD_getPower_mW(INA1);
+		voltage_val = INAD_getVShunt_mv(INA1);
 		current_val = INAD_getCurrent_mA(INA1);
-		shunt_val = INAD_getVShunt_mv(INA1);
+
+		if(in_value & 0x04) select++;
+		if(select == 4) select = 0;
+
+		//---------------------------------------------------p_val for statistics
+		for(int i = 0; i < 50; i++)
+		{
+			p_val[i] = p_val[i+1]; 
+		}
+		//---------------------------------------------------u_val for statistics
+		p_val[49] = (power_val/Max_P_mW*60);
+		for(int i = 0; i < 50; i++)
+		{
+			u_val[i] = u_val[i+1]; 
+		}
+		//---------------------------------------------------i_val for statistics
+		u_val[49] = (voltage_val/Max_U_mV*60);
+		for(int i = 0; i < 50; i++)
+		{
+			i_val[i] = i_val[i+1]; 
+		}
+		i_val[49] = (current_val/Max_I_mA*60);
+
 		//---------------------------------------------------TC_EN
 		if(in_value & 0x08 && !button_last_1)
 		{
@@ -102,6 +148,7 @@ void PSU_main(void *pvParameters)
 		{
 			UI_GPIO_set(LED_0, 1);
 			out_value = out_value ^ 0x10; //does not set EN_IN directly
+			output_val =!output_val;
 			vTaskDelay(50 / portTICK_PERIOD_MS);
 			UI_GPIO_set(LED_0, 0);
 			button_last_3 = 1;
@@ -172,7 +219,40 @@ void PSU_main(void *pvParameters)
 		ESP_LOGW(__FUNCTION__, "Expander Read Reg 0 = 0b"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(in_value));
 		ESP_LOGW(__FUNCTION__, "Expander Write Reg 1 = 0b"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(out_value));
 		//Draw UI
-		UI_draw_test_screen(in_value, out_value, current_val, shunt_val, ENC_value);
+
+		switch(ENC_value)
+		{
+			case -1:
+				Button_ENC_set(6);
+			break;
+			case 0:
+				UI_draw_main_screen(power_val, voltage_val, current_val, output_val);
+			break;
+			case 1:
+				UI_draw_voltages_screen(42.0, 6.9, 4.2, 69.0, output_val);
+			break;
+			case 2:
+				UI_draw_variable_screen(42.0, 6.9, (select%2), output_val);
+			break;
+			case 3:
+				UI_draw_statistics_screen(p_val, 0, select, output_val);
+			break;
+			case 4:
+				UI_draw_statistics_screen(u_val, 1, select, output_val);
+			break;
+			case 5:
+				UI_draw_statistics_screen(i_val, 2, select, output_val);
+			break;
+			case 6:
+				UI_draw_calibrate_screen(1.064, 0.654, 0.154, 1.674, select);
+			break;
+			default:
+				Button_ENC_set(0);
+			break;
+
+
+		}
+		
 		//Update Display
 		UI_Update();
 
@@ -181,7 +261,7 @@ void PSU_main(void *pvParameters)
 
 		//Display free Heap size
 		ESP_LOGI(__FUNCTION__, "Free Heap size: %d\n", xPortGetFreeHeapSize());
-		vTaskDelay(10 / portTICK_PERIOD_MS);
+		vTaskDelay(5 / portTICK_PERIOD_MS);
 	
 	} // end while
 

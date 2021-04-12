@@ -34,6 +34,6 @@ void DF_VlcdUpdate(TFT_t * dev);
 void DF_print_rect(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
 void DF_print_fill_screen(uint16_t color);
 void DF_print_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
-
+void DF_print_triangle(uint16_t xc, uint16_t yc, uint16_t w, uint16_t h, uint16_t angle, uint16_t color);
 
 #endif
