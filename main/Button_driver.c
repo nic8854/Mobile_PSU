@@ -213,6 +213,12 @@ void Button_set_press()
 	}
 }
 
+/**
+ * get press state of selected button
+ * @param button_select Selects which buttons value to return
+ * @return returns button state as an int. 0 = no press, 1 = short press, 2 = long press
+ * @endcode
+ */
 int Button_get_press(int button_select)
 {
 	//If semaphore is initialized

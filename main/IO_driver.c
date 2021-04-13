@@ -120,6 +120,12 @@ void IO_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 	ESP_LOGI(TAG, "--> IO_driver initialized successfully");
 }
 
+/**
+ * Sets levels of Reg 1.
+ * @param write_value Bit Pattern to set Reg 1 to.
+ * @return returns state of GPIO as an int
+ * @endcode
+ */
 void IO_exp_write_reg_1(uint8_t write_value)
 {
 	if( xIO_Semaphore != NULL )
@@ -137,6 +143,11 @@ void IO_exp_write_reg_1(uint8_t write_value)
 	}
 }
 
+/**
+ * Gets levels of reg 0
+ * @return returns states of reg 0 as a bit pattern
+ * @endcode
+ */
 uint8_t IO_exp_read_reg_0()
 {
 	if( xIO_Semaphore != NULL )
@@ -156,6 +167,12 @@ uint8_t IO_exp_read_reg_0()
 	return 0;
 }
 
+/**
+ * Sets level of specified GPIO Pin.
+ * @param GPIO_Num selects GPIO from a List of defines(see header)
+ * @param GPIO_state selects what state the GPIO should change to (HIGH or LOW)
+ * @endcode
+ */
 void IO_GPIO_set(uint8_t GPIO_Num, bool GPIO_state)
 {
 	if( xIO_Semaphore != NULL )
@@ -177,6 +194,13 @@ void IO_GPIO_set(uint8_t GPIO_Num, bool GPIO_state)
 	}
 }
 
+/**
+ * Linking Function to IO driver
+ * Gets level of specified GPIO Pin.
+ * @param GPIO_Num selects GPIO from a List of defines(see header)
+ * @return returns state of GPIO as an int
+ * @endcode
+ */
 int IO_GPIO_get(uint8_t GPIO_Num)
 {
 	int GPIO_state = 0;
@@ -198,6 +222,11 @@ int IO_GPIO_get(uint8_t GPIO_Num)
 	return GPIO_state;
 }
 
+/**
+ * Sets Buzzer PWM to specified frequency
+ * @param freq set frequency. Needs to be within 100 - 10000Hz.
+ * @endcode
+ */
 void IO_Buzzer_PWM(int freq)
 {
 	//check if Frequency is within Range
@@ -206,6 +235,12 @@ void IO_Buzzer_PWM(int freq)
 		ledc_set_freq(ledc_channel.speed_mode, ledc_timer.timer_num, freq);
 	}
 }
+
+/**
+ * Sets Buzzer PWM to on or off
+ * @param power sets power state. 1 = on, 0 = off.
+ * @endcode
+ */
 void IO_Buzzer_power(bool power)
 {
 	if(power)

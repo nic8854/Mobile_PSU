@@ -46,7 +46,17 @@ int led_test_colors[5][3] ={
 }; 
 
 
-
+/**
+ * Initializiation function for display, Buttons and RGB LEDs. Starts SPI target for Display. Also draws boot screen
+ * Starts Button_init() and APA102_init().
+ * 
+ * @param I2C_PORT sets I2c_port
+ * @param SDA_GPIO sets SDA GPIO
+ * @param SCL_GPIO sets SCL GPIO
+ *  
+ * @endcode
+ * \ingroup UI_draw
+ */
 void UI_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 {
 	InitFontx(fx16G,"/spiffs/ILGH16XB.FNT",""); // 8x16Dot Gothic
@@ -179,6 +189,19 @@ void UI_draw_test_screen(uint8_t in_value, uint8_t out_value, double current_val
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 }
 
+/**
+ * Function to generate a variable Screen using the dfuncs library.
+ *
+ * Display must be initialized to use this function. Initialize using UI_init.
+ * 
+ * @param power_val Input power value in Watts.
+ * @param voltage_val Input voltage value in Volts.
+ * @param current_val Input current value in Amps.
+ * @param output_val Sets output display to on or off(1 or 0).
+ *  
+ * @endcode
+ * \ingroup UI_draw
+ */
 void UI_draw_main_screen(double power_val, double voltage_val, double current_val, bool output_val)
 {
 	strcpy(file, "/spiffs/background.png");
@@ -233,6 +256,20 @@ void UI_draw_main_screen(double power_val, double voltage_val, double current_va
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 }
 
+/**
+ * Function to generate a variable Screen using the dfuncs library.
+ *
+ * Display must be initialized to use this function. Initialize using UI_init.
+ * 
+ * @param out24_val 24V output value in Volts.
+ * @param out5_val 5V output value in Volts.
+ * @param outvar_val Variable Output Value in Volts
+ * @param out33_val 3.3V output value in Volts.
+ * @param output_val Sets output display to on or off(1 or 0).
+ *  
+ * @endcode
+ * \ingroup UI_draw
+ */
 void UI_draw_voltages_screen(double out24_val, double out5_val, double outvar_val, double out33_val, bool output_val)
 {
 	strcpy(file, "/spiffs/background.png");
@@ -301,6 +338,19 @@ void UI_draw_voltages_screen(double out24_val, double out5_val, double outvar_va
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 }
 
+/**
+ * Function to generate a variable Screen using the dfuncs library.
+ *
+ * Display must be initialized to use this function. Initialize using UI_init.
+ * 
+ * @param uset_val The set value of the variable out in Volts.
+ * @param ueff_val The effective value of the varible out in Volts.
+ * @param select_val Value to select which parameter should be selected. Draws Rectangle around selected Value.
+ * @param output_val Sets output display to on or off(1 or 0).
+ *  
+ * @endcode
+ * \ingroup UI_draw
+ */
 void UI_draw_variable_screen(double uset_val, double ueff_val, int select_val, bool output_val)
 {
 	strcpy(file, "/spiffs/background.png");
@@ -348,6 +398,19 @@ void UI_draw_variable_screen(double uset_val, double ueff_val, int select_val, b
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 }
 
+/**
+ * Function to generate a Statistics Screen using the dfuncs library.
+ *
+ * Display must be initialized to use this function. Initialize using UI_init.
+ * 
+ * @param p_val Array of 100 values, that should be displayed on display. Values need to be scaled from 0-60.
+ * @param value_select Selects between Power, Voltage and Current. Only changes displayed value.
+ * @param division_select Selects the value for the divisions.
+ * @param output_val Selects if output is on or off(1 or 0).
+ *  
+ * @endcode
+ * \ingroup UI_draw
+ */
 void UI_draw_statistics_screen(uint16_t p_val[100], int value_select, int division_select, bool output_val)
 {
 	int factor = 1;
@@ -504,7 +567,20 @@ void UI_draw_statistics_screen(uint16_t p_val[100], int value_select, int divisi
 	if(!output_val)strcpy((char *)ascii, "OUTPUT OFF");
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 }
-
+/**
+ * Function to generate a Calibration Screen using the dfuncs library.
+ *
+ * Display must be initialized to use this function. Initialize using UI_init.
+ * 
+ * @param INA1_S The Shunt Value in Ohms for INA 1.
+ * @param INA1_A Max Current Value in mA for INA 1.
+ * @param INA2_S The Shunt Value in Ohms for INA 2.
+ * @param INA2_A Max Current Value in mA for INA 2.
+ * @param select_val Value to select which parameter should be selected. Draws Rectangle around slected Value.
+ *  
+ * @endcode
+ * \ingroup UI_draw
+ */
 void UI_draw_calibrate_screen(double INA1_S, double INA1_A, double INA2_S, double INA2_A, int select_val)
 {
 	strcpy(file, "/spiffs/background.png");
@@ -560,47 +636,92 @@ void UI_draw_calibrate_screen(double INA1_S, double INA1_A, double INA2_S, doubl
 	}
 	color = WHITE;
 }
-//Linking Function to Dfuncs
+/**
+ * Linking Function to Dfuncs
+ * Updates LCD from Virtual Screen
+ * @endcode
+ */
 void UI_Update()
 {
 	DF_VlcdUpdate(&dev);
 }
 
-//Linking Function to IO_driver
+/**
+ * Linking Function to IO driver
+ * Sets level of specified GPIO Pin.
+ * @param GPIO_Num selects GPIO from a List of defines(see header)
+ * @param GPIO_state selects what state the GPIO should change to (HIGH or LOW)
+ * @endcode
+ */
 void UI_GPIO_set(uint8_t GPIO_Num, bool GPIO_state)
 {
 	IO_GPIO_set(GPIO_Num, GPIO_state);
 }
 
-//Linking Function to IO_driver
+/**
+ * Linking Function to IO driver
+ * Gets level of specified GPIO Pin.
+ * @param GPIO_Num selects GPIO from a List of defines(see header)
+ * @return returns state of GPIO as an int
+ * @endcode
+ */
 int UI_GPIO_get(uint8_t GPIO_Num)
 {
 	return IO_GPIO_get(GPIO_Num);
 }
 
-//Linking Function to Expander_driver
+/**
+ * Linking Function to Expander driver
+ * Sets levels of Reg 1.
+ * @param write_value Bit Pattern to set Reg 1 to.
+ * @return returns state of GPIO as an int
+ * @endcode
+ */
 void UI_exp_write_reg_1(uint8_t write_value)
 {
 	IO_exp_write_reg_1(write_value);
 }
 
-//Linking Function to Expander_driver
+/**
+ * Linking Function to Expander driver
+ * Gets levels of reg 0
+ * @return returns states of reg 0 as a bit pattern
+ * @endcode
+ */
 uint8_t UI_exp_read_reg_0()
 {
 	return IO_exp_read_reg_0();
 }
 
-//Linking Function to Button_driver
+/**
+ * Linking Function to Button driver
+ * get press state of selected button
+ * @param button_select Selects which buttons value to return
+ * @return returns button state as an int. 0 = no press, 1 = short press, 2 = long press
+ * @endcode
+ */
 int UI_get_press(int button_select)
 {
 	return Button_get_press(button_select);
 }
 
+/**
+ * Linking Function to IO driver
+ * Sets Buzzer PWM to specified frequency
+ * @param freq set frequency. Needs to be within 100 - 10000Hz.
+ * @endcode
+ */
 void UI_Buzzer_PWM(int freq)
 {
 	IO_Buzzer_PWM(freq);
 }
 
+/**
+ * Linking Function to IO driver
+ * Sets Buzzer PWM to on or off
+ * @param power sets power state. 1 = on, 0 = off.
+ * @endcode
+ */
 void UI_Buzzer_power(bool power)
 {
 	IO_Buzzer_power(power);

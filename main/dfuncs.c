@@ -356,6 +356,10 @@ void DF_print_png_finish(pngle_t *pngle)
 	ESP_LOGD(__FUNCTION__, "print_png_finish");
 }
 
+/**
+ * Updates LCD from Virtual Screen
+ * @endcode
+ */
 void DF_VlcdUpdate(TFT_t * dev)
 {
 	uint16_t pngHeight = 160;
