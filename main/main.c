@@ -235,13 +235,13 @@ void PSU_main(void *pvParameters)
 				UI_draw_variable_screen(42.0, 6.9, (select%2), output_val);
 			break;
 			case 3:
-				UI_draw_statistics_screen(p_val, 0, select, output_val);
+				UI_draw_statistics_screen(p_val, 0, select, 0, output_val);
 			break;
 			case 4:
-				UI_draw_statistics_screen(u_val, 1, select, output_val);
+				UI_draw_statistics_screen(u_val, 1, select, 1, output_val);
 			break;
 			case 5:
-				UI_draw_statistics_screen(i_val, 2, select, output_val);
+				UI_draw_statistics_screen(i_val, 2, select, 0, output_val);
 			break;
 			case 6:
 				UI_draw_calibrate_screen(1.064, 0.654, 0.154, 1.674, select);

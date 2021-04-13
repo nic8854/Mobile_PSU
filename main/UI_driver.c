@@ -404,14 +404,15 @@ void UI_draw_variable_screen(double uset_val, double ueff_val, int select_val, b
  * Display must be initialized to use this function. Initialize using UI_init.
  * 
  * @param p_val Array of 100 values, that should be displayed on display. Values need to be scaled from 0-60.
- * @param value_select Selects between Power, Voltage and Current. Only changes displayed value.
+ * @param screen_select Selects between Power, Voltage and Current. Only changes displayed value.
  * @param division_select Selects the value for the divisions.
+ * @param select_val Value to select which parameter should be selected. Draws Rectangle around selected Value.
  * @param output_val Selects if output is on or off(1 or 0).
  *  
  * @endcode
  * \ingroup UI_draw
  */
-void UI_draw_statistics_screen(uint16_t p_val[100], int value_select, int division_select, bool output_val)
+void UI_draw_statistics_screen(uint16_t p_val[100], int screen_select, int division_select, int select_val, bool output_val)
 {
 	int factor = 1;
 
@@ -424,7 +425,8 @@ void UI_draw_statistics_screen(uint16_t p_val[100], int value_select, int divisi
 	strcpy((char *)ascii, "Statistics");
 	DF_print_string(&dev, fx24G, xpos, ypos, ascii, color);
 
-	switch(value_select)
+	//select if power, volts, or current
+	switch(screen_select)
 	{
 		case 0:
 			xpos = 20;
@@ -433,22 +435,23 @@ void UI_draw_statistics_screen(uint16_t p_val[100], int value_select, int divisi
 			DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 			xpos = 10;
 			ypos = 68;
+			//selects what division to use
 			switch(division_select)
 			{
 				case 0:
-					strcpy((char *)ascii, "W  3W/5ms/div");
+					strcpy((char *)ascii, "W  3W/2s/div");
 					factor = 1;
 				break;
 				case 1:
-					strcpy((char *)ascii, "W  1W/5ms/div");
+					strcpy((char *)ascii, "W  1W/2s/div");
 					factor = 3;
 				break;
 				case 2:
-					strcpy((char *)ascii, "W 0.5W/5ms/div");
+					strcpy((char *)ascii, "W 0.5W/2s/div");
 					factor = 6;
 				break;
 				case 3:
-					strcpy((char *)ascii, "W 0.25W/5ms/div");
+					strcpy((char *)ascii, "W 1/4W/2s/div");
 					factor = 12;
 				break;
 			}
@@ -461,22 +464,23 @@ void UI_draw_statistics_screen(uint16_t p_val[100], int value_select, int divisi
 			DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 			xpos = 10;
 			ypos = 68;
+			//selects what division to use
 			switch(division_select)
 			{
 				case 0:
-					strcpy((char *)ascii, "V  5V/ms/div");
+					strcpy((char *)ascii, "V  5V/2s/div");
 					factor = 1;
 				break;
 				case 1:
-					strcpy((char *)ascii, "V 2.5V/ms/div");
+					strcpy((char *)ascii, "V 2.5V/2s/div");
 					factor = 2;
 				break;
 				case 2:
-					strcpy((char *)ascii, "V  1V/ms/div");
+					strcpy((char *)ascii, "V  1V/2s/div");
 					factor = 5;
 				break;
 				case 3:
-					strcpy((char *)ascii, "V 0.5V/ms/div");
+					strcpy((char *)ascii, "V 0.5V/2s/div");
 					factor = 10;
 				break;
 			}
@@ -489,22 +493,23 @@ void UI_draw_statistics_screen(uint16_t p_val[100], int value_select, int divisi
 			DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 			xpos = 10;
 			ypos = 68;
+			//selects what division to use
 			switch(division_select)
 			{
 				case 0:
-					strcpy((char *)ascii, "A  1A/ms/div");
+					strcpy((char *)ascii, "A  1A/2s/div");
 					factor = 1;
 				break;
 				case 1:
-					strcpy((char *)ascii, "A 500mA/ms/div");
+					strcpy((char *)ascii, "A 500mA/2s/div");
 					factor = 2;
 				break;
 				case 2:
-					strcpy((char *)ascii, "A 250mA/ms/div");
+					strcpy((char *)ascii, "A 250mA/2s/div");
 					factor = 4;
 				break;
 				case 3:
-					strcpy((char *)ascii, "A 100mA/ms/div");
+					strcpy((char *)ascii, "A 100mA/2s/div");
 					factor = 10;
 				break;
 			}
@@ -522,7 +527,6 @@ void UI_draw_statistics_screen(uint16_t p_val[100], int value_select, int divisi
 	ypos = 130;
 	strcpy((char *)ascii, "t");
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
-
 
 	DF_print_line(15, 70, 15, 130, color);
 	DF_print_line(15, 130, 115, 130, color);
@@ -544,6 +548,7 @@ void UI_draw_statistics_screen(uint16_t p_val[100], int value_select, int divisi
 		}
 	}
 
+	//draw graph
 	color = 0xFFF6;
 	for(int i = 0; i < 50; i++)
 	{
@@ -555,11 +560,15 @@ void UI_draw_statistics_screen(uint16_t p_val[100], int value_select, int divisi
 			DF_print_Vpixel((i*2 + 16), (130-(p_val_temp*factor)), color);
 		}
 	}
+
+	if(!select_val) DF_print_rect(20, 52, 118, 67, color);
+	if(select_val) DF_print_rect(5, 138, 120, 155, color);
+
 	color = WHITE;
 	DF_print_line(7, 75, 7, 88, color);
 	DF_print_line(7, 75, 1, 81, color);
 	DF_print_line(7, 88, 1, 81, color);
-	if(value_select < 2) DF_print_triangle(123, 80, 15, 7, 90, color);
+	if(screen_select < 2) DF_print_triangle(123, 80, 15, 7, 90, color);
 	xpos = 25;
 	ypos = 155;
 	color = 0xFFF6;

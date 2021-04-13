@@ -23,7 +23,7 @@ void UI_draw_test_screen(uint8_t in_value, uint8_t out_value, double current_val
 void UI_draw_main_screen(double power_val, double voltage_val, double current_val, bool output_val);
 void UI_draw_voltages_screen(double out24_val, double out5_val, double outvar_val, double out33_val, bool output_val);
 void UI_draw_variable_screen(double uset_val, double ueff_val, int select_val, bool output_val);
-void UI_draw_statistics_screen(uint16_t p_val[100], int value_select, int division_select, bool output_val);
+void UI_draw_statistics_screen(uint16_t p_val[100], int screen_select, int division_select, int select_val, bool output_val);
 void UI_draw_calibrate_screen(double INA1_S, double INA1_A, double INA2_S, double INA2_A, int select_val);
 
 void UI_Update();
