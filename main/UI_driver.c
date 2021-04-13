@@ -50,9 +50,9 @@ int led_test_colors[5][3] ={
  * Initializiation function for display, Buttons and RGB LEDs. Starts SPI target for Display. Also draws boot screen
  * Starts Button_init() and APA102_init().
  * 
- * @param I2C_PORT sets I2c_port
- * @param SDA_GPIO sets SDA GPIO
- * @param SCL_GPIO sets SCL GPIO
+ * @param I2C_PORT sets I2c_port for Button init
+ * @param SDA_GPIO sets SDA GPIO for Button init
+ * @param SCL_GPIO sets SCL GPIO for Button init
  *  
  * @endcode
  * \ingroup UI_draw

@@ -13,6 +13,7 @@ static const char *TAG = "IO_Driver";
 expander_t dev_port_expander;
 conf_t config = Default_Config;
 
+//define for GPIO Pins
 #define GPIO_OUTPUT_IO_0    2
 #define GPIO_OUTPUT_IO_1    26
 #define GPIO_OUTPUT_IO_Buzzer   4
@@ -20,6 +21,7 @@ conf_t config = Default_Config;
 #define GPIO_INPUT_IO_CLK   15
 #define GPIO_OUTPUT_PIN_SEL  ((1ULL<<GPIO_OUTPUT_IO_0) | (1ULL<<GPIO_OUTPUT_IO_1))
 
+//Timer for PWM defines
 #define LEDC_LS_TIMER          LEDC_TIMER_0
 #define LEDC_LS_MODE           LEDC_LOW_SPEED_MODE
 #define LEDC_LS_CH0_GPIO       GPIO_OUTPUT_IO_Buzzer
@@ -45,7 +47,12 @@ bool GPIO_Buzzer_state = 0;
 int GPIO_DT_state = 0;
 int GPIO_CLK_state = 0;
 
-//Task
+/**
+ * Main Task in IO_driver Library. Handles GPIO and Expander Input, Outputs and PWM for Buzzer.
+ * @param pvParameters usused
+ * @endcode
+ * \ingroup UI_draw
+ */
 void IO_handler(void *pvParameters)
 {
 	while(1)
@@ -74,6 +81,16 @@ void IO_handler(void *pvParameters)
 	}
 }
 
+/**
+ * Initialization function for GPIOs, Buzzer and Expander(Expander handled in seperate Function).
+ * 
+ * @param I2C_PORT sets I2c_port
+ * @param SDA_GPIO sets SDA GPIO
+ * @param SCL_GPIO sets SCL GPIO
+ *  
+ * @endcode
+ * \ingroup UI_draw
+ */
 void IO_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 {	
 	//Set memory containing dev_port_expander to 0
@@ -112,7 +129,7 @@ void IO_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
     ledc_channel.speed_mode = LEDC_LS_MODE;
     ledc_channel.hpoint     = 0;
     ledc_channel.timer_sel  = LEDC_LS_TIMER;
-	
+	//write COnfig
 	ledc_channel_config(&ledc_channel);
 
 	//Create main Task

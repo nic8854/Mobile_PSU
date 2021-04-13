@@ -7,18 +7,21 @@
 #include "IO_driver.h"
 #include "Button_driver.h"
 
+//Tag for ESP_LOG functions
 static const char *TAG = "Button_driver";
 
+//defines the time it takes for a long press to be registered
 #define LONG_PRESS_TIME 50 //  1 = 10ms
 
+//Create Semaphore
 SemaphoreHandle_t xBTSemaphore;
 
 //expander vars
 uint8_t reg_read = 0;
 uint8_t return_value = 0;
 uint8_t reg_write = 0;
-//button vars
 
+//button vars
 button_states buttons;
 
 //encoder vars
@@ -27,7 +30,13 @@ int CLK_state = 0;
 int CLK_state_last = 0;
 int ENC_counter = 0;
 
-//Task
+/**
+ * Main Button Driver Task. Handles long and short press recognition for buttons and converts encoder signals into usable Numbers.
+ * 
+ * @param pvParameters unused
+ *  
+ * @endcode
+ */
 void Button_handler(void *pvParameters)
 {
 	while(1)
@@ -77,6 +86,15 @@ void Button_handler(void *pvParameters)
 	
 }
 
+/**
+ * Initializiation function for the Button driver. Initializes the IO driver and creates the Button driver task.
+ * 
+ * @param I2C_PORT sets I2c_port
+ * @param SDA_GPIO sets SDA GPIO
+ * @param SCL_GPIO sets SCL GPIO
+ *  
+ * @endcode
+ */
 void Button_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 {	
 	//Create Mutex
@@ -91,6 +109,13 @@ void Button_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 	
 }
 
+/**
+ * Writes Bit Values of Reg1 using a uint8_t Bitmask.
+ * 
+ * @param write_value value to write to Reg1
+ *  
+ * @endcode
+ */
 void Button_write_reg_1(uint8_t write_value)
 {
 	//If semaphore is initialized
@@ -110,6 +135,13 @@ void Button_write_reg_1(uint8_t write_value)
 	}
 }
 
+/**
+ * Reads Reg0 from Expander and returns it as uint8_t.
+ * 
+ * @return Reg0 values as a Bit Pattern.
+ *  
+ * @endcode
+ */
 uint8_t Button_read_reg_0()
 {
 	//If semaphore is initialized
@@ -131,6 +163,13 @@ uint8_t Button_read_reg_0()
 	return 0;
 }
 
+/**
+ * Returns the value of the encoder counter.
+ * 
+ * @return Returns Counter value as an Intiture
+ *  
+ * @endcode
+ */
 int Button_ENC_get()
 {
 	int ENC_temp = 0;
@@ -149,6 +188,13 @@ int Button_ENC_get()
 	return 0;
 }
 
+/**
+ * Sets encoder counter to specified number.
+ * 
+ * @param value value which counter should be set to
+ *  
+ * @endcode
+ */
 void Button_ENC_set(int value)
 {
 	//If semaphore is initialized
@@ -164,6 +210,13 @@ void Button_ENC_set(int value)
 	}
 }
 
+/**
+ * Returns the value of the encoder counter.
+ * 
+ * @return Returns Counter value as an Intiture
+ *  
+ * @endcode
+ */
 void Button_set_states()
 {
 	//get button states from Reg0 and write tobutton state vars
@@ -179,6 +232,12 @@ void Button_set_states()
 	else buttons.state[btn_sel] = 0;
 }
 
+/**
+ * Internal function, do not use!!
+ * Sets press variable of buttons by evaluating the state and count variables
+ *  
+ * @endcode
+ */
 void Button_set_press()
 {
 	//do for every Button
@@ -237,6 +296,11 @@ int Button_get_press(int button_select)
 	return 0;
 }
 
+/**
+ * Resets all Button states. Used when changing to new screen.
+ * 
+ * @endcode
+ */
 void Button_reset_all_states()
 {
 	//If semaphore is initialized
