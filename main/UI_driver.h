@@ -34,8 +34,12 @@ int UI_GPIO_get(uint8_t GPIO_Num);
 void UI_exp_write_reg_1(uint8_t write_value);
 uint8_t UI_exp_read_reg_0();
 int UI_get_press(int button_select);
+void UI_reset_all_states();
+int UI_get_ENC();
 void UI_Buzzer_PWM(int freq);
 void UI_Buzzer_power(bool power);
+void UI_set_LED0(bool value);
+void UI_set_RGB(uint8_t index, int bright, int red, int green, int blue);
 void led_test(bool mode);
 
 #endif

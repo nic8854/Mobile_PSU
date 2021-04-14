@@ -113,7 +113,6 @@ void UI_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 		vTaskDelay(100 / portTICK_PERIOD_MS);
 	}
     DF_VlcdUpdate(&dev);
-	//--------------------------------------------------------------
 	ESP_LOGI(TAG, "--> UI_driver initialized successfully");
 }
 
@@ -616,31 +615,47 @@ void UI_draw_calibrate_screen(double INA1_S, double INA1_A, double INA2_S, doubl
 	ypos = 115;
 	strcpy((char *)ascii, "INA2_A:");
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
-	xpos = 70;
+	xpos = 60;
 	ypos = 55;
-	if(INA1_S >= 0) DF_print_value(&dev, color, fx16G, xpos, ypos, -1, INA1_S);
-	xpos = 70;
+	if(INA1_S >= 0) DF_print_value(&dev, color, fx16G, xpos, ypos, INA1_S, -1);
+	xpos = 60;
 	ypos = 75;
-	if(INA1_A >= 0) DF_print_value(&dev, color, fx16G, xpos, ypos, -1, INA1_A);
-	xpos = 70;
+	if(INA1_A >= 0) DF_print_value(&dev, color, fx16G, xpos, ypos, INA1_A, -1);
+	xpos = 60;
 	ypos = 95;
-	if(INA2_S >= 0) DF_print_value(&dev, color, fx16G, xpos, ypos, -1, INA2_S);
-	xpos = 70;
+	if(INA2_S >= 0) DF_print_value(&dev, color, fx16G, xpos, ypos, INA2_S, -1);
+	xpos = 60;
 	ypos = 115;
-	if(INA2_A >= 0) DF_print_value(&dev, color, fx16G, xpos, ypos, -1, INA2_A);
+	if(INA2_A >= 0) DF_print_value(&dev, color, fx16G, xpos, ypos, INA2_A, -1);
+	xpos = 95;
+	ypos = 55;
+	strcpy((char *)ascii, "mOhm");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 100;
+	ypos = 75;
+	strcpy((char *)ascii, "mA");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 95;
+	ypos = 95;
+	strcpy((char *)ascii, "mOhm");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 100;
+	ypos = 115;
+	strcpy((char *)ascii, "mA");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 	switch(select_val)
 	{
 		case 0:
-			DF_print_rect(5, 38, 120, 57, color);
+			DF_print_rect(5, 38, 127, 57, color);
 		break;
 		case 1:
-			DF_print_rect(5, 58, 120, 77, color);
+			DF_print_rect(5, 58, 127, 77, color);
 		break;
 		case 2:
-			DF_print_rect(5, 78, 120, 97, color);
+			DF_print_rect(5, 78, 127, 97, color);
 		break;
 		case 3:
-			DF_print_rect(5, 98, 120, 117, color);
+			DF_print_rect(5, 98, 127, 117, color);
 		break;
 	}
 	color = WHITE;
@@ -703,7 +718,7 @@ uint8_t UI_exp_read_reg_0()
 }
 
 /**
- * Linking Function to Button driver
+ * Linking Function to Button driver.
  * get press state of selected button
  * @param button_select Selects which buttons value to return
  * @return returns button state as an int. 0 = no press, 1 = short press, 2 = long press
@@ -712,6 +727,44 @@ uint8_t UI_exp_read_reg_0()
 int UI_get_press(int button_select)
 {
 	return Button_get_press(button_select);
+}
+
+/**
+ * Linking Function to Button driver.
+ * Resets all Button states. Used when changing to new screen.
+ * 
+ * @endcode
+ */
+void UI_reset_all_states()
+{
+	Button_reset_all_states();
+}
+
+
+/**
+ * Linking Function to Button driver.
+ * Returns the value of the encoder counter.
+ * 
+ * @return Returns Counter value as an Intiture
+ *  
+ * @endcode
+ */
+int UI_get_ENC()
+{
+	return Button_get_ENC();
+}
+
+/**
+ * Linking Function to Button driver.
+ * Sets encoder counter to specified number.
+ * 
+ * @param value value which counter should be set to
+ *  
+ * @endcode
+ */
+void UI_set_ENC(int value)
+{
+	Button_set_ENC(value);
 }
 
 /**
@@ -736,6 +789,31 @@ void UI_Buzzer_power(bool power)
 	IO_Buzzer_power(power);
 }
 
+/**
+ * Linking Function to IO driver
+ * Sets LED0 to on or off
+ * @param value State as a boolean
+ * @endcode
+ */
+void UI_set_LED0(bool value)
+{
+	IO_GPIO_set(LED_0, value);
+}
+
+/**
+ * Linking Function to APA102
+ * Sets Sets color and brihtness of RGB LEDs
+ * @param index selects which LED to write to. In this case 0 or 1.
+ * @param bright sets brightness setting form 0 to 31.
+ * @param red set red channnel from 0 to 255.
+ * @param green set green channnel from 0 to 255.
+ * @param blue set blue channnel from 0 to 255.
+ * @endcode
+ */
+void UI_set_RGB(uint8_t index, int bright, int red, int green, int blue)
+{
+	setPixel(index, bright, red, green, blue);
+}
 //Function to test RGB LEDs
 void led_test(bool mode)
 {

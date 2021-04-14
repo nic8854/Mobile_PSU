@@ -11,7 +11,7 @@
 static const char *TAG = "Button_driver";
 
 //defines the time it takes for a long press to be registered
-#define LONG_PRESS_TIME 50 //  1 = 10ms
+#define LONG_PRESS_TIME 20 //  1 = 10ms
 
 //Create Semaphore
 SemaphoreHandle_t xBTSemaphore;
@@ -170,7 +170,7 @@ uint8_t Button_read_reg_0()
  *  
  * @endcode
  */
-int Button_ENC_get()
+int Button_get_ENC()
 {
 	int ENC_temp = 0;
 	//If semaphore is initialized
@@ -195,7 +195,7 @@ int Button_ENC_get()
  *  
  * @endcode
  */
-void Button_ENC_set(int value)
+void Button_set_ENC(int value)
 {
 	//If semaphore is initialized
 	if( xBTSemaphore != NULL )
@@ -220,15 +220,15 @@ void Button_ENC_set(int value)
 void Button_set_states()
 {
 	//get button states from Reg0 and write tobutton state vars
-	if(reg_read & 0x08) buttons.state[btn_up] = 1;
+	if(reg_read & 0x08) buttons.state[btn_up] = 1; 
 	else buttons.state[btn_up] = 0;
 	if(reg_read & 0x10) buttons.state[btn_down] = 1;
 	else buttons.state[btn_down] = 0;
 	if(reg_read & 0x20) buttons.state[btn_left] = 1;
 	else buttons.state[btn_left] = 0;
-	if(reg_read & 0x40) buttons.state[btn_right] = 1;
+	if(reg_read & 0x02) buttons.state[btn_right] = 1;// 0x40 for use on final hardware
 	else buttons.state[btn_right] = 0;
-	if(reg_read & 0x80) buttons.state[btn_sel] = 1;
+	if(reg_read & 0x01) buttons.state[btn_sel] = 1;// 0x80 for use on final hardware
 	else buttons.state[btn_sel] = 0;
 }
 
@@ -317,6 +317,8 @@ void Button_reset_all_states()
     			buttons.count[i] = 0;
     			buttons.press[i] = 0;
 			}
+			ENC_counter = 0;
+			
 			xSemaphoreGive( xBTSemaphore );
 		}
 	}

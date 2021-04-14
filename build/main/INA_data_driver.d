@@ -56,10 +56,18 @@ INA_data_driver.o: /home/michael/esp/PSU_main/main/INA_data_driver.c \
  /home/michael/esp/esp-idf/components/freertos/include/freertos/semphr.h \
  /home/michael/esp/esp-idf/components/freertos/include/freertos/queue.h \
  /home/michael/esp/esp-idf/components/freertos/include/freertos/task.h \
+ /home/michael/esp/esp-idf/components/nvs_flash/include/nvs_flash.h \
+ /home/michael/esp/esp-idf/components/nvs_flash/include/nvs.h \
+ /home/michael/esp/esp-idf/components/spi_flash/include/esp_partition.h \
+ /home/michael/esp/esp-idf/components/spi_flash/include/esp_flash.h \
+ /home/michael/esp/esp-idf/components/hal/include/hal/spi_flash_types.h \
+ /home/michael/esp/esp-idf/components/esp_common/include/esp_types.h \
+ /home/michael/esp/esp-idf/components/hal/include/hal/esp_flash_err.h \
+ /home/michael/esp/esp-idf/components/spi_flash/include/esp_spi_flash.h \
+ /home/michael/esp/esp-idf/components/nvs_flash/include/nvs.h \
  /home/michael/esp/PSU_main/main/INA220.h \
  /home/michael/esp/PSU_main/components/i2cdev/i2cdev.h \
  /home/michael/esp/esp-idf/components/driver/include/driver/i2c.h \
- /home/michael/esp/esp-idf/components/esp_common/include/esp_types.h \
  /home/michael/esp/esp-idf/components/esp_system/include/esp_intr_alloc.h \
  /home/michael/esp/esp-idf/components/freertos/include/freertos/queue.h \
  /home/michael/esp/esp-idf/components/esp_ringbuf/include/freertos/ringbuf.h \
@@ -192,13 +200,29 @@ INA_data_driver.o: /home/michael/esp/PSU_main/main/INA_data_driver.c \
 
 /home/michael/esp/esp-idf/components/freertos/include/freertos/task.h:
 
+/home/michael/esp/esp-idf/components/nvs_flash/include/nvs_flash.h:
+
+/home/michael/esp/esp-idf/components/nvs_flash/include/nvs.h:
+
+/home/michael/esp/esp-idf/components/spi_flash/include/esp_partition.h:
+
+/home/michael/esp/esp-idf/components/spi_flash/include/esp_flash.h:
+
+/home/michael/esp/esp-idf/components/hal/include/hal/spi_flash_types.h:
+
+/home/michael/esp/esp-idf/components/esp_common/include/esp_types.h:
+
+/home/michael/esp/esp-idf/components/hal/include/hal/esp_flash_err.h:
+
+/home/michael/esp/esp-idf/components/spi_flash/include/esp_spi_flash.h:
+
+/home/michael/esp/esp-idf/components/nvs_flash/include/nvs.h:
+
 /home/michael/esp/PSU_main/main/INA220.h:
 
 /home/michael/esp/PSU_main/components/i2cdev/i2cdev.h:
 
 /home/michael/esp/esp-idf/components/driver/include/driver/i2c.h:
-
-/home/michael/esp/esp-idf/components/esp_common/include/esp_types.h:
 
 /home/michael/esp/esp-idf/components/esp_system/include/esp_intr_alloc.h:
 

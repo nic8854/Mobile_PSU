@@ -62,6 +62,15 @@ main.o: /home/michael/esp/PSU_main/main/main.c \
  /home/michael/esp/esp-idf/components/newlib/platform_include/sys/termios.h \
  /home/michael/esp/esp-idf/components/newlib/platform_include/sys/poll.h \
  /home/michael/esp/esp-idf/components/spiffs/include/esp_spiffs.h \
+ /home/michael/esp/esp-idf/components/nvs_flash/include/nvs_flash.h \
+ /home/michael/esp/esp-idf/components/nvs_flash/include/nvs.h \
+ /home/michael/esp/esp-idf/components/spi_flash/include/esp_partition.h \
+ /home/michael/esp/esp-idf/components/spi_flash/include/esp_flash.h \
+ /home/michael/esp/esp-idf/components/hal/include/hal/spi_flash_types.h \
+ /home/michael/esp/esp-idf/components/esp_common/include/esp_types.h \
+ /home/michael/esp/esp-idf/components/hal/include/hal/esp_flash_err.h \
+ /home/michael/esp/esp-idf/components/spi_flash/include/esp_spi_flash.h \
+ /home/michael/esp/esp-idf/components/nvs_flash/include/nvs.h \
  /home/michael/esp/PSU_main/main/UI_driver.h \
  /home/michael/esp/esp-idf/components/driver/include/driver/spi_master.h \
  /home/michael/esp/esp-idf/components/driver/include/driver/spi_common.h \
@@ -86,7 +95,6 @@ main.o: /home/michael/esp/PSU_main/main/main.c \
  /home/michael/esp/PSU_main/main/Button_driver.h \
  /home/michael/esp/PSU_main/main/IO_driver.h \
  /home/michael/esp/esp-idf/components/driver/include/driver/gpio.h \
- /home/michael/esp/esp-idf/components/esp_common/include/esp_types.h \
  /home/michael/esp/esp-idf/components/esp_system/include/esp_intr_alloc.h \
  /home/michael/esp/esp-idf/components/soc/include/soc/gpio_periph.h \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/io_mux_reg.h \
@@ -230,6 +238,24 @@ main.o: /home/michael/esp/PSU_main/main/main.c \
 
 /home/michael/esp/esp-idf/components/spiffs/include/esp_spiffs.h:
 
+/home/michael/esp/esp-idf/components/nvs_flash/include/nvs_flash.h:
+
+/home/michael/esp/esp-idf/components/nvs_flash/include/nvs.h:
+
+/home/michael/esp/esp-idf/components/spi_flash/include/esp_partition.h:
+
+/home/michael/esp/esp-idf/components/spi_flash/include/esp_flash.h:
+
+/home/michael/esp/esp-idf/components/hal/include/hal/spi_flash_types.h:
+
+/home/michael/esp/esp-idf/components/esp_common/include/esp_types.h:
+
+/home/michael/esp/esp-idf/components/hal/include/hal/esp_flash_err.h:
+
+/home/michael/esp/esp-idf/components/spi_flash/include/esp_spi_flash.h:
+
+/home/michael/esp/esp-idf/components/nvs_flash/include/nvs.h:
+
 /home/michael/esp/PSU_main/main/UI_driver.h:
 
 /home/michael/esp/esp-idf/components/driver/include/driver/spi_master.h:
@@ -277,8 +303,6 @@ main.o: /home/michael/esp/PSU_main/main/main.c \
 /home/michael/esp/PSU_main/main/IO_driver.h:
 
 /home/michael/esp/esp-idf/components/driver/include/driver/gpio.h:
-
-/home/michael/esp/esp-idf/components/esp_common/include/esp_types.h:
 
 /home/michael/esp/esp-idf/components/esp_system/include/esp_intr_alloc.h:
 
