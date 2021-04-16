@@ -4,7 +4,7 @@
 #include "driver/gpio.h"
 
 #define LED_0   0
-#define LED_1   1
+#define OUT_EN   1
 #define BUZZER  2
 #define ENC_DT  3
 #define ENC_CLK 4

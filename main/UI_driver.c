@@ -71,8 +71,6 @@ void UI_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 	//Initialize Buttons and RGB LEDs
 	Button_init(I2C_PORT, SDA_GPIO, SCL_GPIO);
 	APA102_Init(2, VSPI_HOST);
-
-	vTaskDelay(100 / portTICK_PERIOD_MS);
 	
 	//Bootup screen ------------------------------------------------
     color = WHITE;
@@ -143,6 +141,7 @@ void UI_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
  */
 void UI_draw_main_screen(double power_val, double voltage_val, double current_val, bool output_val)
 {
+	//getting Background from Spiffs and printing it
 	strcpy(file, "/spiffs/background.png");
 	DF_print_png(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
 
@@ -211,6 +210,7 @@ void UI_draw_main_screen(double power_val, double voltage_val, double current_va
  */
 void UI_draw_voltages_screen(double out24_val, double out5_val, double outvar_val, double out33_val, bool output_val)
 {
+	//getting Background from Spiffs and printing it
 	strcpy(file, "/spiffs/background.png");
 	DF_print_png(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
 
@@ -292,6 +292,7 @@ void UI_draw_voltages_screen(double out24_val, double out5_val, double outvar_va
  */
 void UI_draw_variable_screen(double uset_val, double ueff_val, int select_val, bool output_val)
 {
+	//getting Background from Spiffs and printing it
 	strcpy(file, "/spiffs/background.png");
 	DF_print_png(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
 
@@ -353,8 +354,9 @@ void UI_draw_variable_screen(double uset_val, double ueff_val, int select_val, b
  */
 void UI_draw_statistics_screen(uint16_t p_val[100], int screen_select, int division_select, int select_val, bool output_val)
 {
+	//scaling factor for divisions
 	int factor = 1;
-
+	//getting Background from Spiffs and printing it
 	strcpy(file, "/spiffs/background.png");
 	DF_print_png(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
 
@@ -492,9 +494,9 @@ void UI_draw_statistics_screen(uint16_t p_val[100], int screen_select, int divis
 	for(int i = 0; i < 50; i++)
 	{
 		uint16_t p_val_temp = p_val[i];
-		//ESP_LOGI(TAG, "%d = %d", i, p_val_temp);
 		if((p_val_temp*factor) < 60)
 		{
+			//draw selected Pixel and the one right from it
 			DF_print_Vpixel((i*2 + 15), (130-(p_val_temp*factor)), color);
 			DF_print_Vpixel((i*2 + 16), (130-(p_val_temp*factor)), color);
 		}
@@ -531,6 +533,7 @@ void UI_draw_statistics_screen(uint16_t p_val[100], int screen_select, int divis
  */
 void UI_draw_calibrate_screen(double INA1_S, double INA1_A, double INA2_S, double INA2_A, int select_val)
 {
+	//getting Background from Spiffs and printing it
 	strcpy(file, "/spiffs/background.png");
 	DF_print_png(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
 
@@ -606,11 +609,14 @@ void UI_draw_calibrate_screen(double INA1_S, double INA1_A, double INA2_S, doubl
  * Still under construction
  * @param TC_EN_val Enable Pin value for TC Bus
  * @param TC_NFON_val Low frequency mode Pin for TC Bus
+ * @param output_val Value of output
+ * @param select_val chooses which value to select on screen
  * Updates LCD from Virtual Screen
  * @endcode
  */
 void UI_draw_tcbus_screen(bool TC_EN_val, bool TC_NFON_val, bool output_val, int select_val)
 {
+	//getting Background from Spiffs and printing it
 	strcpy(file, "/spiffs/background.png");
 	DF_print_png(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
 
