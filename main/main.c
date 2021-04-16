@@ -42,6 +42,7 @@ static const char *TAG = "Master_Task";
 #define statistics_p 	4
 #define statistics_u 	5
 #define statistics_i 	6
+#define tcbus			7
 
 //Define Spiffs
 static void SPIFFS_Directory(char * path) {
@@ -86,6 +87,7 @@ void Master_Task(void *pvParameters)
 	int left_press = 0;
 	int right_press = 0;
 	int select_press = 0;
+	bool siren_toggle = 0;
 
 
 	//init Value variables
@@ -107,11 +109,13 @@ void Master_Task(void *pvParameters)
 	double uset_val = 0;
 	double ueff_val = 0;
 	int division_select = 0;
-	int ENC_value = 0;
+	bool TC_EN_val = 0;
+	bool TC_NFON_val = 0;
+	APA102_t RGB_0;
+	APA102_t RGB_1;
 	uint16_t p_val[100];
 	uint16_t u_val[100];
 	uint16_t i_val[100];
-	int select = 0;
 
 	// Open NVS Handle
     printf("\n");
@@ -163,17 +167,33 @@ void Master_Task(void *pvParameters)
 		page_select_last = 0;
 		ESP_LOGI(TAG, "Calibrate Screen entered");
 	}
+
+	RGB_0.bright = 0;
+	RGB_0.red = 0;
+	RGB_0.green = 0;
+	RGB_0.blue = 0;
 	
+	RGB_1.bright = 0;
+	RGB_1.red = 0;
+	RGB_1.green = 0;
+	RGB_1.blue = 0;
+
 	UI_reset_all_states();
 
 	while(1) 
 	{
+		//measure values for overcurrent and overvoltage detection
+		power_val = INAD_getPower_mW(INA1);
+		voltage_val = INAD_getVShunt_mv(INA1);
+		current_val = INAD_getCurrent_mA(INA1);
+
 		switch(page_select)
 		{
 			case calibrate:
 				//value selection up
 				if(up_press)
 				{
+					UI_Buzzer_beep();
 					up_press = 0;
 					if(value_select > 0) value_select--;
 					else if(value_select == 0) value_select = 3;
@@ -181,6 +201,7 @@ void Master_Task(void *pvParameters)
 				//value selection down
 				if(down_press)
 				{
+					UI_Buzzer_beep();
 					down_press = 0;
 					if(value_select < 3) value_select++;
 					else if(value_select == 3) value_select = 0;
@@ -188,6 +209,7 @@ void Master_Task(void *pvParameters)
 				//change value
 				if(ENC_count != ENC_count_last)
 				{
+					UI_Buzzer_beep();
 					//save difference in temporary variable
 					double diff_count_temp = ENC_count - ENC_count_last;
 					//add difference to selected value
@@ -210,6 +232,7 @@ void Master_Task(void *pvParameters)
 				//exit page
 				if(left_press || right_press > 1)
 				{
+					UI_Buzzer_beep();
 					err = nvs_set_i32(INA_config_NVS, "INA1_S_val", INA1_S_val);
 					err = nvs_set_i32(INA_config_NVS, "INA1_A_val", INA1_A_val);
 					err = nvs_set_i32(INA_config_NVS, "INA2_S_val", INA2_S_val);
@@ -223,30 +246,29 @@ void Master_Task(void *pvParameters)
 
 					// Close
 					nvs_close(INA_config_NVS);
-					page_select = 1;
+					page_select = main;
 				}
 				//draw Screen
 				UI_draw_calibrate_screen(INA1_S_val, INA1_A_val, INA2_S_val, INA2_A_val, value_select);
 			break;
 			case main:
-				power_val = INAD_getPower_mW(INA1);
-				voltage_val = INAD_getVShunt_mv(INA1);
-				current_val = INAD_getCurrent_mA(INA1);
-
 				//change value
 				if(ENC_count != ENC_count_last)
 				{
+					UI_Buzzer_beep();
 					output_val = !output_val;
 				}
 				//change page -
 				if(left_press > 1)
 				{
-					page_select = 6;
+					UI_Buzzer_beep();
+					page_select = tcbus;
 				}
 				//change page +
 				if(right_press > 1)
 				{
-					page_select = 2;
+					UI_Buzzer_beep();
+					page_select = voltage;
 				}
 				//draw Screen
 				UI_draw_main_screen(power_val, voltage_val, current_val, output_val);
@@ -255,17 +277,20 @@ void Master_Task(void *pvParameters)
 				//change value
 				if(ENC_count != ENC_count_last)
 				{
+					UI_Buzzer_beep();
 					output_val = !output_val;
 				}
 				//change page -
 				if(left_press > 1)
 				{
-					page_select = 1;
+					UI_Buzzer_beep();
+					page_select = main;
 				}
 				//change page +
 				if(right_press > 1)
 				{
-					page_select = 3;
+					UI_Buzzer_beep();
+					page_select = variable;
 				}
 				//draw Screen
 				UI_draw_voltages_screen(24, 5, 42.69, 3.3, output_val);
@@ -274,18 +299,21 @@ void Master_Task(void *pvParameters)
 				//value selection up
 				if(up_press)
 				{
+					UI_Buzzer_beep();
 					up_press = 0;
 					value_select = !value_select;
 				}
 				//value selection down
 				if(down_press)
 				{
+					UI_Buzzer_beep();
 					down_press = 0;
 					value_select = !value_select;
 				}
 				//change value
 				if(ENC_count != ENC_count_last)
 				{
+					UI_Buzzer_beep();
 					//save difference in temporary variable
 					double diff_count_temp = ENC_count - ENC_count_last;
 					//add difference to selected value
@@ -303,12 +331,14 @@ void Master_Task(void *pvParameters)
 				//change page -
 				if(left_press > 1)
 				{
-					page_select = 2;
+					UI_Buzzer_beep();
+					page_select = voltage;
 				}
 				//change page +
 				if(right_press > 1)
 				{
-					page_select = 4;
+					UI_Buzzer_beep();
+					page_select = statistics_p;
 				}
 				//draw Screen
 				UI_draw_variable_screen(uset_val, ueff_val, value_select, output_val);
@@ -325,18 +355,21 @@ void Master_Task(void *pvParameters)
 				//value selection up
 				if(up_press)
 				{
+					UI_Buzzer_beep();
 					up_press = 0;
 					value_select = !value_select;
 				}
 				//value selection down
 				if(down_press)
 				{
+					UI_Buzzer_beep();
 					down_press = 0;
 					value_select = !value_select;
 				}
 				//change value
 				if(ENC_count != ENC_count_last)
 				{
+					UI_Buzzer_beep();
 					//save difference in temporary variable
 					double diff_count_temp = ENC_count - ENC_count_last;
 					//add difference to selected value
@@ -353,12 +386,14 @@ void Master_Task(void *pvParameters)
 				//change page -
 				if(left_press > 1)
 				{
-					page_select = 3;
+					UI_Buzzer_beep();
+					page_select = variable;
 				}
 				//change page +
 				if(right_press > 1)
 				{
-					page_select = 5;
+					UI_Buzzer_beep();
+					page_select = statistics_u;
 				}
 				//draw Screen
 				UI_draw_statistics_screen(p_val, 0, division_select, value_select, output_val);
@@ -375,21 +410,23 @@ void Master_Task(void *pvParameters)
 				//value selection up
 				if(up_press)
 				{
+					UI_Buzzer_beep();
 					up_press = 0;
 					value_select = !value_select;
 				}
 				//value selection down
 				if(down_press)
 				{
+					UI_Buzzer_beep();
 					down_press = 0;
 					value_select = !value_select;
 				}
 				//change value
 				if(ENC_count != ENC_count_last)
 				{
+					UI_Buzzer_beep();
 					//save difference in temporary variable
 					double diff_count_temp = ENC_count - ENC_count_last;
-					ESP_LOGI(TAG, "%f", diff_count_temp);
 					//add difference to selected value
 					switch(value_select)
 					{
@@ -404,12 +441,14 @@ void Master_Task(void *pvParameters)
 				//change page -
 				if(left_press > 1)
 				{
-					page_select = 4;
+					UI_Buzzer_beep();
+					page_select = statistics_p;
 				}
 				//change page +
 				if(right_press > 1)
 				{
-					page_select = 6;
+					UI_Buzzer_beep();
+					page_select = statistics_i;
 				}
 				//draw Screen
 				UI_draw_statistics_screen(u_val, 1, division_select, value_select, output_val);
@@ -426,21 +465,23 @@ void Master_Task(void *pvParameters)
 				//value selection up
 				if(up_press)
 				{
+					UI_Buzzer_beep();
 					up_press = 0;
 					value_select = !value_select;
 				}
 				//value selection down
 				if(down_press)
 				{
+					UI_Buzzer_beep();
 					down_press = 0;
 					value_select = !value_select;
 				}
 				//change value
 				if(ENC_count != ENC_count_last)
 				{
+					UI_Buzzer_beep();
 					//save difference in temporary variable
 					double diff_count_temp = ENC_count - ENC_count_last;
-					ESP_LOGI(TAG, "%f", diff_count_temp);
 					//add difference to selected value
 					switch(value_select)
 					{
@@ -455,21 +496,150 @@ void Master_Task(void *pvParameters)
 				//change page -
 				if(left_press > 1)
 				{
-					page_select = 5;
+					UI_Buzzer_beep();
+					page_select = statistics_u;
 				}
 				//change page +
 				if(right_press > 1)
 				{
-					page_select = 1;
+					UI_Buzzer_beep();
+					page_select = tcbus;
 				}
 				//draw Screen
 				UI_draw_statistics_screen(u_val, 2, division_select, value_select, output_val);
 			break;
+			case tcbus:
+				//value selection up
+				if(up_press)
+				{
+					UI_Buzzer_beep();
+					up_press = 0;
+					if(value_select > 0) value_select--;
+					else if(value_select == 0) value_select = 3;
+				}
+				//value selection down
+				if(down_press)
+				{
+					UI_Buzzer_beep();
+					down_press = 0;
+					if(value_select < 3) value_select++;
+					else if(value_select == 3) value_select = 0;
+				}
+				//change value
+				if(ENC_count != ENC_count_last)
+				{
+					UI_Buzzer_beep();
+					//save difference in temporary variable
+					double diff_count_temp = ENC_count - ENC_count_last;
+					//add difference to selected value
+					switch(value_select)
+					{
+						case 0: 
+							TC_EN_val = !TC_EN_val;
+						break;
+						case 1: 
+							TC_NFON_val = !TC_NFON_val;
+						break;
+						case 2: 
+							output_val = !output_val;
+						break;
+					}
+				}
 
+				//change page -
+				if(left_press > 1)
+				{
+					UI_Buzzer_beep();
+					page_select = statistics_i;
+				}
+				//change page +
+				if(right_press > 1)
+				{
+					UI_Buzzer_beep();
+					page_select = main;
+				}
+				//draw Screen
+				UI_draw_tcbus_screen(TC_EN_val, TC_NFON_val, output_val, value_select);
+			break;
+		}
+		//set Expander value for TC_NFON anf TC_EN
+		if(TC_EN_val) UI_set_TC_EN(1);
+		else UI_set_TC_EN(0);
+		if(TC_NFON_val) UI_set_TC_NFON(1);
+		else UI_set_TC_NFON(0);
+
+		//overcurrent or overvoltage siren
+		if(voltage_val > Max_U_mV || current_val > Max_I_mA)
+		{
+			UI_Buzzer_power(1);
+			siren_toggle = !siren_toggle;
+
+			if(siren_toggle)
+			{
+				UI_Buzzer_PWM(400);
+				RGB_0.bright = 10;
+				RGB_0.red = 250;
+				RGB_0.green = 0;
+				RGB_0.blue = 0;
+				RGB_1.bright = 0;
+				RGB_1.red = 0;
+				RGB_1.green = 0;
+				RGB_1.blue = 0;
+			}
+			else
+			{
+				UI_Buzzer_PWM(800);
+				RGB_0.bright = 00;
+				RGB_0.red = 0;
+				RGB_0.green = 0;
+				RGB_0.blue = 0;
+				RGB_1.bright = 10;
+				RGB_1.red = 250;
+				RGB_1.green = 0;
+				RGB_1.blue = 0;
+			}
+		}
+		else
+		{
+			UI_Buzzer_power(0);
+			UI_GPIO_set(LED_1, 0);
+			RGB_0.bright = 00;
+			RGB_0.red = 0;
+			RGB_0.green = 0;
+			RGB_0.blue = 0;
+			RGB_1.bright = 0;
+			RGB_1.red = 0;
+			RGB_1.green = 0;
+			RGB_1.blue = 0;
+
+			if(output_val)
+			{
+				UI_GPIO_set(LED_1, 1);
+				RGB_0.bright = 2;
+				RGB_0.red = 50;
+				RGB_0.green = 0;
+				RGB_0.blue = 200; 
+				RGB_1.bright = 2;
+				RGB_1.red = 50;
+				RGB_1.green = 0;
+				RGB_1.blue = 200; 
+			}
 		}
 
+
+		//update RGB LEDs
+		UI_set_RGB(0, RGB_0.bright, RGB_0.red, RGB_0.green, RGB_0.blue);
+		UI_set_RGB(1, RGB_1.bright, RGB_1.red, RGB_1.green, RGB_1.blue);
+		//update Display
 		UI_Update();
+
+		//write last state for detecting change
 		ENC_count_last = ENC_count;
+
+		//write last state for detecting change
+		page_select_last = page_select;
+
+		//if page is the same, update button values
 		if(page_select == page_select_last)
 		{
 			up_press = UI_get_press(up); 
@@ -479,6 +649,8 @@ void Master_Task(void *pvParameters)
 			select_press = UI_get_press(sel);
 			ENC_count = UI_get_ENC();
 		}
+
+		//if state changed, reset all Buttons
 		if(page_select != page_select_last)
 		{
 			UI_reset_all_states();
@@ -488,191 +660,14 @@ void Master_Task(void *pvParameters)
 			right_press = 0;
 			select_press = 0;
 			value_select = 0;
+			ENC_count = 0;
+			ENC_count_last = 0;
 		}
-		page_select_last = page_select;
-		vTaskDelay(5 / portTICK_PERIOD_MS);
-
-
-		/*
-		//Button state test
-		//ESP_LOGW(TAG, "Button Up = %d", UI_get_press(up));
-		//get values to Display
-		//in_value = Button_read_reg_0();
-		power_val = INAD_getPower_mW(INA1);
-		voltage_val = INAD_getVShunt_mv(INA1);
-		current_val = INAD_getCurrent_mA(INA1);
-
-		if(in_value & 0x04) select++;
-		if(select == 4) select = 0;
-
-		//---------------------------------------------------p_val for statistics
-		for(int i = 0; i < 50; i++)
-		{
-			p_val[i] = p_val[i+1]; 
-		}
-		
-		p_val[49] = (power_val/Max_P_mW*60);
-		//---------------------------------------------------u_val for statistics
-		for(int i = 0; i < 50; i++)
-		{
-			u_val[i] = u_val[i+1]; 
-		}
-		//---------------------------------------------------i_val for statistics
-		u_val[49] = (voltage_val/Max_U_mV*60);
-		for(int i = 0; i < 50; i++)
-		{
-			i_val[i] = i_val[i+1]; 
-		}
-		i_val[49] = (current_val/Max_I_mA*60);
-
-		//---------------------------------------------------TC_EN
-		if(in_value & 0x08 && !button_last_1)
-		{
-			UI_GPIO_set(LED_0, 1);
-			out_value = out_value ^ 0x01; //0x02 on PSU Board (TC_EN)
-			vTaskDelay(50 / portTICK_PERIOD_MS);
-			UI_GPIO_set(LED_0, 0);
-			button_last_1 = 1;
-		} 
-		else if(!(in_value & 0x08) && button_last_1)
-		{
-			button_last_1 = 0;
-		}
-		//---------------------------------------------------TC_NFON
-		if(in_value & 0x10 && !button_last_2)
-		{
-			UI_GPIO_set(LED_0, 1);
-			out_value = out_value ^ 0x02; //0x04 on PSU Board (TC_NFON)
-			vTaskDelay(50 / portTICK_PERIOD_MS);
-			UI_GPIO_set(LED_0, 0);
-			button_last_2 = 1;
-		} 
-		else if(!(in_value & 0x10) && button_last_2)
-		{
-			button_last_2 = 0;
-		}
-		//---------------------------------------------------EN_IN
-		if(in_value & 0x20 && !button_last_3) 
-		{
-			UI_GPIO_set(LED_0, 1);
-			out_value = out_value ^ 0x10; //does not set EN_IN directly
-			output_val =!output_val;
-			vTaskDelay(50 / portTICK_PERIOD_MS);
-			UI_GPIO_set(LED_0, 0);
-			button_last_3 = 1;
-		}
-		else if(!(in_value & 0x20) && button_last_3)
-		{
-			button_last_3 = 0;
-		}
-		//---------------------------------------------------BUZZER
-		if(in_value & 0x01 && !button_last_4) 
-		{
-			UI_Buzzer_power(1);
-			UI_Buzzer_PWM(100);
-			UI_GPIO_set(LED_0, 1);
-			vTaskDelay(100 / portTICK_PERIOD_MS);
-			UI_Buzzer_PWM(300);
-			UI_GPIO_set(LED_0, 0);
-			vTaskDelay(100 / portTICK_PERIOD_MS);
-			UI_Buzzer_PWM(500);
-			UI_GPIO_set(LED_0, 1);
-			vTaskDelay(100 / portTICK_PERIOD_MS);
-			UI_Buzzer_PWM(700);
-			UI_GPIO_set(LED_0, 0);
-			vTaskDelay(100 / portTICK_PERIOD_MS);
-			UI_Buzzer_PWM(900);
-			UI_GPIO_set(LED_0, 1);
-			vTaskDelay(200 / portTICK_PERIOD_MS);
-			UI_Buzzer_PWM(700);
-			UI_GPIO_set(LED_0, 0);
-			vTaskDelay(100 / portTICK_PERIOD_MS);
-			UI_Buzzer_PWM(500);
-			UI_GPIO_set(LED_0, 1);
-			vTaskDelay(100 / portTICK_PERIOD_MS);
-			UI_Buzzer_PWM(300);
-			UI_GPIO_set(LED_0, 0);
-			vTaskDelay(100 / portTICK_PERIOD_MS);
-			UI_Buzzer_PWM(100);
-			UI_GPIO_set(LED_0, 0);
-			vTaskDelay(200 / portTICK_PERIOD_MS);
-			UI_Buzzer_power(0);
-			button_last_4 = 1;
-		}
-		else if(!(in_value & 0x01) && button_last_4)
-		{
-			button_last_4 = 0;
-		}
-		//---------------------------------------------------RGB_LEDs
-		if(in_value & 0x02 && !button_last_5) 
-		{
-			UI_GPIO_set(LED_0, 1);
-			out_value = out_value ^ 0x20;
-			vTaskDelay(50 / portTICK_PERIOD_MS);
-			UI_GPIO_set(LED_0, 0);
-			button_last_5 = 1;
-		}
-		else if(!(in_value & 0x02) && button_last_5)
-		{
-			button_last_5 = 0;
-		}
-		//Write Expander
-		Button_write_reg_1(out_value);
-		//Set EN_IN
-		if(out_value & 0x10) UI_GPIO_set(LED_1, 1);
-		else UI_GPIO_set(LED_1, 0);
-		//Set RGB LEDs
-		if(out_value & 0x20) led_test(1);
-		if(!(out_value & 0x20)) led_test(0);
-		ESP_LOGW(__FUNCTION__, "Expander Read Reg 0 = 0b"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(in_value));
-		ESP_LOGW(__FUNCTION__, "Expander Write Reg 1 = 0b"BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(out_value));
-		//Draw UI
-
-		switch(ENC_value)
-		{
-			case -1:
-				UI_set_ENC(6);
-			break;
-			case 0:
-				UI_draw_main_screen(power_val, voltage_val, current_val, output_val);
-			break;
-			case 1:
-				UI_draw_voltages_screen(42.0, 6.9, 4.2, 69.0, output_val);
-			break;
-			case 2:
-				UI_draw_variable_screen(42.0, 6.9, (select%2), output_val);
-			break;
-			case 3:
-				UI_draw_statistics_screen(p_val, 0, select, 0, output_val);
-			break;
-			case 4:
-				UI_draw_statistics_screen(u_val, 1, select, 1, output_val);
-			break;
-			case 5:
-				UI_draw_statistics_screen(i_val, 2, select, 0, output_val);
-			break;
-			case 6:
-				UI_draw_calibrate_screen(1.064, 0.654, 0.154, 1.674, select);
-			break;
-			default:
-				UI_set_ENC(0);
-			break;
-
-
-		}
-		
-		//Update Display
-		UI_Update();
-
-		ENC_value = UI_get_ENC();
-		ESP_LOGW(TAG, "Encoder state = %d", ENC_value);
 
 		//Display free Heap size
 		ESP_LOGI(__FUNCTION__, "Free Heap size: %d\n", xPortGetFreeHeapSize());
-		vTaskDelay(5 / portTICK_PERIOD_MS);
-	*/
-	} // end while
-
+		vTaskDelay(3 / portTICK_PERIOD_MS);
+	}
 	// never reach
 	while (1) {
 		vTaskDelay(2000 / portTICK_PERIOD_MS);

@@ -35,16 +35,8 @@ FontxFile fx24M[2];
 FontxFile fx32M[2];
 
 //global variables
-int led_test_index = 0;
-
-int led_test_colors[5][3] ={
-							{200, 100, 90},
-							{100, 150, 50},
-							{20, 90, 200},
-							{80, 10, 250},
-							{50, 150, 20}
-}; 
-
+uint8_t Reg1_value = 0;
+uint8_t Reg1_value_last = 0;
 
 /**
  * Initializiation function for display, Buttons and RGB LEDs. Starts SPI target for Display. Also draws boot screen
@@ -80,7 +72,7 @@ void UI_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 	Button_init(I2C_PORT, SDA_GPIO, SCL_GPIO);
 	APA102_Init(2, VSPI_HOST);
 
-	vTaskDelay(500 / portTICK_PERIOD_MS);
+	vTaskDelay(100 / portTICK_PERIOD_MS);
 	
 	//Bootup screen ------------------------------------------------
     color = WHITE;
@@ -107,85 +99,33 @@ void UI_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 	strcpy((char *)ascii, "#");
 	for(int i = 1; i < 15; i++)
 	{
+		if(i%2) UI_set_LED0(1);
+		else UI_set_LED0(0);
 		xpos = i*8;
 		DF_print_string(&dev, fx16M, xpos, ypos, ascii, color);
 		DF_VlcdUpdate(&dev);
 		vTaskDelay(100 / portTICK_PERIOD_MS);
 	}
+
+	//startup
+	UI_GPIO_set(LED_0, 1);
+	UI_Buzzer_power(1);
+	UI_Buzzer_PWM(100);
+	vTaskDelay(50 / portTICK_PERIOD_MS);
+	UI_Buzzer_PWM(300);
+	vTaskDelay(50 / portTICK_PERIOD_MS);
+	UI_Buzzer_PWM(500);
+	vTaskDelay(50 / portTICK_PERIOD_MS);
+	UI_Buzzer_PWM(700);
+	vTaskDelay(50 / portTICK_PERIOD_MS);
+	UI_Buzzer_PWM(900);
+	vTaskDelay(50 / portTICK_PERIOD_MS);
+	UI_Buzzer_PWM(1100);
+	vTaskDelay(100 / portTICK_PERIOD_MS);
+	UI_Buzzer_power(0);
+
     DF_VlcdUpdate(&dev);
 	ESP_LOGI(TAG, "--> UI_driver initialized successfully");
-}
-
-//Function to draw Test Screen with Parameter Values
-void UI_draw_test_screen(uint8_t in_value, uint8_t out_value, double current_val, double shunt_val, int enc_val)
-{
-	strcpy(file, "/spiffs/background.png");
-	DF_print_png(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
-
-	color = WHITE;
-	xpos = 40;
-	ypos = 28;
-	strcpy((char *)ascii, "TEST");
-	DF_print_string(&dev, fx24G, xpos, ypos, ascii, color);
-	xpos = 8;
-	ypos = 55;
-	strcpy((char *)ascii, "Reg 0:");
-	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
-	xpos = 8;
-	ypos = 75;
-	strcpy((char *)ascii, "Reg 1:");
-	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
-	xpos = 8;
-	ypos = 95;
-	strcpy((char *)ascii, "INA I:");
-	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
-	xpos = 8;
-	ypos = 115;
-	strcpy((char *)ascii, "SHUNT:");
-	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
-	xpos = 8;
-	ypos = 135;
-	strcpy((char *)ascii, "ENC  :");
-	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
-	xpos = 55;
-	ypos = 55;
-	sprintf(text, BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(in_value));
-	strcpy((char *)ascii, text);
-	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
-	xpos = 55;
-	ypos = 75;
-	sprintf(text, BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(out_value));
-	strcpy((char *)ascii, text);
-	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
-	xpos = 55;
-	ypos = 95;
-	DF_print_value(&dev, color, fx16G, xpos, ypos, -1, current_val);
-	xpos = 100;
-	ypos = 95;
-	strcpy((char *)ascii, "mA");
-	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
-	xpos = 55;
-	ypos = 115;
-	DF_print_value(&dev, color, fx16G, xpos, ypos, -1, shunt_val);
-	
-	xpos = 100;
-	ypos = 115;
-	strcpy((char *)ascii, "mV");
-	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
-	xpos = 55;
-	ypos = 135;
-	DF_print_value(&dev, color, fx16G, xpos, ypos, enc_val, -1);
-	DF_print_rect(5, 138, 120, 155, color);
-	color = WHITE;
-	DF_print_triangle(123, 80, 15, 7, 90, color);
-	DF_print_line(7, 75, 7, 88, color);
-	DF_print_line(7, 75, 1, 81, color);
-	DF_print_line(7, 88, 1, 81, color);
-	xpos = 25;
-	ypos = 155;
-	color = 0xFFF6;
-	strcpy((char *)ascii, "OUTPUT ON");
-	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 }
 
 /**
@@ -490,7 +430,7 @@ void UI_draw_statistics_screen(uint16_t p_val[100], int screen_select, int divis
 			ypos = 50;
 			strcpy((char *)ascii, "Currentmeter");
 			DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
-			xpos = 10;
+			xpos = 7;
 			ypos = 68;
 			//selects what division to use
 			switch(division_select)
@@ -567,7 +507,7 @@ void UI_draw_statistics_screen(uint16_t p_val[100], int screen_select, int divis
 	DF_print_line(7, 75, 7, 88, color);
 	DF_print_line(7, 75, 1, 81, color);
 	DF_print_line(7, 88, 1, 81, color);
-	if(screen_select < 2) DF_print_triangle(123, 80, 15, 7, 90, color);
+	DF_print_triangle(123, 80, 15, 7, 90, color);
 	xpos = 25;
 	ypos = 155;
 	color = 0xFFF6;
@@ -659,6 +599,77 @@ void UI_draw_calibrate_screen(double INA1_S, double INA1_A, double INA2_S, doubl
 		break;
 	}
 	color = WHITE;
+}
+
+/**
+ * Function to generate a tcbus Screen using the dfuncs library.
+ * Still under construction
+ * @param TC_EN_val Enable Pin value for TC Bus
+ * @param TC_NFON_val Low frequency mode Pin for TC Bus
+ * Updates LCD from Virtual Screen
+ * @endcode
+ */
+void UI_draw_tcbus_screen(bool TC_EN_val, bool TC_NFON_val, bool output_val, int select_val)
+{
+	strcpy(file, "/spiffs/background.png");
+	DF_print_png(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
+
+	color = WHITE;
+	xpos = 25;
+	ypos = 28;
+	strcpy((char *)ascii, "TC Bus");
+	DF_print_string(&dev, fx24G, xpos, ypos, ascii, color);
+	xpos = 10;
+	ypos = 55;
+	strcpy((char *)ascii, "TC_EN:");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 10;
+	ypos = 75;
+	strcpy((char *)ascii, "NFON :");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 20;
+	ypos = 115;
+	strcpy((char *)ascii, "more coming");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 40;
+	ypos = 130;
+	strcpy((char *)ascii, "soon");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 65;
+	ypos = 55;
+	if(TC_EN_val)strcpy((char *)ascii, "ON");
+	if(!TC_EN_val)strcpy((char *)ascii, "OFF");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 65;
+	ypos = 75;
+	if(TC_NFON_val)strcpy((char *)ascii, "ON");
+	if(!TC_NFON_val)strcpy((char *)ascii, "OFF");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+
+	switch(select_val)
+	{
+		case 0:
+			DF_print_rect(5, 38, 120, 57, color);
+		break;
+		case 1:
+			DF_print_rect(5, 58, 120, 77, color);
+		break;
+		case 2:
+			DF_print_rect(5, 138, 120, 155, color);
+		break;
+	}
+
+	color = WHITE;
+	DF_print_line(7, 75, 7, 88, color);
+	DF_print_line(7, 75, 1, 81, color);
+	DF_print_line(7, 88, 1, 81, color);
+
+	xpos = 25;
+	ypos = 155;
+	color = 0xFFF6;
+	if(output_val)strcpy((char *)ascii, "OUTPUT ON");
+	if(!output_val)strcpy((char *)ascii, "OUTPUT OFF");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 }
 /**
  * Linking Function to Dfuncs
@@ -790,6 +801,19 @@ void UI_Buzzer_power(bool power)
 }
 
 /**
+ * Short Beep of Buzzer
+ * 
+ * @endcode
+ */
+void UI_Buzzer_beep()
+{
+	IO_Buzzer_PWM(150);
+	IO_Buzzer_power(1);
+	vTaskDelay(25 / portTICK_PERIOD_MS);
+	IO_Buzzer_power(0);
+}
+
+/**
  * Linking Function to IO driver
  * Sets LED0 to on or off
  * @param value State as a boolean
@@ -801,8 +825,9 @@ void UI_set_LED0(bool value)
 }
 
 /**
- * Linking Function to APA102
- * Sets Sets color and brihtness of RGB LEDs
+ * Linking Function to APA102. 
+ * Sets Sets color and brihtness of RGB LEDs. 
+ * Both LEDs always have to be set.
  * @param index selects which LED to write to. In this case 0 or 1.
  * @param bright sets brightness setting form 0 to 31.
  * @param red set red channnel from 0 to 255.
@@ -812,27 +837,21 @@ void UI_set_LED0(bool value)
  */
 void UI_set_RGB(uint8_t index, int bright, int red, int green, int blue)
 {
-	setPixel(index, bright, red, green, blue);
-}
-//Function to test RGB LEDs
-void led_test(bool mode)
-{
-	if(mode)
-	{
-		//Set LEDs to the next Color in led_test_colors
-		setPixel(0, 8, led_test_colors[led_test_index][0], led_test_colors[led_test_index][1], led_test_colors[led_test_index][2]);
-		setPixel(1, 8, led_test_colors[led_test_index][0], led_test_colors[led_test_index][1], led_test_colors[led_test_index][2]);
-		flush();
-		//Counter counts 0 - 4
-		if(led_test_index < 5) led_test_index++;
-		else led_test_index = 0;
-	}
-	else
-	{
-		//set LEDs to off
-		setPixel(0, 0, 0, 0, 0);
-		setPixel(1, 0, 0, 0, 0);
-		flush();
-	}
+	setPixel(index, bright, green, blue, red);
+	flush();
 }
 
+void UI_set_TC_EN(bool value)
+{
+	if(value) Reg1_value = (Reg1_value | 0x01);
+	else Reg1_value = (Reg1_value & 0xFE);
+	if(Reg1_value != Reg1_value_last) Button_write_reg_1(Reg1_value);
+	Reg1_value_last = Reg1_value;
+}
+void UI_set_TC_NFON(bool value)
+{
+	if(value) Reg1_value = (Reg1_value | 0x02);
+	else Reg1_value = (Reg1_value & 0xFD);
+	if(Reg1_value != Reg1_value_last) Button_write_reg_1(Reg1_value);
+	Reg1_value_last = Reg1_value;
+}

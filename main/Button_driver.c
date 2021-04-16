@@ -219,7 +219,7 @@ void Button_set_ENC(int value)
  */
 void Button_set_states()
 {
-	//get button states from Reg0 and write tobutton state vars
+	//get button states from Reg0 and write to button state vars
 	if(reg_read & 0x08) buttons.state[btn_up] = 1; 
 	else buttons.state[btn_up] = 0;
 	if(reg_read & 0x10) buttons.state[btn_down] = 1;
