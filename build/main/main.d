@@ -110,7 +110,9 @@ main.o: /home/michael/esp/PSU_main/main/main.c \
  /home/michael/esp/esp-idf/components/esp_ringbuf/include/freertos/ringbuf.h \
  /home/michael/esp/esp-idf/components/hal/include/hal/i2c_types.h \
  /home/michael/esp/PSU_main/components/esp_idf_lib_helpers/esp_idf_lib_helpers.h \
- /home/michael/esp/esp-idf/components/soc/esp32/include/soc/i2c_reg.h
+ /home/michael/esp/esp-idf/components/soc/esp32/include/soc/i2c_reg.h \
+ /home/michael/esp/PSU_main/main/ADC_data_driver.h \
+ /home/michael/esp/PSU_main/main/ADC_driver.h
 
 /home/michael/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h:
 
@@ -335,4 +337,8 @@ main.o: /home/michael/esp/PSU_main/main/main.c \
 /home/michael/esp/PSU_main/components/esp_idf_lib_helpers/esp_idf_lib_helpers.h:
 
 /home/michael/esp/esp-idf/components/soc/esp32/include/soc/i2c_reg.h:
+
+/home/michael/esp/PSU_main/main/ADC_data_driver.h:
+
+/home/michael/esp/PSU_main/main/ADC_driver.h:
 /home/michael/esp/PSU_main/main/./main.c:

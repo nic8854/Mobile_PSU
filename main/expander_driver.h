@@ -1,5 +1,5 @@
-#ifndef MAIN_BUTTON_DRIVER_H_
-#define MAIN_BUTTON_DRIVER_H_
+#ifndef MAIN_EXPANDER_DRIVER_H_
+#define MAIN_EXPANDER_DRIVER_H_
 
 #include "i2cdev.h"
 #include <esp_err.h>

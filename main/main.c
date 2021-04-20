@@ -15,6 +15,7 @@
 #include "UI_driver.h"
 #include "Button_driver.h"
 #include "INA_data_driver.h"
+#include "ADC_data_driver.h"
 
 //Tag for ESP_LOG functions
 static const char *TAG = "Master_Task";
@@ -24,11 +25,19 @@ static const char *TAG = "Master_Task";
 #define Max_U_mV 7
 #define Max_I_mA 5
 
+//ADC calibration value
+#define out24_cal 240
+#define out5_cal 50
+#define out33_cal 33
+#define outvar_cal 260
+
+//ADC value at 1V
+#define ADC_cal 34100
+
 //define I2C Pins
 #define I2C_PORT 0
 #define SDA_GPIO 21
 #define SCL_GPIO 22
-#define I2C_port 0
 
 //define Button directions
 #define up      0
@@ -70,7 +79,7 @@ static void SPIFFS_Directory(char * path) {
 	closedir(dir);
 }
 
-//Init page selection variables
+//Init internal variables
 int page_select = 1;
 int page_select_last = 1;
 int value_select = 0;
@@ -93,6 +102,15 @@ int32_t INA2_A_val = 0;
 double power_val = 0;
 double voltage_val = 0;
 double current_val = 0;
+uint16_t adc1_read = 0;
+uint16_t adc2_read = 0;
+uint16_t adc3_read = 0;
+uint16_t adc4_read = 0;
+uint16_t adc5_read = 0;
+double out24_val = 0;
+double out5_val = 0;
+double out33_val = 0;
+double outvar_val = 0;
 bool output_val = 0;
 double uset_val = 0;
 double ueff_val = 0;
@@ -117,13 +135,15 @@ void Master_Task(void *pvParameters)
         err = nvs_flash_init();
     }
     ESP_ERROR_CHECK( err );
-
     
 	//Init: Display, Buttons, IO and Buzzer
 	UI_init(I2C_PORT, SDA_GPIO, SCL_GPIO);	
 
 	//Init INAs
 	INAD_init(I2C_PORT, SDA_GPIO, SCL_GPIO);
+
+	//Init ADC
+	ADCD_init(I2C_PORT, SDA_GPIO, SCL_GPIO);
 
 	
 	// Open NVS Handle
@@ -223,11 +243,8 @@ void Master_Task(void *pvParameters)
 				tcbus_func();
 			break;
 		}
-
 		//do everything that needs to be done every loop (including the delay)
 		house_keeping();
-
-		
 	}
 
 	// never reach
@@ -322,6 +339,16 @@ void main_func(void)
 }
 void voltages_func(void)
 {
+	adc1_read = ADCD_get(1);
+	adc2_read = ADCD_get(2);
+	adc3_read = ADCD_get(3);
+	adc4_read = ADCD_get(4);
+
+	out24_val = (double)adc1_read * out24_cal / ADC_cal;
+	out5_val = (double)(adc2_read - 0x1000) * out5_cal / ADC_cal;
+	out33_val = (double)(adc3_read - 0x2000) * out33_cal / ADC_cal;
+	outvar_val = (double)(adc4_read - 0x3000) * outvar_cal / ADC_cal;
+
 	//change value
 	if(ENC_count != ENC_count_last)
 	{
@@ -341,7 +368,7 @@ void voltages_func(void)
 		page_select = variable;
 	}
 	//draw Screen
-	UI_draw_voltages_screen(24, 5, 42.69, 3.3, output_val);
+	UI_draw_voltages_screen(out24_val, out5_val, outvar_val, out33_val, output_val);
 }
 void variable_func(void)
 {
@@ -623,6 +650,7 @@ void house_keeping(void)
 		//RGB0 red and low tone
 		if(siren_toggle)
 		{
+			//LED1 red and Buzzer frequency low
 			UI_Buzzer_PWM(400);
 			RGB_0.bright = 10;
 			RGB_0.red = 250;
@@ -636,6 +664,7 @@ void house_keeping(void)
 		//RGB1 red and high tone
 		else
 		{
+			//LED0 red and Buzzer frequency high
 			UI_Buzzer_PWM(800);
 			RGB_0.bright = 00;
 			RGB_0.red = 0;
@@ -665,6 +694,7 @@ void house_keeping(void)
 		{
 			//output on
 			UI_GPIO_set(OUT_EN, 1);
+			//LEDs to purple
 			RGB_0.bright = 2;
 			RGB_0.red = 50;
 			RGB_0.green = 0;

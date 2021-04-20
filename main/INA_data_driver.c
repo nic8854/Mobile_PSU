@@ -85,7 +85,7 @@ void INAD_handler(void *pvParameters)
 				ESP_LOGE(TAG, "Could not take Semaphore");
 			}
 		}
-		vTaskDelay(100 / portTICK_PERIOD_MS);	
+		vTaskDelay(50 / portTICK_PERIOD_MS);	
 	}
 }
 
