@@ -153,7 +153,7 @@ double ADCD_get(int ADC_num)
 		//If able, take semaphore, otherwise try again for 10 Ticks
 		if( xSemaphoreTake( xADCD_Semaphore, ( TickType_t ) 10 ) == pdTRUE )
 	    {
-			uint16_t ADCD_return = 0;
+			double ADCD_return = 0;
 			switch(ADC_num)
 			{
 				case 1:
