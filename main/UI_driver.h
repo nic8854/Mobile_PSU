@@ -31,7 +31,8 @@ void UI_draw_main_screen(double power_val, double voltage_val, double current_va
 void UI_draw_voltages_screen(double out24_val, double out5_val, double outvar_val, double out33_val, bool output_val);
 void UI_draw_variable_screen(double uset_val, double ueff_val, int select_val, bool output_val);
 void UI_draw_statistics_screen(uint16_t p_val[100], int screen_select, int division_select, int select_val, bool output_val);
-void UI_draw_calibrate_screen(double INA1_S, double INA1_A, double INA2_S, double INA2_A, int select_val);
+void UI_draw_calibrate_screen_1(double INA1_S, double INA1_A, double INA2_S, double INA2_A, int select_val);
+void UI_draw_calibrate_screen_2(double out24, double out5, double out33, double outvar, int select_val);
 void UI_draw_tcbus_screen(bool TC_EN_val, bool TC_NFON_val, bool output_val, int select_val);
 
 //Linking Functions

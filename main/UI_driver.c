@@ -531,7 +531,7 @@ void UI_draw_statistics_screen(uint16_t p_val[100], int screen_select, int divis
  * @endcode
  * \ingroup UI_draw
  */
-void UI_draw_calibrate_screen(double INA1_S, double INA1_A, double INA2_S, double INA2_A, int select_val)
+void UI_draw_calibrate_screen_1(double INA1_S, double INA1_A, double INA2_S, double INA2_A, int select_val)
 {
 	//getting Background from Spiffs and printing it
 	strcpy(file, "/spiffs/background.png");
@@ -560,23 +560,23 @@ void UI_draw_calibrate_screen(double INA1_S, double INA1_A, double INA2_S, doubl
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 	xpos = 60;
 	ypos = 55;
-	if(INA1_S >= 0) DF_print_value(&dev, color, fx16G, xpos, ypos, INA1_S, -1);
+	DF_print_value(&dev, color, fx16G, xpos, ypos, INA1_S, -1);
 	xpos = 60;
 	ypos = 75;
-	if(INA1_A >= 0) DF_print_value(&dev, color, fx16G, xpos, ypos, INA1_A, -1);
+	DF_print_value(&dev, color, fx16G, xpos, ypos, -1, INA1_A);
 	xpos = 60;
 	ypos = 95;
-	if(INA2_S >= 0) DF_print_value(&dev, color, fx16G, xpos, ypos, INA2_S, -1);
+	DF_print_value(&dev, color, fx16G, xpos, ypos, INA2_S, -1);
 	xpos = 60;
 	ypos = 115;
-	if(INA2_A >= 0) DF_print_value(&dev, color, fx16G, xpos, ypos, INA2_A, -1);
+	DF_print_value(&dev, color, fx16G, xpos, ypos, -1, INA2_A);
 	xpos = 95;
 	ypos = 55;
 	strcpy((char *)ascii, "mOhm");
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 	xpos = 100;
 	ypos = 75;
-	strcpy((char *)ascii, "mA");
+	strcpy((char *)ascii, "A");
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 	xpos = 95;
 	ypos = 95;
@@ -584,8 +584,65 @@ void UI_draw_calibrate_screen(double INA1_S, double INA1_A, double INA2_S, doubl
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 	xpos = 100;
 	ypos = 115;
-	strcpy((char *)ascii, "mA");
+	strcpy((char *)ascii, "A");
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	switch(select_val)
+	{
+		case 0:
+			DF_print_rect(5, 38, 127, 57, color);
+		break;
+		case 1:
+			DF_print_rect(5, 58, 127, 77, color);
+		break;
+		case 2:
+			DF_print_rect(5, 78, 127, 97, color);
+		break;
+		case 3:
+			DF_print_rect(5, 98, 127, 117, color);
+		break;
+	}
+	color = WHITE;
+}
+void UI_draw_calibrate_screen_2(double out24, double out5, double out33, double outvar, int select_val)
+{
+	//getting Background from Spiffs and printing it
+	strcpy(file, "/spiffs/background.png");
+	DF_print_png(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
+
+	color = WHITE;
+	xpos = 10;
+	ypos = 28;
+	strcpy((char *)ascii, "Calibrate");
+	DF_print_string(&dev, fx24G, xpos, ypos, ascii, color);
+	xpos = 5;
+	ypos = 55;
+	strcpy((char *)ascii, "   24V:");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 5;
+	ypos = 75;
+	strcpy((char *)ascii, "    5V:");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 5;
+	ypos = 95;
+	strcpy((char *)ascii, "  3.3V:");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 5;
+	ypos = 115;
+	strcpy((char *)ascii, "   Var:");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 60;
+	ypos = 55;
+	DF_print_value(&dev, color, fx16G, xpos, ypos, -1, out24);
+	xpos = 60;
+	ypos = 75;
+	DF_print_value(&dev, color, fx16G, xpos, ypos, -1, out5);
+	xpos = 60;
+	ypos = 95;
+	DF_print_value(&dev, color, fx16G, xpos, ypos, -1, out33);
+	xpos = 60;
+	ypos = 115;
+	DF_print_value(&dev, color, fx16G, xpos, ypos, -1, outvar);
+
 	switch(select_val)
 	{
 		case 0:

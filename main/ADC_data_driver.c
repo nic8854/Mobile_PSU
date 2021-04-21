@@ -13,6 +13,9 @@
 
 static const char *TAG = "ADCD_Data_Driver";
 
+//ADC value at 1V
+#define ADC_cal_factor 3410
+
 #define ADC1_config 0x0010
 #define ADC2_config 0x0020
 #define ADC3_config 0x0040
@@ -31,6 +34,16 @@ uint16_t ADC2_read = 0x0000;
 uint16_t ADC3_read = 0x0000;
 uint16_t ADC4_read = 0x0000;
 uint16_t ADC5_read = 0x0000;
+
+double out24_calibrate = 0;
+double out5_calibrate = 0;
+double out33_calibrate = 0;
+double outvar_calibrate = 0;
+
+double out24_value = 0;
+double out5_value = 0;
+double out33_value = 0;
+double outvar_value = 0;
 
 /**
  * Main task of ADC data driver.
@@ -72,6 +85,10 @@ void ADCD_handler(void *pvParameters)
 			{
 				ESP_LOGE(TAG, "Could not take Semaphore");
 			}
+			out24_value = (double)ADC1_read * out24_calibrate / ADC_cal_factor;
+			out5_value = (double)(ADC2_read - 0x1000) * out5_calibrate / ADC_cal_factor;
+			out33_value = (double)(ADC3_read - 0x2000) * out33_calibrate / ADC_cal_factor;
+			outvar_value = (double)(ADC4_read - 0x3000) * outvar_calibrate / ADC_cal_factor;
 			vTaskDelay(50 / portTICK_PERIOD_MS);
 		}
 	}
@@ -89,9 +106,13 @@ void ADCD_handler(void *pvParameters)
  * @endcode
  * \ingroup ADCD
  */
-void ADCD_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
+void ADCD_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO, ADC_cal_t ADC_cal)
 {
-	
+	out24_calibrate = ((double)ADC_cal.OUT24_cal) / 1000;
+	out5_calibrate = ((double)ADC_cal.OUT5_cal) / 1000;
+	out33_calibrate = ((double)ADC_cal.OUT33_cal) / 1000;
+	outvar_calibrate = ((double)ADC_cal.OUTvar_cal) / 1000;
+
 	//ADC Init
 	memset(&ADC_dev, 0, sizeof(AD_t));
 	AD_init_desc(&ADC_dev, AD_addr_low, I2C_PORT, SDA_GPIO, SCL_GPIO);
@@ -123,7 +144,7 @@ void ADCD_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
  * \ingroup ADCD
  * @endcode
  */
-uint16_t ADCD_get(int ADC_num)
+double ADCD_get(int ADC_num)
 {
 	
 	//If semaphore is initialized
@@ -136,16 +157,16 @@ uint16_t ADCD_get(int ADC_num)
 			switch(ADC_num)
 			{
 				case 1:
-					ADCD_return = ADC1_read;
+					ADCD_return = out24_value;
 				break;
 				case 2:
-					ADCD_return = ADC2_read;
+					ADCD_return = out5_value;
 				break;
 				case 3:
-					ADCD_return = ADC3_read;
+					ADCD_return = out33_value;
 				break;
 				case 4:
-					ADCD_return = ADC4_read;
+					ADCD_return = outvar_value;
 				break;
 				case 5:
 					ADCD_return = ADC5_read;

@@ -16,6 +16,17 @@ static const char *TAG = "AD_driver";
 //define Error checking function
 #define CHECK_ARG(VAL) do { if (!(VAL)) return ESP_ERR_INVALID_ARG; } while (0)
 
+/**
+ * Function read an 8Bit Register from the ADC
+ *
+ * I2C dev and the ADC must be initialized to use this function. 
+ * @param dev ADC I2C Object
+ * @param reg Register Adress
+ * @param val Value to read from the register
+ *  
+ * @endcode
+ * \ingroup ADC
+ */
 esp_err_t AD_read_reg_8(AD_t *dev, uint8_t reg, uint8_t *val)
 {
     CHECK_ARG(val);
@@ -29,6 +40,17 @@ esp_err_t AD_read_reg_8(AD_t *dev, uint8_t reg, uint8_t *val)
     return ESP_OK;
 }
 
+/**
+ * Function to write an 8Bit Register to the ADC
+ *
+ * I2C dev and the ADC must be initialized to use this function. 
+ * @param dev ADC I2C Object
+ * @param reg Register Adress
+ * @param val Value to write to the register
+ *  
+ * @endcode
+ * \ingroup ADC
+ */
 esp_err_t AD_write_reg_8(AD_t *dev, uint8_t reg, uint8_t val)
 {
     //Take I2C Mutex and Write 8Bit Register
@@ -39,6 +61,17 @@ esp_err_t AD_write_reg_8(AD_t *dev, uint8_t reg, uint8_t val)
     return ESP_OK;
 }
 
+/**
+ * Function to read an 16Bit Register from the ADC
+ *
+ * I2C dev and the ADC must be initialized to use this function. 
+ * @param dev ADC I2C Object
+ * @param reg Register Adress
+ * @param val Value to read from the register
+ *  
+ * @endcode
+ * \ingroup ADC
+ */
 esp_err_t AD_read_reg_16(AD_t *dev, uint8_t reg, uint16_t *val)
 {
     CHECK_ARG(val);
@@ -52,6 +85,17 @@ esp_err_t AD_read_reg_16(AD_t *dev, uint8_t reg, uint16_t *val)
     return ESP_OK;
 }
 
+/**
+ * Function to write an 8Bit Register to the ADC
+ *
+ * I2C dev and the ADC must be initialized to use this function. 
+ * @param dev ADC I2C Object
+ * @param reg Register Adress
+ * @param val Value to write to the register
+ *  
+ * @endcode
+ * \ingroup ADC
+ */
 esp_err_t AD_write_reg_16(AD_t *dev, uint8_t reg, uint16_t val)
 {
     //Switch bytes around
@@ -64,7 +108,20 @@ esp_err_t AD_write_reg_16(AD_t *dev, uint8_t reg, uint16_t val)
     return ESP_OK;
 }
 
-
+/**
+ * Function to initialize the ADC I2C Object
+ *
+ * I2C dev must be initialized to use this function. 
+ * 
+ * @param dev ADC I2C Object
+ * @param addr I2C address
+ * @param port I2C Port
+ * @param sda_gpio sda GPIO Pin for I2C
+ * @param scl_gpio scl GPIO Pin for I2C
+ *  
+ * @endcode
+ * \ingroup ADC
+ */
 esp_err_t AD_init_desc(AD_t *dev, uint8_t addr, i2c_port_t port, gpio_num_t sda_gpio, gpio_num_t scl_gpio)
 {
     //check if argument !=0

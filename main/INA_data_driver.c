@@ -4,11 +4,10 @@
 #include "freertos/task.h"
 #include "freertos/semphr.h"
 #include "esp_err.h"
-#include "nvs_flash.h"
-#include "nvs.h"
-#include "math.h"
 #include "INA220.h"
+#include "math.h"
 #include "esp_log.h"
+#include "INA_data_driver.h"
 
 static const char *TAG = "INAD_Data_Driver";
 
@@ -46,6 +45,7 @@ SemaphoreHandle_t xINAD_Semaphore;
     double INA2_i_val = 0;
     
 #endif
+	INA_cal_t INA_cal;
 	double INA2_i_max = 0;
     double INA2_s_cal = 0;
 	int32_t INA2_i_max_int = 0;
@@ -89,53 +89,13 @@ void INAD_handler(void *pvParameters)
 	}
 }
 
-void INAD_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
+void INAD_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO, INA_cal_t INA_cal)
 {
-	// Initialize NVS
-    esp_err_t err = nvs_flash_init();
-    if (err == ESP_ERR_NVS_NO_FREE_PAGES) {
-        // NVS partition was truncated and needs to be erased
-        // Retry nvs_flash_init
-        ESP_ERROR_CHECK(nvs_flash_erase());
-        err = nvs_flash_init();
-    }
-    ESP_ERROR_CHECK( err );
+	INA1_i_max = ((double)INA_cal.INA1_A_val) / 1000;
+	INA1_s_cal = ((double)INA_cal.INA1_S_val) / 1000;
+	INA1_i_max = ((double)INA_cal.INA2_A_val) / 1000;
+	INA1_s_cal = ((double)INA_cal.INA2_S_val) / 1000;
 
-	// Open NVS Handle
-    printf("\n");
-    printf("Opening NVS handle... ");
-    nvs_handle INA_config_NVS;
-    err = nvs_open("storage", NVS_READWRITE, &INA_config_NVS);
-    if (err != ESP_OK) 
-	{
-        printf("Error (%s) opening NVS handle!\n", esp_err_to_name(err));
-    } else 
-	{
-        printf("Done\n");
-
-		// Reading from NVS
-        printf("Reading INA1_S_val from NVS ... ");
-        err = nvs_get_i32(INA_config_NVS, "INA1_S_val", &INA1_s_cal_int);
-		err = nvs_get_i32(INA_config_NVS, "INA1_A_val", &INA1_i_max_int);
-		err = nvs_get_i32(INA_config_NVS, "INA2_S_val", &INA2_s_cal_int);
-		err = nvs_get_i32(INA_config_NVS, "INA2_A_val", &INA2_i_max_int);
-		INA1_i_max = ((double)INA1_i_max_int) / 1000;
-		INA1_s_cal = ((double)INA1_s_cal_int) / 1000;
-		INA1_i_max = ((double)INA2_i_max_int) / 1000;
-		INA1_s_cal = ((double)INA2_s_cal_int) / 1000;
-
-        switch (err) {
-            case ESP_OK:
-                printf("NVS read successfully\n");
-                break;
-            case ESP_ERR_NVS_NOT_FOUND:
-                printf("The value is not initialized yet!\n");
-                break;
-            default :
-                printf("Error (%s) reading!\n", esp_err_to_name(err));
-        }
-		nvs_close(INA_config_NVS);
-	}
 	//INA1 Init
 #ifdef INA1
     ina220_init_default_params(&INA1_params);

@@ -10,9 +10,8 @@
 #include "esp_vfs.h"
 #include "esp_spiffs.h"
 #include "esp_heap_caps.h"
-#include "nvs_flash.h"
-#include "nvs.h"
 #include "UI_driver.h"
+#include "NVS_driver.h"
 #include "Button_driver.h"
 #include "INA_data_driver.h"
 #include "ADC_data_driver.h"
@@ -25,14 +24,8 @@ static const char *TAG = "Master_Task";
 #define Max_U_mV 7
 #define Max_I_mA 5
 
-//ADC calibration value
-#define out24_cal 240
-#define out5_cal 50
-#define out33_cal 33
-#define outvar_cal 260
-
 //ADC value at 1V
-#define ADC_cal 34100
+#define ADC_cal_factor 3410
 
 //define I2C Pins
 #define I2C_PORT 0
@@ -47,17 +40,19 @@ static const char *TAG = "Master_Task";
 #define sel     4
 
 //define screens for switch case
-#define calibrate 		0
-#define main 			1
-#define voltage 		2
-#define variable 		3
-#define statistics_p 	4
-#define statistics_u 	5
-#define statistics_i 	6
-#define tcbus			7
+#define calibrate_1 	0
+#define calibrate_2 	1
+#define main 			2
+#define voltage 		3
+#define variable 		4
+#define statistics_p 	5
+#define statistics_u 	6
+#define statistics_i 	7
+#define tcbus			8
 
 //Subtask Functions
-void calibrate_func(void);
+void calibrate_1_func(void);
+void calibrate_2_func(void);
 void main_func(void);
 void voltages_func(void);
 void variable_func(void);
@@ -80,8 +75,8 @@ static void SPIFFS_Directory(char * path) {
 }
 
 //Init internal variables
-int page_select = 1;
-int page_select_last = 1;
+int page_select = main;
+int page_select_last = main;
 int value_select = 0;
 int ENC_count = 0;
 int ENC_count_last = 0;
@@ -95,10 +90,18 @@ bool siren_toggle = 0;
 //init Value variables
 nvs_handle INA_config_NVS;
 esp_err_t err;
-int32_t INA1_S_val = 0;
-int32_t INA1_A_val = 0;
-int32_t INA2_S_val = 0;
-int32_t INA2_A_val = 0;
+INA_cal_t INA_cal;
+ADC_cal_t ADC_cal;
+//INA calibration values
+double INA1_S_val = 0;
+double INA1_A_val = 0;
+double INA2_S_val = 0;
+double INA2_A_val = 0;
+//ADC calibration value
+double out24_cal = 24;
+double out5_cal = 5;
+double out33_cal = 3.3;
+double outvar_cal = 26;
 double power_val = 0;
 double voltage_val = 0;
 double current_val = 0;
@@ -127,53 +130,38 @@ uint16_t i_val[100];
 void Master_Task(void *pvParameters)
 {
 	// Initialize NVS
-    err = nvs_flash_init();
-    if (err == ESP_ERR_NVS_NO_FREE_PAGES) {
-        // NVS partition was truncated and needs to be erased
-        // Retry nvs_flash_init
-        ESP_ERROR_CHECK(nvs_flash_erase());
-        err = nvs_flash_init();
-    }
-    ESP_ERROR_CHECK( err );
+    NVS_init();
+	//Read calibration values from NVS
+	NVS_read_values("INA1_A_val", &INA_cal.INA1_A_val);
+	NVS_read_values("INA1_S_val", &INA_cal.INA1_S_val);
+	NVS_read_values("INA2_A_val", &INA_cal.INA2_A_val);
+	NVS_read_values("INA2_S_val", &INA_cal.INA2_S_val);
+
+	NVS_read_values("OUT24_cal", &ADC_cal.OUT24_cal);
+	NVS_read_values("OUT5_cal", &ADC_cal.OUT5_cal);
+	NVS_read_values("OUT33_cal", &ADC_cal.OUT33_cal);
+	NVS_read_values("OUTvar_cal", &ADC_cal.OUTvar_cal);
+
+	//convert to doubles
+	INA1_S_val = (double)INA_cal.INA1_S_val;
+	INA1_A_val = ((double)INA_cal.INA1_A_val / 1000);
+	INA2_S_val = (double)INA_cal.INA2_S_val;
+	INA2_A_val = ((double)INA_cal.INA2_A_val / 1000);
+
+	out24_cal = ((double)ADC_cal.OUT24_cal / 1000);
+	out5_cal = ((double)ADC_cal.OUT5_cal / 1000);
+	out33_cal = ((double)ADC_cal.OUT33_cal / 1000);
+	outvar_cal = ((double)ADC_cal.OUTvar_cal / 1000);
+	
     
 	//Init: Display, Buttons, IO and Buzzer
 	UI_init(I2C_PORT, SDA_GPIO, SCL_GPIO);	
 
 	//Init INAs
-	INAD_init(I2C_PORT, SDA_GPIO, SCL_GPIO);
+	INAD_init(I2C_PORT, SDA_GPIO, SCL_GPIO, INA_cal);
 
 	//Init ADC
-	ADCD_init(I2C_PORT, SDA_GPIO, SCL_GPIO);
-
-	
-	// Open NVS Handle
-    printf("\n");
-    printf("Opening NVS handle... ");
-    err = nvs_open("storage", NVS_READWRITE, &INA_config_NVS);
-    if (err != ESP_OK) 
-	{
-        printf("Error (%s) opening NVS handle!\n", esp_err_to_name(err));
-    } else 
-	{
-        printf("Done\n");
-
-		// Reading from NVS
-        printf("Reading INA1_S_val from NVS ... ");
-        err = nvs_get_i32(INA_config_NVS, "INA1_S_val", &INA1_S_val);
-		err = nvs_get_i32(INA_config_NVS, "INA1_A_val", &INA1_A_val);
-		err = nvs_get_i32(INA_config_NVS, "INA2_S_val", &INA2_S_val);
-		err = nvs_get_i32(INA_config_NVS, "INA2_A_val", &INA2_A_val);
-        switch (err) {
-            case ESP_OK:
-                printf("NVS read successfully\n");
-                break;
-            case ESP_ERR_NVS_NOT_FOUND:
-                printf("The value is not initialized yet!\n");
-                break;
-            default :
-                printf("Error (%s) reading!\n", esp_err_to_name(err));
-        }
-	}
+	ADCD_init(I2C_PORT, SDA_GPIO, SCL_GPIO, ADC_cal);
 
 	//set all elements of arrays to 0
 	for(int i = 0; i < 100; i++)
@@ -192,8 +180,8 @@ void Master_Task(void *pvParameters)
 	//check sel press for calibrate screen
 	if(UI_get_press(sel)) 
 	{
-		page_select = 0;
-		page_select_last = 0;
+		page_select = calibrate_1;
+		page_select_last = calibrate_1;
 		ESP_LOGI(TAG, "Calibrate Screen entered");
 	}
 
@@ -218,8 +206,11 @@ void Master_Task(void *pvParameters)
 
 		switch(page_select)
 		{
-			case calibrate:
-				calibrate_func();
+			case calibrate_1:
+				calibrate_1_func();
+			break;
+			case calibrate_2:
+				calibrate_2_func();
 			break;
 			case main:
 				main_func();
@@ -253,7 +244,7 @@ void Master_Task(void *pvParameters)
 	}
 }
 
-void calibrate_func(void)
+void calibrate_1_func(void)
 {
 	//value selection up
 	if(up_press)
@@ -284,35 +275,126 @@ void calibrate_func(void)
 				if((INA1_S_val + diff_count_temp) > 0) INA1_S_val += diff_count_temp; 
 			break;
 			case 1: 
-				if((INA1_A_val + diff_count_temp) > 0) INA1_A_val += diff_count_temp; 
+				if((INA1_A_val + diff_count_temp) > -1) INA1_A_val += diff_count_temp / 10; 
 			break;
 			case 2: 
 				if((INA2_S_val + diff_count_temp) > 0) INA2_S_val += diff_count_temp; 
 			break;
 			case 3:
-				if((INA2_A_val + diff_count_temp) > 0) INA2_A_val += diff_count_temp; 
+				if((INA2_A_val + diff_count_temp) > -1) INA2_A_val += diff_count_temp / 10; 
 			break;
 		}
 	}
 	//exit page
-	if(left_press || right_press > 1)
+	if(select_press > 1)
 	{
+		INA_cal.INA1_S_val = (int32_t)INA1_S_val;
+		INA_cal.INA1_A_val = (int32_t)(INA1_A_val*1000);
+		INA_cal.INA2_S_val = (int32_t)INA2_S_val;
+		INA_cal.INA2_A_val = (int32_t)(INA2_A_val*1000);
+
+		ADC_cal.OUT24_cal = (int32_t)(out24_cal * 1000);
+		ADC_cal.OUT5_cal = (int32_t)(out5_cal * 1000);
+		ADC_cal.OUT33_cal = (int32_t)(out33_cal * 1000);
+		ADC_cal.OUTvar_cal = (int32_t)(outvar_cal * 1000);
+
 		UI_Buzzer_beep();
-		err = nvs_set_i32(INA_config_NVS, "INA1_S_val", INA1_S_val);
-		err = nvs_set_i32(INA_config_NVS, "INA1_A_val", INA1_A_val);
-		err = nvs_set_i32(INA_config_NVS, "INA2_S_val", INA2_S_val);
-		err = nvs_set_i32(INA_config_NVS, "INA2_A_val", INA2_A_val);
-		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
-		// Commit written value.
-		printf("Committing updates in NVS ... ");
-		err = nvs_commit(INA_config_NVS);
-		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
-		// Close
-		nvs_close(INA_config_NVS);
+
+		NVS_write_values("INA1_S_val", INA_cal.INA1_S_val);
+		NVS_write_values("INA1_A_val", INA_cal.INA1_A_val);
+		NVS_write_values("INA2_S_val", INA_cal.INA2_S_val);
+		NVS_write_values("INA2_A_val", INA_cal.INA2_A_val);
+
+		NVS_write_values("OUT24_cal", ADC_cal.OUT24_cal);
+		NVS_write_values("OUT5_cal", ADC_cal.OUT5_cal);
+		NVS_write_values("OUT33_cal", ADC_cal.OUT33_cal);
+		NVS_write_values("OUTvar_cal", ADC_cal.OUTvar_cal);
+
 		page_select = main;
 	}
+
+	if(left_press || right_press)
+	{
+		page_select = calibrate_2;
+	}
 	//draw Screen
-	UI_draw_calibrate_screen(INA1_S_val, INA1_A_val, INA2_S_val, INA2_A_val, value_select);
+	UI_draw_calibrate_screen_1(INA1_S_val, INA1_A_val, INA2_S_val, INA2_A_val, value_select);
+}
+
+void calibrate_2_func(void)
+{
+	//value selection up
+	if(up_press)
+	{
+		UI_Buzzer_beep();
+		up_press = 0;
+		if(value_select > 0) value_select--;
+		else if(value_select == 0) value_select = 3;
+	}
+	//value selection down
+	if(down_press)
+	{
+		UI_Buzzer_beep();
+		down_press = 0;
+		if(value_select < 3) value_select++;
+		else if(value_select == 3) value_select = 0;
+	}
+	//change value
+	if(ENC_count != ENC_count_last)
+	{
+		UI_Buzzer_beep();
+		//save difference in temporary variable
+		double diff_count_temp = ((double)(ENC_count - ENC_count_last)) / 100;
+		ESP_LOGE(TAG, "-------> %f", diff_count_temp);
+		//add difference to selected value
+		switch(value_select)
+		{
+			case 0: 
+				if((out24_cal + diff_count_temp) > -1) out24_cal += diff_count_temp; 
+			break;
+			case 1: 
+				if((out5_cal + diff_count_temp) > -1) out5_cal += diff_count_temp; 
+			break;
+			case 2: 
+				if((out33_cal + diff_count_temp) > -1) out33_cal += diff_count_temp; 
+			break;
+			case 3:
+				if((outvar_cal + diff_count_temp) > -1) outvar_cal += diff_count_temp; 
+			break;
+		}
+	}
+	//exit page
+	if(select_press > 1)
+	{
+		INA_cal.INA1_S_val = (uint32_t)INA1_S_val;
+		INA_cal.INA1_A_val = (uint32_t)(INA1_A_val*1000);
+		INA_cal.INA2_S_val = (uint32_t)INA2_S_val;
+		INA_cal.INA2_A_val = (uint32_t)(INA2_A_val*1000);
+
+		ADC_cal.OUT24_cal = (int32_t)(out24_cal * 1000);
+		ADC_cal.OUT5_cal = (int32_t)(out5_cal * 1000);
+		ADC_cal.OUT33_cal = (int32_t)(out33_cal * 1000);
+		ADC_cal.OUTvar_cal = (int32_t)(outvar_cal * 1000);
+
+		UI_Buzzer_beep();
+		NVS_write_values("INA1_S_val", INA_cal.INA1_S_val);
+		NVS_write_values("INA1_A_val", INA_cal.INA1_A_val);
+		NVS_write_values("INA2_S_val", INA_cal.INA2_S_val);
+		NVS_write_values("INA2_A_val", INA_cal.INA2_A_val);
+
+		NVS_write_values("OUT24_cal", ADC_cal.OUT24_cal);
+		NVS_write_values("OUT5_cal", ADC_cal.OUT5_cal);
+		NVS_write_values("OUT33_cal", ADC_cal.OUT33_cal);
+		NVS_write_values("OUTvar_cal", ADC_cal.OUTvar_cal);
+		page_select = main;
+	}
+
+	if(left_press || right_press)
+	{
+		page_select = calibrate_1;
+	}
+	//draw Screen
+	UI_draw_calibrate_screen_2(out24_cal, out5_cal, out33_cal, outvar_cal, value_select);
 }
 void main_func(void)
 {
@@ -339,15 +421,10 @@ void main_func(void)
 }
 void voltages_func(void)
 {
-	adc1_read = ADCD_get(1);
-	adc2_read = ADCD_get(2);
-	adc3_read = ADCD_get(3);
-	adc4_read = ADCD_get(4);
-
-	out24_val = (double)adc1_read * out24_cal / ADC_cal;
-	out5_val = (double)(adc2_read - 0x1000) * out5_cal / ADC_cal;
-	out33_val = (double)(adc3_read - 0x2000) * out33_cal / ADC_cal;
-	outvar_val = (double)(adc4_read - 0x3000) * outvar_cal / ADC_cal;
+	out24_val = ADCD_get(1);
+	out5_val = ADCD_get(2);
+	out33_val = ADCD_get(3);
+	outvar_val = ADCD_get(4);
 
 	//change value
 	if(ENC_count != ENC_count_last)
@@ -397,7 +474,7 @@ void variable_func(void)
 		{
 			case 0: 
 				diff_count_temp = diff_count_temp / 10;
-				if((uset_val + diff_count_temp) > 0) uset_val += diff_count_temp; 
+				if((uset_val + diff_count_temp) >= 0) uset_val += diff_count_temp; 
 			break;
 			case 1: 
 				output_val = !output_val;
@@ -712,8 +789,7 @@ void house_keeping(void)
 	UI_Update();
 	//write last state for detecting change
 	ENC_count_last = ENC_count;
-	//write last state for detecting change
-	page_select_last = page_select;
+	
 	//if page is the same, update button values
 	if(page_select == page_select_last)
 	{
@@ -737,6 +813,8 @@ void house_keeping(void)
 		ENC_count = 0;
 		ENC_count_last = 0;
 	}
+	//write last state for detecting change
+	page_select_last = page_select;
 	//Display free Heap size
 	ESP_LOGI(__FUNCTION__, "Free Heap size: %d\n", xPortGetFreeHeapSize());
 	
