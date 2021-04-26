@@ -34,6 +34,8 @@ void UI_draw_statistics_screen(uint16_t p_val[100], int screen_select, int divis
 void UI_draw_calibrate_screen_1(double INA1_S, double INA1_A, double INA2_S, double INA2_A, int select_val);
 void UI_draw_calibrate_screen_2(double out24, double out5, double out33, double outvar, int select_val);
 void UI_draw_tcbus_screen(bool TC_EN_val, bool TC_NFON_val, bool output_val, int select_val);
+void UI_draw_test_screen_1(int ADC1_read, int ADC2_read, int ADC3_read, int ADC4_read, int ADC5_read);
+void UI_draw_test_screen_2(int master_stack, int ADC_stack, int INA_stack, int button_stack, int IO_stack);
 
 //Linking Functions
 void UI_Update();

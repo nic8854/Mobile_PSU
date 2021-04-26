@@ -13,7 +13,8 @@ typedef struct
 
 void ADCD_handler(void *pvParameters);
 void ADCD_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO, ADC_cal_t ADC_cal);
-double ADCD_get(int ADC_num);
+double ADCD_get_volt(int ADC_num);
+int ADCD_get(int ADC_num);
 void ADCD_write_value_8(uint8_t reg, uint8_t value);
 void ADCD_write_value_16(uint8_t reg, uint16_t value);
 #endif

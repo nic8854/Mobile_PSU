@@ -85,7 +85,8 @@ ADC_data_driver.o: /home/michael/esp/PSU_main/main/ADC_data_driver.c \
  /home/michael/esp/esp-idf/components/soc/esp32/include/soc/i2c_reg.h \
  /home/michael/esp/esp-idf/components/log/include/esp_log.h \
  /home/michael/esp/esp-idf/components/log/include/esp_log_internal.h \
- /home/michael/esp/PSU_main/main/ADC_data_driver.h
+ /home/michael/esp/PSU_main/main/ADC_data_driver.h \
+ /home/michael/esp/PSU_main/main/stack_usage_queue_handler.h
 
 /home/michael/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h:
 
@@ -260,4 +261,6 @@ ADC_data_driver.o: /home/michael/esp/PSU_main/main/ADC_data_driver.c \
 /home/michael/esp/esp-idf/components/log/include/esp_log_internal.h:
 
 /home/michael/esp/PSU_main/main/ADC_data_driver.h:
+
+/home/michael/esp/PSU_main/main/stack_usage_queue_handler.h:
 /home/michael/esp/PSU_main/main/./ADC_data_driver.c:

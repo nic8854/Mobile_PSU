@@ -517,8 +517,9 @@ void UI_draw_statistics_screen(uint16_t p_val[100], int screen_select, int divis
 	if(!output_val)strcpy((char *)ascii, "OUTPUT OFF");
 	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
 }
+
 /**
- * Function to generate a Calibration Screen using the dfuncs library.
+ * Function to generate a Calibration Screen 1 for INA Calibration using the dfuncs library.
  *
  * Display must be initialized to use this function. Initialize using UI_init.
  * 
@@ -603,6 +604,22 @@ void UI_draw_calibrate_screen_1(double INA1_S, double INA1_A, double INA2_S, dou
 	}
 	color = WHITE;
 }
+
+/**
+ * Function to generate a Calibration Screen 2 for ADC Calibration using the dfuncs library.
+ * The values set with the out... Parameters is the value that will be displayed when the ADC Input is at 1V. 
+ *
+ * Display must be initialized to use this function. Initialize using UI_init.
+ * 
+ * @param out24 Set Calibration Value for 24Vout
+ * @param out5 Max Current Value in mA for INA 1.
+ * @param out33 The Shunt Value in Ohms for INA 2.
+ * @param outvar Max Current Value in mA for INA 2.
+ * @param select_val Value to select which parameter should be selected. Draws Rectangle around slected Value.
+ *  
+ * @endcode
+ * \ingroup UI_draw
+ */
 void UI_draw_calibrate_screen_2(double out24, double out5, double out33, double outvar, int select_val)
 {
 	//getting Background from Spiffs and printing it
@@ -742,6 +759,101 @@ void UI_draw_tcbus_screen(bool TC_EN_val, bool TC_NFON_val, bool output_val, int
 void UI_Update()
 {
 	DF_VlcdUpdate(&dev);
+}
+
+
+void UI_draw_test_screen_1(int ADC1_read, int ADC2_read, int ADC3_read, int ADC4_read, int ADC5_read)
+{
+	strcpy(file, "/spiffs/background.png");
+	DF_print_png(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
+
+	color = WHITE;
+	xpos = 40;
+	ypos = 28;
+	strcpy((char *)ascii, "TEST");
+	DF_print_string(&dev, fx24G, xpos, ypos, ascii, color);
+	xpos = 5;
+	ypos = 55;
+	strcpy((char *)ascii, "ADC1:");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 5;
+	ypos = 75;
+	strcpy((char *)ascii, "ADC2:");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 5;
+	ypos = 95;
+	strcpy((char *)ascii, "ADC3:");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 5;
+	ypos = 115;
+	strcpy((char *)ascii, "ADC4:");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 5;
+	ypos = 135;
+	strcpy((char *)ascii, "ADC5:");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 55;
+	ypos = 55;
+	DF_print_value(&dev, color, fx16G, xpos, ypos, ADC1_read, -1);
+	xpos = 55;
+	ypos = 75;
+	DF_print_value(&dev, color, fx16G, xpos, ypos, ADC2_read, -1);
+	xpos = 55;
+	ypos = 95;
+	DF_print_value(&dev, color, fx16G, xpos, ypos, ADC3_read, -1);
+	xpos = 55;
+	ypos = 115;
+	DF_print_value(&dev, color, fx16G, xpos, ypos, ADC4_read, -1);
+	xpos = 55;
+	ypos = 135;
+	DF_print_value(&dev, color, fx16G, xpos, ypos, ADC5_read, -1);
+}
+
+void UI_draw_test_screen_2(int master_stack, int ADC_stack, int INA_stack, int button_stack, int IO_stack)
+{
+	strcpy(file, "/spiffs/background.png");
+	DF_print_png(&dev, file, CONFIG_WIDTH, CONFIG_HEIGHT);
+
+	color = WHITE;
+	xpos = 40;
+	ypos = 28;
+	strcpy((char *)ascii, "TEST");
+	DF_print_string(&dev, fx24G, xpos, ypos, ascii, color);
+	xpos = 5;
+	ypos = 55;
+	strcpy((char *)ascii, "Master:");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 5;
+	ypos = 75;
+	strcpy((char *)ascii, "ADC   :");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 5;
+	ypos = 95;
+	strcpy((char *)ascii, "INA   :");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 5;
+	ypos = 115;
+	strcpy((char *)ascii, "Button:");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 5;
+	ypos = 135;
+	strcpy((char *)ascii, "IO    :");
+	DF_print_string(&dev, fx16G, xpos, ypos, ascii, color);
+	xpos = 65;
+	ypos = 55;
+	DF_print_value(&dev, color, fx16G, xpos, ypos, master_stack, -1);
+	xpos = 65;
+	ypos = 75;
+	DF_print_value(&dev, color, fx16G, xpos, ypos, ADC_stack, -1);
+	xpos = 65;
+	ypos = 95;
+	DF_print_value(&dev, color, fx16G, xpos, ypos, INA_stack, -1);
+	xpos = 65;
+	ypos = 115;
+	DF_print_value(&dev, color, fx16G, xpos, ypos, button_stack, -1);
+	xpos = 65;
+	ypos = 135;
+	DF_print_value(&dev, color, fx16G, xpos, ypos, IO_stack, -1);
 }
 
 /**

@@ -10,7 +10,7 @@
 #define btn_right   3
 #define btn_sel     4
 
-//struct for all button vars
+//struct for all button variables
 typedef struct {
     bool state[5];
     bool state_last[5];

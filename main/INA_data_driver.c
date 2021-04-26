@@ -8,8 +8,12 @@
 #include "math.h"
 #include "esp_log.h"
 #include "INA_data_driver.h"
+#include "stack_usage_queue_handler.h"
 
 static const char *TAG = "INAD_Data_Driver";
+
+//Create Task Handle
+TaskHandle_t INA_task;
 
 //select INA1, INA2 or both
 
@@ -18,6 +22,9 @@ static const char *TAG = "INAD_Data_Driver";
 
 //initialize Mutex Handle
 SemaphoreHandle_t xINAD_Semaphore;
+
+//Initialize Object for stack usage queue
+stack_usage_dataframe_t stack_INA;
 
 //Vars INA1
 #ifdef INA1
@@ -85,6 +92,12 @@ void INAD_handler(void *pvParameters)
 				ESP_LOGE(TAG, "Could not take Semaphore");
 			}
 		}
+		//send free stack of task to queue
+		stack_INA.size = uxTaskGetStackHighWaterMark(INA_task);
+		if(stack_usage_queue)
+		{
+			xQueueSendToBack(stack_usage_queue, &stack_INA, 0);
+		}
 		vTaskDelay(50 / portTICK_PERIOD_MS);	
 	}
 }
@@ -112,10 +125,16 @@ void INAD_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO, INA_cal_t INA_cal)
 	ina220_init(&INA2_dev, &INA2_params);
 	ina220_setCalibrationData(&INA2_dev, &INA2_params, INA2_i_max, INA2_s_cal);
 #endif
+
+	//set name of stack queue object
+	if(stack_usage_queue)
+	{
+		stack_INA.task_num = INA_TASK;
+	}
 	//Create Mutex
 	xINAD_Semaphore = xSemaphoreCreateMutex();
 	//Create Handler Task
-	xTaskCreate(INAD_handler, "INAD_handler", 1024*4, NULL, 2, NULL);
+	xTaskCreate(INAD_handler, "INAD_handler", 1024*4, NULL, 2, INA_task);
 	ESP_LOGI(TAG, "--> INA220_data_driver initialized successfully");
 }
 

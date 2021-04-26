@@ -6,15 +6,22 @@
 #include "esp_log.h"
 #include "IO_driver.h"
 #include "Button_driver.h"
+#include "stack_usage_queue_handler.h"
 
 //Tag for ESP_LOG functions
 static const char *TAG = "Button_driver";
 
+//Create Task Handle
+TaskHandle_t button_task;
+
 //defines the time it takes for a long press to be registered
-#define LONG_PRESS_TIME 20 //  1 = 10ms
+#define LONG_PRESS_TIME 50 //  1 = 10ms
 
 //Create Semaphore
 SemaphoreHandle_t xBTSemaphore;
+
+//Initialize Object for stack usage queue
+stack_usage_dataframe_t stack_button;
 
 //expander vars
 uint8_t reg_read = 0;
@@ -29,6 +36,7 @@ int DT_state = 0;
 int CLK_state = 0;
 int CLK_state_last = 0;
 int ENC_counter = 0;
+int queue_counter_button = 0;
 
 /**
  * Main Button Driver Task. Handles long and short press recognition for buttons and converts encoder signals into usable Numbers.
@@ -62,10 +70,6 @@ void Button_handler(void *pvParameters)
 
 				xSemaphoreGive( xBTSemaphore );
 				
-				
-				
-				
-				
 				//Encoder Logic (counter)
 				if(CLK_state != CLK_state_last)
 				{
@@ -81,9 +85,24 @@ void Button_handler(void *pvParameters)
 				ESP_LOGE(TAG, "Could not take Semaphore(main");
 			}
 		}
+
+		//execute every 10th time
+		if(queue_counter_button > 10)
+		{
+			//send free stack of task to queue
+			stack_button.size = uxTaskGetStackHighWaterMark(button_task);
+			if(stack_usage_queue)
+			{
+				xQueueSendToBack(stack_usage_queue, &stack_button, 0);
+			}
+			queue_counter_button = 0;
+		}
+		else
+		{
+			queue_counter_button++;
+		}
 		vTaskDelay(10 / portTICK_PERIOD_MS);	
 	}
-	
 }
 
 /**
@@ -103,8 +122,13 @@ void Button_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 	IO_init(I2C_PORT, SDA_GPIO, SCL_GPIO);
 	//set all values in buttons to 0
 	memset( &buttons, 0, sizeof( button_states ) );
+	//set name of stack queue object
+	if(stack_usage_queue)
+	{
+		stack_button.task_num = BUTTON_TASK;
+	}
 	//Create Main Task
-	xTaskCreate(Button_handler, "Button_handler", 1024*4, NULL, 2, NULL);
+	xTaskCreate(Button_handler, "Button_handler", 1024*4, NULL, 2, button_task);
 	ESP_LOGI(TAG, "--> Button_driver initialized successfully");
 	
 }

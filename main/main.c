@@ -4,6 +4,7 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "freertos/queue.h"
 #include "esp_err.h"
 #include "esp_log.h"
 #include "esp_system.h"
@@ -15,6 +16,7 @@
 #include "Button_driver.h"
 #include "INA_data_driver.h"
 #include "ADC_data_driver.h"
+#include "stack_usage_queue_handler.h"
 
 //Tag for ESP_LOG functions
 static const char *TAG = "Master_Task";
@@ -23,9 +25,6 @@ static const char *TAG = "Master_Task";
 #define Max_P_mW 25
 #define Max_U_mV 7
 #define Max_I_mA 5
-
-//ADC value at 1V
-#define ADC_cal_factor 3410
 
 //define I2C Pins
 #define I2C_PORT 0
@@ -49,6 +48,8 @@ static const char *TAG = "Master_Task";
 #define statistics_u 	6
 #define statistics_i 	7
 #define tcbus			8
+#define test_1			9
+#define test_2			10
 
 //Subtask Functions
 void calibrate_1_func(void);
@@ -60,6 +61,8 @@ void statistics_p_func(void);
 void statistics_u_func(void);
 void statistics_i_func(void);
 void tcbus_func(void);
+void test_func_1(void);
+void test_func_2(void);
 void house_keeping(void);
 
 //Function for Spiffs
@@ -75,6 +78,7 @@ static void SPIFFS_Directory(char * path) {
 }
 
 //Init internal variables
+TaskHandle_t master_task;
 int page_select = main;
 int page_select_last = main;
 int value_select = 0;
@@ -87,34 +91,46 @@ int right_press = 0;
 int select_press = 0;
 bool siren_toggle = 0;
 
-//init Value variables
+
 nvs_handle INA_config_NVS;
 esp_err_t err;
 INA_cal_t INA_cal;
 ADC_cal_t ADC_cal;
-//INA calibration values
+
+stack_usage_dataframe_t stack_temp;
+uint32_t stack_master_size = 0;
+uint32_t stack_ADC_size = 0;
+uint32_t stack_INA_size = 0;
+uint32_t stack_button_size = 0;
+uint32_t stack_IO_size = 0;
+//INA calibration variables
 double INA1_S_val = 0;
 double INA1_A_val = 0;
 double INA2_S_val = 0;
 double INA2_A_val = 0;
-//ADC calibration value
+//ADC calibration variables
 double out24_cal = 24;
 double out5_cal = 5;
 double out33_cal = 3.3;
 double outvar_cal = 26;
+//INA value variables
 double power_val = 0;
 double voltage_val = 0;
 double current_val = 0;
-uint16_t adc1_read = 0;
-uint16_t adc2_read = 0;
-uint16_t adc3_read = 0;
-uint16_t adc4_read = 0;
-uint16_t adc5_read = 0;
+//ADC value variables
 double out24_val = 0;
 double out5_val = 0;
 double out33_val = 0;
 double outvar_val = 0;
+//ADC raw values
+int adc1_read = 0;
+int adc2_read = 0;
+int adc3_read = 0;
+int adc4_read = 0;
+int adc5_read = 0;
+//output value variable
 bool output_val = 0;
+//variable out value variable
 double uset_val = 0;
 double ueff_val = 0;
 int division_select = 0;
@@ -125,6 +141,8 @@ APA102_t RGB_1;
 uint16_t p_val[100];
 uint16_t u_val[100];
 uint16_t i_val[100];
+
+int receive = 0;
 
 //main Task
 void Master_Task(void *pvParameters)
@@ -153,6 +171,18 @@ void Master_Task(void *pvParameters)
 	out33_cal = ((double)ADC_cal.OUT33_cal / 1000);
 	outvar_cal = ((double)ADC_cal.OUTvar_cal / 1000);
 	
+	//initialize queue
+	stack_usage_queue = xQueueCreate( 10, sizeof( stack_usage_dataframe_t ) );
+
+	//check if queue is initialized
+	if(stack_usage_queue == NULL)
+	{
+		ESP_LOGW(TAG, "Stack queue was not created!");
+	}
+	if(stack_usage_queue)
+	{
+		ESP_LOGI(TAG, "Stack queue was created successfully!");
+	}
     
 	//Init: Display, Buttons, IO and Buzzer
 	UI_init(I2C_PORT, SDA_GPIO, SCL_GPIO);	
@@ -183,6 +213,14 @@ void Master_Task(void *pvParameters)
 		page_select = calibrate_1;
 		page_select_last = calibrate_1;
 		ESP_LOGI(TAG, "Calibrate Screen entered");
+	}
+
+	//check sel press for calibrate screen
+	if(UI_get_press(left) && UI_get_press(right)) 
+	{
+		page_select = test_1;
+		page_select_last = test_1;
+		ESP_LOGI(TAG, "Test Screen entered");
 	}
 
 	//set RGB_led values to zero
@@ -232,6 +270,12 @@ void Master_Task(void *pvParameters)
 			break;
 			case tcbus:
 				tcbus_func();
+			break;
+			case test_1:
+				test_func_1();
+			break;
+			case test_2:
+				test_func_2();
 			break;
 		}
 		//do everything that needs to be done every loop (including the delay)
@@ -421,10 +465,10 @@ void main_func(void)
 }
 void voltages_func(void)
 {
-	out24_val = ADCD_get(1);
-	out5_val = ADCD_get(2);
-	out33_val = ADCD_get(3);
-	outvar_val = ADCD_get(4);
+	out24_val = ADCD_get_volt(1);
+	out5_val = ADCD_get_volt(2);
+	out33_val = ADCD_get_volt(3);
+	outvar_val = ADCD_get_volt(4);
 
 	//change value
 	if(ENC_count != ENC_count_last)
@@ -709,6 +753,65 @@ void tcbus_func(void)
 	//draw Screen
 	UI_draw_tcbus_screen(TC_EN_val, TC_NFON_val, output_val, value_select);
 }
+void test_func_1(void)
+{
+	adc1_read = ADCD_get(1);
+	adc2_read = ADCD_get(2);
+	adc3_read = ADCD_get(3);
+	adc4_read = ADCD_get(4);
+	adc5_read = ADCD_get(5);
+	//change page +
+	if(select_press > 1)
+	{
+		UI_Buzzer_beep();
+		page_select = main;
+	}
+	if(right_press || left_press)
+	{
+		UI_Buzzer_beep();
+		page_select = test_2;
+	}
+	//draw Screen
+	UI_draw_test_screen_1(adc1_read, adc2_read, adc3_read, adc4_read, adc5_read);
+}
+void test_func_2(void)
+{
+	if(xQueueReceive(stack_usage_queue, &stack_temp, 0))
+	{
+		receive++;
+	}
+
+	switch(stack_temp.task_num)
+	{
+		break;
+		case ADC_TASK:
+			stack_ADC_size = stack_temp.size;
+		break;
+		case INA_TASK:
+			stack_INA_size = stack_temp.size;
+		break;
+		case BUTTON_TASK:
+			stack_button_size = stack_temp.size;
+		break;
+		case IO_TASK:
+			stack_IO_size = stack_temp.size;
+		break;
+	}
+
+	//change page +
+	if(select_press > 1)
+	{
+		UI_Buzzer_beep();
+		page_select = main;
+	}
+	if(right_press || left_press)
+	{
+		UI_Buzzer_beep();
+		page_select = test_1;
+	}
+	//draw Screen
+	UI_draw_test_screen_2(stack_master_size, stack_ADC_size, stack_INA_size, stack_button_size, stack_IO_size);
+}
 void house_keeping(void)
 {
 	//set Expander value for TC_NFON anf TC_EN
@@ -789,7 +892,6 @@ void house_keeping(void)
 	UI_Update();
 	//write last state for detecting change
 	ENC_count_last = ENC_count;
-	
 	//if page is the same, update button values
 	if(page_select == page_select_last)
 	{
@@ -817,6 +919,8 @@ void house_keeping(void)
 	page_select_last = page_select;
 	//Display free Heap size
 	ESP_LOGI(__FUNCTION__, "Free Heap size: %d\n", xPortGetFreeHeapSize());
+	//send free stack of task to queue
+	stack_master_size = uxTaskGetStackHighWaterMark(master_task);
 	
 	vTaskDelay(3 / portTICK_PERIOD_MS);
 }
@@ -862,5 +966,5 @@ void app_main(void)
 	SPIFFS_Directory("/spiffs/");
 
 	//Create Main Task
-	xTaskCreate(Master_Task, "Master_Task", 1024*8, NULL, 2, NULL);
+	xTaskCreate(Master_Task, "Master_Task", 1024*8, NULL, 2, master_task);
 }

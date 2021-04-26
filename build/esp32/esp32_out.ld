@@ -19,7 +19,6 @@
  * Espressif IoT Development Framework (ESP-IDF) Configuration Header
  */
        
-/* List of deprecated options */
 /* If BT is not built at all */
 MEMORY
 {

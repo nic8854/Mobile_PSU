@@ -10,6 +10,7 @@
 #include "ADC_driver.h"
 #include "esp_log.h"
 #include "ADC_data_driver.h"
+#include "stack_usage_queue_handler.h"
 
 static const char *TAG = "ADCD_Data_Driver";
 
@@ -27,6 +28,12 @@ static const char *TAG = "ADCD_Data_Driver";
 SemaphoreHandle_t xADCD_Semaphore;
 //Initialize ADC I2C Object
 AD_t ADC_dev;
+
+//Initialize Object for stack usage queue
+stack_usage_dataframe_t stack_ADC;
+
+//Initialize Task handle
+TaskHandle_t ADC_task;
 
 //Variables to save values to
 uint16_t ADC1_read = 0x0000;
@@ -89,8 +96,15 @@ void ADCD_handler(void *pvParameters)
 			out5_value = (double)(ADC2_read - 0x1000) * out5_calibrate / ADC_cal_factor;
 			out33_value = (double)(ADC3_read - 0x2000) * out33_calibrate / ADC_cal_factor;
 			outvar_value = (double)(ADC4_read - 0x3000) * outvar_calibrate / ADC_cal_factor;
-			vTaskDelay(50 / portTICK_PERIOD_MS);
+			
 		}
+		//send free stack of task to queue
+		stack_ADC.size = uxTaskGetStackHighWaterMark(ADC_task);
+		if(stack_usage_queue)
+		{
+			xQueueSendToBack(stack_usage_queue, &stack_ADC, 0);
+		}
+		vTaskDelay(50 / portTICK_PERIOD_MS);
 	}
 }
 
@@ -119,7 +133,10 @@ void ADCD_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO, ADC_cal_t ADC_cal)
 	//Create Mutex
 	xADCD_Semaphore = xSemaphoreCreateMutex();
 
-
+	if(stack_usage_queue)
+	{
+		stack_ADC.task_num = ADC_TASK;
+	}
 
 	//try 5 times to set the config
 	ADCD_write_value_16(reg_config, default_config);
@@ -127,24 +144,22 @@ void ADCD_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO, ADC_cal_t ADC_cal)
 	ADCD_write_value_8(reg_cycle_timer, default_interval);
 
 	//Create Handler Task
-	xTaskCreate(ADCD_handler, "ADCD_handler", 1024*4, NULL, 2, NULL);
+	xTaskCreate(ADCD_handler, "ADCD_handler", 1024*4, NULL, 2, ADC_task);
 	ESP_LOGI(TAG, "--> INA220_data_driver initialized successfully");
 }
 
 /**
- * Function used to get values from the 5 ADCs. 
+ * Function used to get voltages from the 5 ADCs. 
  * 
- * This is a 10 Bit ADC, so values range from 0 to 4092, 0V being equal to 0 and 1.2V being equal to 4092. 
- * The resistive voltage divider used in the schematic of this project, divides the voltages to 1V, which is equal to 3410.
  *
  * ADC must be initialized to use this function. 
  * 
  * @param ADC_num value used to define which ADC should be used (1-5)
- * @return returns ADC value as a uint16_t (0-4092)
+ * @return returns ADC voltage as a double
  * \ingroup ADCD
  * @endcode
  */
-double ADCD_get(int ADC_num)
+double ADCD_get_volt(int ADC_num)
 {
 	
 	//If semaphore is initialized
@@ -184,9 +199,61 @@ double ADCD_get(int ADC_num)
 }
 
 /**
+ * Function used to get values from the 5 ADCs. 
+ * 
+ * Values range from 0 to 4092, 0V being equal to 0 and 1.2V being equal to 4092. 
+ * The resistive voltage divider used in the schematic of this project, divides the voltages to 1V, which is equal to 3410.
+ *
+ * ADC must be initialized to use this function. 
+ * 
+ * @param ADC_num value used to define which ADC should be used (1-5)
+ * @return returns ADC value as a uint16_t (0-4092)
+ * \ingroup ADCD
+ * @endcode
+ */
+int ADCD_get(int ADC_num)
+{
+	
+	//If semaphore is initialized
+	if( xADCD_Semaphore != NULL )
+	{
+		//If able, take semaphore, otherwise try again for 10 Ticks
+		if( xSemaphoreTake( xADCD_Semaphore, ( TickType_t ) 10 ) == pdTRUE )
+	    {
+			double ADCD_return = 0;
+			switch(ADC_num)
+			{
+				case 1:
+					ADCD_return = ADC1_read;
+				break;
+				case 2:
+					ADCD_return = ADC2_read;
+				break;
+				case 3:
+					ADCD_return = ADC3_read;
+				break;
+				case 4:
+					ADCD_return = ADC4_read;
+				break;
+				case 5:
+					ADCD_return = ADC5_read;
+				break;
+			}
+			xSemaphoreGive( xADCD_Semaphore );
+            return ADCD_return;
+		}
+		else
+		{
+			ESP_LOGE(TAG, "Could not take Semaphore");
+		}
+	}
+    return 0;
+}
+
+/**
  * Internal function!!
  * Function used to try writing a 8bit value 5 times to a register.
- * Writes Could not write to 0x... if it is uable to write
+ * Writes Could not write to 0x... if it is unable to write
  * 
  * @param reg register to write to
  * @param value value to write to register
@@ -212,7 +279,7 @@ void ADCD_write_value_8(uint8_t reg, uint8_t value)
 /**
  * Internal function!!
  * Function used to try writing a 16bit value 5 times to a register.
- * Writes Could not write to 0x... if it is uable to write
+ * Writes Could not write to 0x... if it is unable to write
  * 
  * @param reg register to write to
  * @param value value to write to register

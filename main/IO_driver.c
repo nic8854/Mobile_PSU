@@ -7,8 +7,12 @@
 #include "driver/gpio.h"
 #include "esp_log.h"
 #include "driver/ledc.h"
+#include "stack_usage_queue_handler.h"
 
 static const char *TAG = "IO_Driver";
+
+//Create Task Handle
+TaskHandle_t IO_task;
 
 expander_t dev_port_expander;
 conf_t config = Default_Config;
@@ -37,6 +41,9 @@ ledc_channel_config_t ledc_channel;
 //create Mutex
 SemaphoreHandle_t xIO_Semaphore;
 
+//Initialize Object for stack usage queue
+stack_usage_dataframe_t stack_IO;
+
 //Init Variables
 uint8_t reg_0_val = 0;
 uint8_t return_val = 0;
@@ -46,6 +53,7 @@ bool GPIO_1_state = 0;
 bool GPIO_Buzzer_state = 0;
 int GPIO_DT_state = 0;
 int GPIO_CLK_state = 0;
+int queue_counter_IO = 0;
 
 /**
  * Main Task in IO_driver Library. Handles GPIO and Expander Input, Outputs and PWM for Buzzer.
@@ -77,6 +85,22 @@ void IO_handler(void *pvParameters)
 				ESP_LOGE(TAG, "Could not take Semaphore");
 			}
 		}
+		if(queue_counter_IO > 20)
+		{
+			//send free stack of task to queue
+			stack_IO.size = uxTaskGetStackHighWaterMark(IO_task);
+			if(stack_usage_queue)
+			{
+				xQueueSendToBack(stack_usage_queue, &stack_IO, 0);
+			}
+			queue_counter_IO = 0;
+		}
+
+		else
+		{
+			queue_counter_IO++;
+		}
+		
 		vTaskDelay(3 / portTICK_PERIOD_MS);	
 	}
 }
@@ -132,8 +156,14 @@ void IO_init(int I2C_PORT, int SDA_GPIO, int SCL_GPIO)
 	//write COnfig
 	ledc_channel_config(&ledc_channel);
 
+	//set name of stack queue object
+	if(stack_usage_queue)
+	{
+		stack_IO.task_num = IO_TASK;
+	}
+
 	//Create main Task
-	xTaskCreate(IO_handler, "IO_handler", 1024*4, NULL, 2, NULL);
+	xTaskCreate(IO_handler, "IO_handler", 1024*4, NULL, 2, IO_task);
 	ESP_LOGI(TAG, "--> IO_driver initialized successfully");
 }
 
