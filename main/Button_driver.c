@@ -70,15 +70,7 @@ void Button_handler(void *pvParameters)
 
 				xSemaphoreGive( xBTSemaphore );
 				
-				//Encoder Logic (counter)
-				if(CLK_state != CLK_state_last)
-				{
-					if(!CLK_state && !DT_state) ENC_counter--;
-					if(!CLK_state && DT_state) ENC_counter++;
-					if(CLK_state && !DT_state) ENC_counter++;
-					if(CLK_state && DT_state) ENC_counter--;
-				}
-				CLK_state_last = CLK_state;
+				Button_set_ENC_from_GPIO();
 			}
 			else
 			{
@@ -185,6 +177,26 @@ uint8_t Button_read_reg_0()
 		}
 	}
 	return 0;
+}
+
+/**
+ * Internal function, do not use!!
+ * Sets ENC counter value from GPIO states.
+ * 
+ *  
+ * @endcode
+ */
+void Button_set_ENC_from_GPIO()
+{
+	//Encoder Logic (counter)
+	if(CLK_state != CLK_state_last)
+	{
+		if(!CLK_state && !DT_state) ENC_counter--;
+		if(!CLK_state && DT_state) ENC_counter++;
+		if(CLK_state && !DT_state) ENC_counter++;
+		if(CLK_state && DT_state) ENC_counter--;
+	}
+	CLK_state_last = CLK_state;
 }
 
 /**

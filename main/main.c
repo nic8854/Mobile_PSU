@@ -142,8 +142,6 @@ uint16_t p_val[100];
 uint16_t u_val[100];
 uint16_t i_val[100];
 
-int receive = 0;
-
 //main Task
 void Master_Task(void *pvParameters)
 {
@@ -364,7 +362,6 @@ void calibrate_1_func(void)
 	//draw Screen
 	UI_draw_calibrate_screen_1(INA1_S_val, INA1_A_val, INA2_S_val, INA2_A_val, value_select);
 }
-
 void calibrate_2_func(void)
 {
 	//value selection up
@@ -912,6 +909,7 @@ void house_keeping(void)
 		right_press = 0;
 		select_press = 0;
 		value_select = 0;
+		division_select = 0;
 		ENC_count = 0;
 		ENC_count_last = 0;
 	}
