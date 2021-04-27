@@ -773,11 +773,7 @@ void test_func_1(void)
 }
 void test_func_2(void)
 {
-	if(xQueueReceive(stack_usage_queue, &stack_temp, 0))
-	{
-		receive++;
-	}
-
+	xQueueReceive(stack_usage_queue, &stack_temp, 0);
 	switch(stack_temp.task_num)
 	{
 		break;
